@@ -1,27 +1,52 @@
-import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../lib/firebase'; // adjust path if needed
 
-export default function HomeScreen({ navigation }) {
+import { db } from '../lib/firebase';
+import global from '../styles/global';
+
+export default function RoomSelectionScreen({ navigation }) {
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const testFirestore = async () => {
-      const querySnapshot = await getDocs(collection(db, 'rooms'));
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, doc.data());
-      });
+    const fetchRooms = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms'));
+
+        const roomList = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setRooms(roomList);
+      } catch (error) {
+        console.error('Error fetching rooms:', error);
+      } finally {
+        setLoading(false);
+      }
     };
-    testFirestore();
+
+    fetchRooms();
   }, []);
 
+  if (loading) return <ActivityIndicator size="large" />;
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.roomBox}
-        onPress={() => navigation.navigate('Room')}
-      >
-        <Text style={styles.roomText}>Living Room</Text>
-      </TouchableOpacity>
+    <View style={global.container}>
+      <Text style={{ fontSize: 24, marginBottom: 20 }}>Select a Room</Text>
+      <FlatList
+        data={rooms}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={global.roomBox}
+            onPress={() => navigation.navigate('Room', { roomId: item.id })}
+          >
+            <Text style={global.roomText}>{item.room_name || 'Unnamed Room'}</Text>
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
 }
