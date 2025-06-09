@@ -12,6 +12,7 @@ import Bed from '../assets/images/decor/bed.svg';
 
 // Avatar
 import BasicAvatar from '../assets/images/avatar/basic_avatar';
+import Skin from '../assets/images/avatar/skin.svg';
 import Dress from '../assets/images/avatar/dress.svg';
 import Pants from '../assets/images/avatar/pants.svg';
 import Shirt from '../assets/images/avatar/shirt.svg';
@@ -42,6 +43,7 @@ export const decorMap = {
   
   // Avatar
   basicAvatar: BasicAvatar,
+  skin: Skin,
   dress: Dress,
   pants: Pants,
   shirt: Shirt,
