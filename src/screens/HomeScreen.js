@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation }) {
   const houseSize = Math.min(width * 0.8, 600); // scale based on screen size
 
   return (
-    <View style={[global.container, { position: 'relative' }]}>
+    <View style={[global.container]}>
       {/* Background layer */}
       {Background && (
         <Background
@@ -66,7 +66,7 @@ export default function HomeScreen({ navigation }) {
             height: houseSize,
           }}
         >
-          <House width={600} height={600} />
+          <House width={houseSize} height={houseSize} />
         </TouchableOpacity>
       )}
     </View>
