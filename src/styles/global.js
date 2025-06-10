@@ -3,7 +3,8 @@ import { View, ImageBackground, Text, TouchableOpacity, StyleSheet, FlatList, Pr
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    position: 'relative',
+    backgroundColor: '#fff',
   },
   roomBox: {
     backgroundColor: '#4caf50',
