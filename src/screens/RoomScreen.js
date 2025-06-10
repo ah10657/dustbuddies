@@ -7,56 +7,61 @@ import {
   Pressable,
   Dimensions,
   ActivityIndicator,
+  StyleSheet,
 } from 'react-native';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+
 import { db } from '../lib/firebase';
 import { decorMap } from '../lib/svgMap';
+import { AvatarStack } from '../components/AvatarStack';
 import global from '../styles/global';
 
 export default function RoomScreen({ route }) {
   const { roomId } = route.params;
   const [roomData, setRoomData] = useState(null);
+  const [roomTasks, setRoomTasks] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [completedTasks, setCompletedTasks] = useState({});
   const { width, height } = Dimensions.get('window');
 
   useEffect(() => {
-    const fetchRoom = async () => {
+    const fetchRoomAndTasks = async () => {
       try {
         const roomRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms', roomId);
         const roomSnap = await getDoc(roomRef);
 
         if (roomSnap.exists()) {
-          setRoomData(roomSnap.data());
-          console.log('Loaded room:', roomId, roomSnap.data());
+          const roomData = roomSnap.data();
+
+          const taskSnap = await getDocs(collection(roomRef, 'room_tasks'));
+          const tasks = taskSnap.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setRoomData(roomData);
+          setRoomTasks(tasks);
         } else {
           console.log('Room not found!');
         }
       } catch (error) {
-        console.error('Error fetching room:', error);
+        console.error('Error fetching room or tasks:', error);
       }
     };
 
-    if (roomId) fetchRoom();
+    if (roomId) fetchRoomAndTasks();
   }, [roomId]);
 
-  if (!roomData) {
-    return <ActivityIndicator size="large" />;
-  }
+  if (!roomData) return <ActivityIndicator size="large" />;
 
-  const Background = decorMap[roomData.decor.pref_wall]; // replace into sections such as wall, floor, bed, etc
-  const tasks = roomData.room_tasks || [
-    'Vacuum the carpet',
-    'Dust the shelves',
-    'Clean the windows',
-  ];
+  const Background = decorMap[roomData.decor?.pref_wall];
+  const Bed = decorMap[roomData.decor?.pref_bed];
+  const bedSize = Math.min(width * 0.6, 600); // scale based on screen size
 
-  const toggleTask = (task) => {
-    setCompletedTasks((prev) => ({
-      ...prev,
-      [task]: !prev[task],
-    }));
-  };
+
+  const remainingTasks = roomTasks.filter(task => !task.task_complete);
+  const totalTasks = roomTasks.length;
+  const completedCount = roomTasks.filter(task => task.task_complete).length;
+  const progressPercent = totalTasks ? Math.round((completedCount / totalTasks) * 100) : 0;
 
   return (
     <View style={[global.container, { position: 'relative' }]}>
@@ -68,39 +73,74 @@ export default function RoomScreen({ route }) {
           style={{ position: 'absolute', top: 0, left: 0 }}
         />
       )}
+      {Bed && (
+        <Bed
+          style={{
+            position: 'absolute',
+            bottom: 120,
+            left: (width - bedSize) / 2,
+            width: bedSize,
+            height: bedSize,
+          }}
+        />
+      )}
+      {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
 
-      <Pressable
-        style={global.dropdownHeader}
-        onPress={() => setDropdownOpen(!dropdownOpen)}
-      >
-        <Text style={global.dropdownHeaderText}>
-          {dropdownOpen ? 'Hide Tasks ▲' : 'Show Tasks ▼'}
-        </Text>
+
+      {/* Top Bar */}
+      <Pressable style={global.topBar} onPress={() => setDropdownOpen(!dropdownOpen)}>
+        {!dropdownOpen && (
+          <Text style={global.remainingLabel}>Remaining Tasks:</Text>
+        )}
+
+        <View style={dropdownOpen ? global.expandedHeader : global.previewRow}>
+          {!dropdownOpen && (
+            <FlatList
+              data={remainingTasks}
+              horizontal
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <View style={global.taskChip}>
+                  <Text style={global.taskChipText}>{item.task_name}</Text>
+                </View>
+              )}
+              contentContainerStyle={global.taskChipContainer}
+            />
+          )}
+
+          <View style={global.progressCircle}>
+            <Text style={global.progressText}>{progressPercent}%</Text>
+          </View>
+        </View>
+
+        <Text style={global.dropdownToggle}>{dropdownOpen ? '▲' : '▼'}</Text>
       </Pressable>
 
+      {/* Dropdown Task List */}
       {dropdownOpen && (
-        <FlatList
-          data={tasks}
-          keyExtractor={(item) => item}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={[
-                global.taskItem,
-                completedTasks[item] && global.taskCompleted,
-              ]}
-              onPress={() => toggleTask(item)}
-            >
-              <Text
+        <View style={global.dropdown}>
+          <FlatList
+            data={roomTasks}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
                 style={[
-                  global.taskText,
-                  completedTasks[item] && global.taskTextCompleted,
+                  global.taskItem,
+                  item.task_complete && global.taskCompleted,
                 ]}
               >
-                {item}
-              </Text>
-            </TouchableOpacity>
-          )}
-        />
+                <Text
+                  style={[
+                    global.taskText,
+                    item.task_complete && global.taskTextCompleted,
+                  ]}
+                >
+                  {item.task_name}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+        </View>
       )}
     </View>
   );

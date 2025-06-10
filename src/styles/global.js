@@ -42,6 +42,71 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     color: '#555',
   },
+  topBar: {
+    backgroundColor: '#5EB1CC',
+    padding: 12,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    alignItems: 'center',
+  },
+  remainingLabel: {
+    fontSize: 14,
+    color: 'white',
+    marginBottom: 5,
+  },
+  taskChip: {
+    backgroundColor: '#178591',
+    width: '100%',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginHorizontal: 5,
+    borderRadius: 20,
+  },
+  taskChipText: {
+    color: 'white',
+    fontSize: 14,
+  },
+  progressCircle: {
+    marginTop: 10,
+    backgroundColor: 'white',
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  progressText: {
+    fontSize: 18,
+    color: '#f9a825',
+  },
+  dropdownToggle: {
+    fontSize: 22,
+    color: 'white',
+    marginTop: 10,
+  },
+  dropdown: {
+    backgroundColor: '#5EB1CC',
+    padding: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  expandedHeader: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    width: '100%',
+  },
+  previewRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: 10,
+  },
+  taskChipContainer: {
+    flexGrow: 1,
+  },
 });
 
 export default styles;
