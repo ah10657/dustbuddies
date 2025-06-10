@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
 
 import { db } from '../lib/firebase';
 import { decorMap } from '../lib/svgMap';
+import AvatarStack from '../components/AvatarStack';
 import global from '../styles/global';
 
 export default function HomeScreen({ navigation }) {
@@ -12,28 +13,44 @@ export default function HomeScreen({ navigation }) {
   const [roomData, setRoomData] = useState(null);
 
   useEffect(() => {
-    const fetchFirstRoom = async () => {
+    const fetchUserAndRooms = async () => {
       try {
-        const roomCollection = collection(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms');
-        const snapshot = await getDocs(roomCollection);
+        const userDocRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5');
+        const userSnapshot = await getDoc(userDocRef);
 
-        if (snapshot.empty) {
+        if (!userSnapshot.exists()) {
+          console.log('No user found!');
+          return;
+        }
+
+        const userData = userSnapshot.data();
+
+        const roomCollection = collection(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms');
+        const roomSnapshot = await getDocs(roomCollection);
+
+        if (roomSnapshot.empty) {
           console.log('No rooms found!');
           return;
         }
 
-        const firstDoc = snapshot.docs[0];
-        const data = firstDoc.data();
-        setRoomData(data);
-        console.log('Loaded first room:', firstDoc.id, data);
+        const firstRoomDoc = roomSnapshot.docs[0];
+        const roomData = firstRoomDoc.data();
+
+        setRoomData({
+          ...roomData,
+          user: {
+            avatar: userData.avatar
+          }
+        });
 
       } catch (error) {
-        console.error('Error fetching rooms:', error);
+        console.error('Error fetching user or rooms:', error);
       }
     };
 
-    fetchFirstRoom();
+    fetchUserAndRooms();
   }, []);
+
 
   if (!roomData) {
     return <ActivityIndicator size="large" />;
@@ -41,8 +58,10 @@ export default function HomeScreen({ navigation }) {
 
   const Background = decorMap[roomData.decor.background];
   const House = decorMap[roomData.decor.home];
-
+  const Bike = decorMap[roomData.decor.bike];
+  const Sun = decorMap[roomData.decor.sun];
   const houseSize = Math.min(width * 0.8, 600); // scale based on screen size
+
 
   return (
     <View style={[global.container]}>
@@ -60,7 +79,7 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: 40,
+            bottom: 120,
             left: (width - houseSize) / 2,
             width: houseSize,
             height: houseSize,
@@ -69,7 +88,34 @@ export default function HomeScreen({ navigation }) {
           <House width={houseSize} height={houseSize} />
         </TouchableOpacity>
       )}
+      {Bike && (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Shop')}
+          activeOpacity={0.8}
+          style={{
+            position: 'absolute',
+            bottom: 100,
+            left: 20,
+          }}
+        >
+          <Bike width={100} height={100} />
+        </TouchableOpacity>
+      )}
+      {Sun && (
+        <Sun
+          style={{
+            position: 'absolute',
+            top: 20,
+            right: 30,
+            width: 150,
+            height: 150,
+          }}
+        />
+      )}
+
+      {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
     </View>
+    
 
   );
 }

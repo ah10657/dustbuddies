@@ -13,9 +13,11 @@ import Bed from '../assets/images/decor/bed.svg';
 // Avatar
 import BasicAvatar from '../assets/images/avatar/basic_avatar';
 import Skin from '../assets/images/avatar/skin.svg';
+import Eyes from '../assets/images/avatar/eyes.svg';
 import Dress from '../assets/images/avatar/dress.svg';
 import Pants from '../assets/images/avatar/pants.svg';
 import Shirt from '../assets/images/avatar/shirt.svg';
+import Shoes from '../assets/images/avatar/shoes.svg';
 import LongHair from '../assets/images/avatar/long_hair.svg';
 import ShortHair from '../assets/images/avatar/short_hair';
 
@@ -44,8 +46,10 @@ export const decorMap = {
   // Avatar
   basicAvatar: BasicAvatar,
   skin: Skin,
+  eyes: Eyes,
   dress: Dress,
   pants: Pants,
+  shoes: Shoes,
   shirt: Shirt,
   longHair: LongHair,
   shortHair: ShortHair,

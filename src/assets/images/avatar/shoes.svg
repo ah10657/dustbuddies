@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="avatar_lawn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.39 65.58">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #543d25;
+        stroke: #3c2424;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: .75px;
+      }
+
+      .cls-2 {
+        fill: #dfd5c9;
+      }
+    </style>
+  </defs>
+  <ellipse class="cls-2" cx="13.2" cy="62.92" rx="13.2" ry="2.67"/>
+  <g id="Shoes">
+    <path class="cls-1" d="M10.97,58.75v3.13c-1.48,1.02-2.81,1.38-3.62,1.53-.59.11-3.53.65-4.17-.61-.32-.63.03-1.5.11-1.69.22-.55.56-.87,1.11-1.37.5-.46.97-.78,1.33-.99h5.25Z"/>
+    <path class="cls-1" d="M15.71,58.75v3.13c1.48,1.02,2.81,1.38,3.62,1.53.59.11,3.53.65,4.17-.61.32-.63-.03-1.5-.11-1.69-.22-.55-.56-.87-1.11-1.37-.5-.46-.97-.78-1.33-.99h-5.25Z"/>
+  </g>
+</svg>
