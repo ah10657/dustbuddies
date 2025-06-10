@@ -4,6 +4,9 @@ import BasicHouse from '../assets/homeScreen/houses/basicHouse.svg';
 // Backgrounds
 import HomeScreenYard from '../assets/homeScreen/homeScreenYard.svg';
 
+//Sun
+import Sun from '../assets/homeScreen/sun.svg';
+
 //Decor
 import BasicBedroom from '../assets/decor/basicBedroom.svg';
 
@@ -15,5 +18,8 @@ export const decorMap = {
   homeScreenYard: HomeScreenYard,
 
   //Decor
-  basicBedroom: BasicBedroom
+  basicBedroom: BasicBedroom,
+
+  //Sun
+  homeScreenSun: Sun
 };
