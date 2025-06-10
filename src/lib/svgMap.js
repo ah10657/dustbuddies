@@ -30,7 +30,7 @@ import Coin from '../assets/images/tasks/coin.svg';
 
 export const decorMap = {
   // Houses
-  basicHouse: BasicHouse,
+  house: BasicHouse,
   houseThumbnail: HouseThumbnail,
 
   // Backgrounds
