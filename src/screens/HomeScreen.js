@@ -42,7 +42,7 @@ export default function HomeScreen({ navigation }) {
   const Background = decorMap[roomData.decor.background];
   const House = decorMap[roomData.decor.home];
 
-
+  const houseSize = Math.min(width * 0.8, 600); // scale based on screen size
 
   return (
     <View style={[global.container, { position: 'relative' }]}>
@@ -61,9 +61,9 @@ export default function HomeScreen({ navigation }) {
           style={{
             position: 'absolute',
             bottom: 40,
-            left: (width - 600) / 2,
-            width: 600,
-            height: 600,
+            left: (width - houseSize) / 2,
+            width: houseSize,
+            height: houseSize,
           }}
         >
           <House width={600} height={600} />
