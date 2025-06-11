@@ -13,10 +13,11 @@ import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 
 import { db } from '../lib/firebase';
 import { decorMap } from '../lib/svgMap';
-import { AvatarStack } from '../components/AvatarStack';
+import AvatarStack from '../components/AvatarStack';
+import BackButtonIcon from '../assets/images/house/house_thumbnail.svg';
 import global from '../styles/global';
 
-export default function RoomScreen({ route }) {
+export default function RoomScreen({ route, navigation }) {
   const { roomId } = route.params;
   const [roomData, setRoomData] = useState(null);
   const [roomTasks, setRoomTasks] = useState([]);
@@ -28,9 +29,12 @@ export default function RoomScreen({ route }) {
       try {
         const roomRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms', roomId);
         const roomSnap = await getDoc(roomRef);
+        const userDocRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5');
+        const userSnap = await getDoc(userDocRef);
 
         if (roomSnap.exists()) {
           const roomData = roomSnap.data();
+          const userData = userSnap.data();
 
           const taskSnap = await getDocs(collection(roomRef, 'room_tasks'));
           const tasks = taskSnap.docs.map(doc => ({
@@ -38,7 +42,12 @@ export default function RoomScreen({ route }) {
             ...doc.data(),
           }));
 
-          setRoomData(roomData);
+          setRoomData({
+            ...roomData,
+            user: {
+              avatar: userData.avatar,
+            },
+          });
           setRoomTasks(tasks);
         } else {
           console.log('Room not found!');
@@ -55,7 +64,7 @@ export default function RoomScreen({ route }) {
 
   const Background = decorMap[roomData.decor?.pref_wall];
   const Bed = decorMap[roomData.decor?.pref_bed];
-  const bedSize = Math.min(width * 0.6, 600); // scale based on screen size
+  const bedSize = Math.min(width * 0.6, 600);
 
 
   const remainingTasks = roomTasks.filter(task => !task.task_complete);
@@ -86,6 +95,18 @@ export default function RoomScreen({ route }) {
       )}
       {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
 
+      {BackButtonIcon && (
+        <TouchableOpacity
+          style={{
+            position: 'absolute',
+            bottom: -5,
+            left: -5,
+          }}
+          onPress={() => navigation.navigate('RoomSelection')}
+        >
+          <BackButtonIcon width={80} height={80} />
+        </TouchableOpacity>
+      )}
 
       {/* Top Bar */}
       <Pressable style={global.topBar} onPress={() => setDropdownOpen(!dropdownOpen)}>

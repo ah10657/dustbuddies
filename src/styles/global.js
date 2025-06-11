@@ -6,6 +6,58 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: '#fff',
   },
+  headerText: {
+    fontSize: 40,
+    padding: 10,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 50,
+    color: '#ffffff',
+  },
+    roomSelectionWrapper: {
+      backgroundColor: '#6ec1e4',
+      paddingVertical: 40,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flex: 1,
+    },
+
+  headerText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  roomGrid: {
+    position: 'relative',
+    backgroundColor: '#f4f4f4',
+    borderRadius: 12,
+    padding: 10,
+    minWidth: 300,
+    minHeight: 300,
+    maxWidth: 600,
+    maxHeight: 600,
+    alignSelf: 'center',
+  },
+
+  roomBoxMap: {
+    position: 'absolute',
+    backgroundColor: '#e0e0e0',
+    borderRadius: 6,
+    borderColor: '#999',
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 1, height: 1 },
+    elevation: 2,
+  },
+  roomBoxMapText: {
+    textAlign: 'center',
+    fontWeight: '500',
+  },
   roomBox: {
     backgroundColor: '#4caf50',
     padding: 30,
@@ -107,6 +159,27 @@ const styles = StyleSheet.create({
   taskChipContainer: {
     flexGrow: 1,
   },
+    center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  shopMessage: {
+    fontSize: 24,
+    marginBottom: 30,
+    color: '#333',
+    textAlign: 'center',
+  },
+  shopButton: {
+    backgroundColor: '#2196f3',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  shopButtonText: {
+    color: 'white',
+    fontSize: 16,
+  },
+
 });
 
 export default styles;
