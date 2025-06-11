@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -14,6 +15,7 @@ import { decorMap } from '../lib/svgMap';
 import global from '../styles/global';
 
 export default function RoomScreen({ route }) {
+  const navigation = useNavigation();
   const { roomId } = route.params;
   const [roomData, setRoomData] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -83,23 +85,28 @@ export default function RoomScreen({ route }) {
           data={tasks}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
-            <TouchableOpacity
+          <TouchableOpacity
+            style={[
+              global.taskItem,
+              completedTasks[item] && global.taskCompleted,
+            ]}
+            onPress={() =>
+              navigation.navigate('Timer', {
+                taskName: item,
+                roomId: roomId,
+              })
+            }
+          >
+            <Text
               style={[
-                global.taskItem,
-                completedTasks[item] && global.taskCompleted,
+                global.taskText,
+                completedTasks[item] && global.taskTextCompleted,
               ]}
-              onPress={() => toggleTask(item)}
             >
-              <Text
-                style={[
-                  global.taskText,
-                  completedTasks[item] && global.taskTextCompleted,
-                ]}
-              >
-                {item}
-              </Text>
-            </TouchableOpacity>
-          )}
+              {item}
+            </Text>
+          </TouchableOpacity>
+        )}
         />
       )}
     </View>

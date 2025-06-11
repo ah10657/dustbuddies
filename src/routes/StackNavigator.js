@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import RoomScreen from '../screens/RoomScreen';
 import RoomSelectionScreen from '../screens/RoomSelectionScreen';
+import TimerScreen from '../screens/TimerScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export default function StackNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Room" component={RoomScreen} />
       <Stack.Screen name="RoomSelection" component={RoomSelectionScreen} />
+      <Stack.Screen name="Timer" component={TimerScreen} />
     </Stack.Navigator>
   );
 }
