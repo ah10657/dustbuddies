@@ -7,9 +7,9 @@ import {
   Pressable,
   Dimensions,
   ActivityIndicator,
-  StyleSheet,
 } from 'react-native';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
 
 import { db } from '../lib/firebase';
 import { decorMap } from '../lib/svgMap';
@@ -17,8 +17,10 @@ import AvatarStack from '../components/AvatarStack';
 import BackButtonIcon from '../assets/images/house/house_thumbnail.svg';
 import global from '../styles/global';
 
-export default function RoomScreen({ route, navigation }) {
+export default function RoomScreen({ route }) {
+  const navigation = useNavigation();
   const { roomId } = route.params;
+
   const [roomData, setRoomData] = useState(null);
   const [roomTasks, setRoomTasks] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -66,7 +68,6 @@ export default function RoomScreen({ route, navigation }) {
   const Bed = decorMap[roomData.decor?.pref_bed];
   const bedSize = Math.min(width * 0.6, 600);
 
-
   const remainingTasks = roomTasks.filter(task => !task.task_complete);
   const totalTasks = roomTasks.length;
   const completedCount = roomTasks.filter(task => task.task_complete).length;
@@ -97,11 +98,7 @@ export default function RoomScreen({ route, navigation }) {
 
       {BackButtonIcon && (
         <TouchableOpacity
-          style={{
-            position: 'absolute',
-            bottom: -5,
-            left: -5,
-          }}
+          style={{ position: 'absolute', bottom: -5, left: -5 }}
           onPress={() => navigation.navigate('RoomSelection')}
         >
           <BackButtonIcon width={80} height={80} />
@@ -149,6 +146,12 @@ export default function RoomScreen({ route, navigation }) {
                   global.taskItem,
                   item.task_complete && global.taskCompleted,
                 ]}
+                onPress={() =>
+                  navigation.navigate('Timer', {
+                    taskName: item.task_name,
+                    roomId: roomId,
+                  })
+                }
               >
                 <Text
                   style={[
