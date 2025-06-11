@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import RoomScreen from '../screens/RoomScreen';
 import RoomSelectionScreen from '../screens/RoomSelectionScreen';
 import TimerScreen from '../screens/TimerScreen';
+import ShopScreen from '../screens/ShopScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ export default function StackNavigator() {
       <Stack.Screen name="Room" component={RoomScreen} />
       <Stack.Screen name="RoomSelection" component={RoomSelectionScreen} />
       <Stack.Screen name="Timer" component={TimerScreen} />
+      <Stack.Screen name="Shop" component={ShopScreen} />
     </Stack.Navigator>
   );
 }
