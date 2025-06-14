@@ -7,7 +7,10 @@ import { useRoute } from '@react-navigation/native';
 import { Dimensions } from 'react-native';
 import { Animated, Easing } from 'react-native';
 
+import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
+
 import global from '../styles/global';
+import { db } from '../lib/firebase';
 
 
 const { width, height } = Dimensions.get('window');
@@ -73,21 +76,38 @@ export default function TimerScreen({ navigation }) {
 
   const handleComplete = async () => {
     setCompleted(true);
-    setShowConfetti(true);    
+    setShowConfetti(true);
 
-    
+    //Firestore update
+    try {
+      const taskQuery = collection(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms', roomId, 'room_tasks');
+      const snapshot = await getDocs(taskQuery);
+      
+      const matchingDoc = snapshot.docs.find(doc => doc.data().task_name === taskName);
+      if (matchingDoc) {
+        const taskRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms', roomId, 'room_tasks', matchingDoc.id);
+        await updateDoc(taskRef, {
+          task_complete: true,
+          last_completed_at: new Date().toISOString(),
+        });
+      }
+    } catch (err) {
+      console.error('Failed to mark task complete:', err);
+    }
 
+    //Play sound
     const { sound } = await Audio.Sound.createAsync(
       require('../assets/sounds/celebration.mp3')
     );
     await sound.playAsync();
 
-    
+    //Exit after confetti
     setTimeout(() => {
       setShowConfetti(false);
       navigation.goBack();
     }, 2000);
   };
+
 
   const formatTime = (sec) => {
     if (sec === null) return '--:--';
@@ -129,10 +149,7 @@ export default function TimerScreen({ navigation }) {
         </>
       ) : (
         <>
-          <Text style={global.timerLabel}>
-            {duration !== 0 && (<Text style={global.timerLabel}>Time Remaining:</Text>
-)}
-          </Text>
+          {duration !== 0 && <Text style={global.timerLabel}>Time Remaining:</Text>}
 
           {duration === 0 ? (
             <View style={global.pulseContainer}>
