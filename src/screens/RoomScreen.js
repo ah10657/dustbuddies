@@ -35,7 +35,7 @@ export default function RoomScreen({ route }) {
           const userId = getUserId();
           const roomRef = doc(db, 'user', userId, 'rooms', roomId);
           const roomSnap = await getDoc(roomRef);
-          const userDocRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5');
+          const userDocRef = doc(db, 'user', userId);
           const userSnap = await getDoc(userDocRef);
 
           if (roomSnap.exists()) {

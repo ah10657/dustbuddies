@@ -9,6 +9,7 @@ import {
 import { collection, getDocs } from 'firebase/firestore';
 
 import { db } from '../lib/firebase';
+import { getUserId } from '../lib/getUserId';
 import global from '../styles/global';
 
 const GRID_UNIT = 60; // base room size (adjust as needed)
@@ -20,8 +21,9 @@ export default function RoomSelectionScreen({ navigation }) {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
+        const userId = getUserId();
         const snapshot = await getDocs(
-          collection(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms')
+          collection(db, 'user', userId, 'rooms')
         );
         const roomList = snapshot.docs.map((doc) => ({
           id: doc.id,

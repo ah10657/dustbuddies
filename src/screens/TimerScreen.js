@@ -11,6 +11,7 @@ import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
 
 import global from '../styles/global';
 import { db } from '../lib/firebase';
+import { getUserId } from '../lib/getUserId';
 
 
 const { width, height } = Dimensions.get('window');
@@ -80,12 +81,13 @@ export default function TimerScreen({ navigation }) {
 
     //Firestore update
     try {
-      const taskQuery = collection(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms', roomId, 'room_tasks');
+      const userId = getUserId();
+      const taskQuery = collection(db, 'user', userId, 'rooms', roomId, 'room_tasks');
       const snapshot = await getDocs(taskQuery);
       
       const matchingDoc = snapshot.docs.find(doc => doc.data().task_name === taskName);
       if (matchingDoc) {
-        const taskRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms', roomId, 'room_tasks', matchingDoc.id);
+        const taskRef = doc(db, 'user', userId, 'rooms', roomId, 'room_tasks', matchingDoc.id);
         await updateDoc(taskRef, {
           task_complete: true,
           last_completed_at: new Date().toISOString(),
