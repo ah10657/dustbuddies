@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
   progressText: {
     fontSize: 18,
     color: '#f9a825',
+    fontWeight: 'bold',
   },
   dropdownToggle: {
     fontSize: 22,

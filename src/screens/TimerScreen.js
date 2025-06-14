@@ -118,13 +118,13 @@ export default function TimerScreen({ navigation }) {
 
   return (
     <View style={global.timerContainer}>
-      <Text style={{ fontSize: 30, fontWeight:'bold', color:'#FFFFFF', marginBottom: 50 }}>{taskName}</Text>
+      <Text style={global.headerText}>{taskName}</Text>
            
       {!started ? (
         <>
           <Text style={{ margin: 30, fontSize: 25, fontWeight:'normal', color:'#535353' }}>Optional: Set a Timer</Text>
           
-          <View style={global.timerButtons} >
+          <View style={global.timerButtons}>
           <TouchableOpacity style={global.timerBtn} onPress={() => setDuration(300)}>
             <Text style={global.timerBtnText}>5 min</Text>
           </TouchableOpacity>

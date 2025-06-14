@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -9,9 +9,11 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import { db } from '../lib/firebase';
+import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
 import AvatarStack from '../components/AvatarStack';
 import BackButtonIcon from '../assets/images/house/house_thumbnail.svg';
@@ -26,41 +28,45 @@ export default function RoomScreen({ route }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { width, height } = Dimensions.get('window');
 
-  useEffect(() => {
-    const fetchRoomAndTasks = async () => {
-      try {
-        const roomRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms', roomId);
-        const roomSnap = await getDoc(roomRef);
-        const userDocRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5');
-        const userSnap = await getDoc(userDocRef);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchRoomAndTasks = async () => {
+        try {
+          const userId = getUserId();
+          const roomRef = doc(db, 'user', userId, 'rooms', roomId);
+          const roomSnap = await getDoc(roomRef);
+          const userDocRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5');
+          const userSnap = await getDoc(userDocRef);
 
-        if (roomSnap.exists()) {
-          const roomData = roomSnap.data();
-          const userData = userSnap.data();
+          if (roomSnap.exists()) {
+            const roomData = roomSnap.data();
+            const userData = userSnap.data();
 
-          const taskSnap = await getDocs(collection(roomRef, 'room_tasks'));
-          const tasks = taskSnap.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
+            const taskSnap = await getDocs(collection(roomRef, 'room_tasks'));
+            const tasks = taskSnap.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data(),
+            }));
 
-          setRoomData({
-            ...roomData,
-            user: {
-              avatar: userData.avatar,
-            },
-          });
-          setRoomTasks(tasks);
-        } else {
-          console.log('Room not found!');
+            setRoomData({
+              ...roomData,
+              user: {
+                avatar: userData.avatar,
+              },
+            });
+            setRoomTasks(tasks);
+          } else {
+            console.log('Room not found!');
+          }
+        } catch (error) {
+          console.error('Error fetching room or tasks:', error);
         }
-      } catch (error) {
-        console.error('Error fetching room or tasks:', error);
-      }
-    };
+      };
 
-    if (roomId) fetchRoomAndTasks();
-  }, [roomId]);
+      fetchRoomAndTasks();
+    }, [roomId])
+  );
+
 
   if (!roomData) return <ActivityIndicator size="large" />;
 
@@ -126,9 +132,20 @@ export default function RoomScreen({ route }) {
             />
           )}
 
-          <View style={global.progressCircle}>
-            <Text style={global.progressText}>{progressPercent}%</Text>
-          </View>
+          <AnimatedCircularProgress
+            size={70}
+            width={7}
+            fill={progressPercent}
+            tintColor="#f7bd50"
+            backgroundColor="#ffffff"
+            style={{ marginTop: 10 }}
+          >
+            {
+              () => (
+                <Text style={global.progressText}>{progressPercent}%</Text>
+              )
+            }
+          </AnimatedCircularProgress>
         </View>
 
         <Text style={global.dropdownToggle}>{dropdownOpen ? '▲' : '▼'}</Text>
