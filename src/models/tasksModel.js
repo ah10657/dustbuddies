@@ -1,11 +1,9 @@
-// tasksModel.js
+
 
 export class Task {
   constructor(id, data) {
     this.id = id;
     this.name = data.task_name || 'Unnamed Task';
-    this.time = data.task_time ?? 0;
-    this.timerEnabled = !!data.task_timer_enabled;
     this.completed = !!data.task_complete;
     this.recurrence = data.recurrence || 'daily';
     this.lastCompletedAt = data.last_completed_at

@@ -4,6 +4,7 @@ import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
 
 import { db } from '../lib/firebase';
+import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
 import AvatarStack from '../components/AvatarStack';
 import global from '../styles/global';
@@ -15,7 +16,8 @@ export default function HomeScreen({ navigation }) {
   useEffect(() => {
     const fetchUserAndRooms = async () => {
       try {
-        const userDocRef = doc(db, 'user', 'VuoNhIFyleph42rgqis5');
+        const userId = getUserId();
+        const userDocRef = doc(db, 'user', userId);
         const userSnapshot = await getDoc(userDocRef);
 
         if (!userSnapshot.exists()) {
@@ -25,7 +27,7 @@ export default function HomeScreen({ navigation }) {
 
         const userData = userSnapshot.data();
 
-        const roomCollection = collection(db, 'user', 'VuoNhIFyleph42rgqis5', 'rooms');
+        const roomCollection = collection(db, 'user', userId, 'rooms');
         const roomSnapshot = await getDocs(roomCollection);
 
         if (roomSnapshot.empty) {
