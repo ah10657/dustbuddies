@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Dimensions,
+  ActivityIndicator,
+  Text,
+} from 'react-native';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
@@ -12,6 +18,7 @@ import global from '../styles/global';
 export default function HomeScreen({ navigation }) {
   const { width, height } = Dimensions.get('window');
   const [roomData, setRoomData] = useState(null);
+  const [completionPercent, setCompletionPercent] = useState(0);
 
   useEffect(() => {
     const fetchUserAndRooms = async () => {
@@ -26,7 +33,6 @@ export default function HomeScreen({ navigation }) {
         }
 
         const userData = userSnapshot.data();
-
         const roomCollection = collection(db, 'user', userId, 'rooms');
         const roomSnapshot = await getDocs(roomCollection);
 
@@ -41,10 +47,22 @@ export default function HomeScreen({ navigation }) {
         setRoomData({
           ...roomData,
           user: {
-            avatar: userData.avatar
-          }
+            avatar: userData.avatar,
+          },
         });
 
+        // Calculate global task completion
+        let totalTasks = 0;
+        let completedTasks = 0;
+
+        for (const roomDoc of roomSnapshot.docs) {
+          const tasksSnap = await getDocs(collection(roomDoc.ref, 'room_tasks'));
+          totalTasks += tasksSnap.size;
+          completedTasks += tasksSnap.docs.filter(doc => doc.data().task_complete).length;
+        }
+
+        const percent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+        setCompletionPercent(percent);
       } catch (error) {
         console.error('Error fetching user or rooms:', error);
       }
@@ -52,7 +70,6 @@ export default function HomeScreen({ navigation }) {
 
     fetchUserAndRooms();
   }, []);
-
 
   if (!roomData) {
     return <ActivityIndicator size="large" />;
@@ -62,12 +79,10 @@ export default function HomeScreen({ navigation }) {
   const House = decorMap[roomData.decor.home];
   const Bike = decorMap[roomData.decor.bike];
   const Sun = decorMap[roomData.decor.sun];
-  const houseSize = Math.min(width * 0.8, 600); // scale based on screen size
-
+  const houseSize = Math.min(width * 0.8, 600);
 
   return (
     <View style={[global.container]}>
-      {/* Background layer */}
       {Background && (
         <Background
           width={width}
@@ -75,6 +90,7 @@ export default function HomeScreen({ navigation }) {
           preserveAspectRatio="xMidYMax slice"
         />
       )}
+
       {House && (
         <TouchableOpacity
           onPress={() => navigation.navigate('RoomSelection')}
@@ -90,6 +106,7 @@ export default function HomeScreen({ navigation }) {
           <House width={houseSize} height={houseSize} />
         </TouchableOpacity>
       )}
+
       {Bike && (
         <TouchableOpacity
           onPress={() => navigation.navigate('Shop')}
@@ -103,21 +120,51 @@ export default function HomeScreen({ navigation }) {
           <Bike width={100} height={100} />
         </TouchableOpacity>
       )}
-      {Sun && (
-        <Sun
+
+      {/* Sun with progress overlay */}
+     {Sun && (
+      <View
+        style={{
+          position: 'absolute',
+          top: height * 0.05, // 5% from top
+          right: width * 0.08, // 8% from right
+          width: 100,
+          height: 100,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Sun width={100} height={100} />
+
+        <View
           style={{
             position: 'absolute',
-            top: 20,
-            right: 30,
-            width: 150,
-            height: 150,
+            width: 76,
+            height: 76,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
-        />
-      )}
+        >
+          <AnimatedCircularProgress
+            size={76}
+            width={8}
+            fill={completionPercent}
+            tintColor="#f7bd50"
+            backgroundColor="#ffffff"
+            rotation={0}
+          >
+            {() => (
+              <Text style={{ color: '#f7bd50', fontWeight: 'bold', fontSize: 14 }}>
+                {completionPercent}%
+              </Text>
+            )}
+          </AnimatedCircularProgress>
+        </View>
+      </View>
+    )}
+
 
       {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
     </View>
-    
-
   );
 }
