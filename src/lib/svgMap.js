@@ -4,11 +4,11 @@ import HouseThumbnail from '../assets/images/house/house_thumbnail.svg'
 
 // Backgrounds
 import HomeScreenYard from '../assets/images/homeScreen/homeScreenYard.svg';
-import BasicBedroom from '../assets/images/house/basic_bedroom.svg';
+import BasicBedroom from '../assets/images/house/mainBedroom';
 import BlueBackground from '../assets/images/tutorial/blue_background.svg';
 
 // Decor
-import Bed from '../assets/images/decor/bed.svg';
+import Bed from '../assets/images/house/mainBedroom/bed.svg';
 
 // Avatar
 import BasicAvatar from '../assets/images/avatar/basic_avatar';
