@@ -1,8 +1,13 @@
-// src/lib/firebase.js
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import {
+  getAuth,
+  initializeAuth,
+  getReactNativePersistence,
+} from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 
 const firebaseConfig = {
   apiKey: Constants.expoConfig.extra.FIREBASE_API_KEY,
@@ -13,6 +18,21 @@ const firebaseConfig = {
   appId: Constants.expoConfig.extra.FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+// prevent reinitializing firebase
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+let auth;
+if (Platform.OS === 'web') {
+  auth = getAuth(app);
+} else {
+  try {
+    auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    });
+  } catch (e) {
+    auth = getAuth(app); // fallback if already initialized
+  }
+}
+
+export { auth };
 export const db = getFirestore(app);
-export const auth = getAuth(app);
