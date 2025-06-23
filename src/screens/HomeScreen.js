@@ -6,10 +6,11 @@ import {
   ActivityIndicator,
   Text,
 } from 'react-native';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
+import { getGlobalTaskCompletion } from '../models/tasksModel';
 import AvatarStack from '../components/AvatarStack';
 import AnimatedSun from '../components/AnimatedSun';
 import global from '../styles/global';
@@ -50,18 +51,9 @@ export default function HomeScreen({ navigation }) {
           },
         });
 
-        // Calculate global task completion
-        let totalTasks = 0;
-        let completedTasks = 0;
-
-        for (const roomDoc of roomSnapshot.docs) {
-          const tasksSnap = await getDocs(collection(roomDoc.ref, 'room_tasks'));
-          totalTasks += tasksSnap.size;
-          completedTasks += tasksSnap.docs.filter(doc => doc.data().task_complete).length;
-        }
-
-        const percent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-        setCompletionPercent(percent);
+        // Use the new tasksModel function for better task management with auto-reset
+        const taskData = await getGlobalTaskCompletion(userId);
+        setCompletionPercent(taskData.completionPercent);
       } catch (error) {
         console.error('Error fetching user or rooms:', error);
       }

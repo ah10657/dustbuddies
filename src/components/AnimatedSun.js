@@ -12,7 +12,7 @@ const SVG_HEIGHT = 66.01;
 const SUN_CX = 65.39;
 const SUN_CY = 37.8;
 const OUTER_R = 28.32;
-const INNER_R = 18.57;
+const INNER_R = 17;
 const PROGRESS_R = INNER_R + (OUTER_R - INNER_R) * 0.28;
 const PROGRESS_STROKE = (OUTER_R - INNER_R) * 0.5;
 
@@ -43,12 +43,13 @@ const AnimatedSun = ({ progress = 0, size = 200 }) => {
           cx={SUN_CX}
           cy={SUN_CY}
           r={PROGRESS_R}
-          fill="#F7BD50"
+          fill="none"
           stroke="#F7BD50"
           strokeWidth={PROGRESS_STROKE}
           strokeDasharray={circumference}
           strokeDashoffset={progressOffset}
-          strokeLinecap="round"
+
+          transform={`rotate(-90 ${SUN_CX} ${SUN_CY})`}
         />
         {/* Inner ring */}
         <Circle cx={SUN_CX} cy={SUN_CY} r={INNER_R} fill="#E7A120" />
