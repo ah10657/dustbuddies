@@ -7,12 +7,11 @@ import {
   Text,
 } from 'react-native';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
-
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
 import AvatarStack from '../components/AvatarStack';
+import AnimatedSun from '../components/AnimatedSun';
 import global from '../styles/global';
 
 export default function HomeScreen({ navigation }) {
@@ -78,7 +77,6 @@ export default function HomeScreen({ navigation }) {
   const Background = decorMap[roomData.decor.background];
   const House = decorMap[roomData.decor.home];
   const Bike = decorMap[roomData.decor.bike];
-  const Sun = decorMap[roomData.decor.sun];
   const houseSize = Math.min(width * 0.8, 600);
 
   return (
@@ -97,7 +95,7 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: (height - houseSize) / 3,
             left: (width - houseSize) / 2,
             width: houseSize,
             height: houseSize,
@@ -113,7 +111,7 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: 100,
+            bottom: 200,
             left: 20,
           }}
         >
@@ -121,48 +119,20 @@ export default function HomeScreen({ navigation }) {
         </TouchableOpacity>
       )}
 
-      {/* Sun with progress overlay */}
-     {Sun && (
+      {/* Sun with progress overlay replaced by ProgressRing */}
       <View
         style={{
           position: 'absolute',
-          top: height * 0.05, // 5% from top
-          right: width * 0.08, // 8% from right
+          top: height * 0.05,
+          right: width * 0.2,
           width: 100,
           height: 100,
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Sun width={100} height={100} />
-
-        <View
-          style={{
-            position: 'absolute',
-            width: 76,
-            height: 76,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <AnimatedCircularProgress
-            size={76}
-            width={8}
-            fill={completionPercent}
-            tintColor="#f7bd50"
-            backgroundColor="#ffffff"
-            rotation={0}
-          >
-            {() => (
-              <Text style={{ color: '#f7bd50', fontWeight: 'bold', fontSize: 14 }}>
-                {completionPercent}%
-              </Text>
-            )}
-          </AnimatedCircularProgress>
-        </View>
+        <AnimatedSun progress={completionPercent} size={200} />
       </View>
-    )}
-
 
       {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
     </View>
