@@ -6,11 +6,12 @@ import {
   ActivityIndicator,
   Text,
 } from 'react-native';
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
 import { getGlobalTaskCompletion } from '../models/tasksModel';
+import { getHouseRoom } from '../models/roomsModel';
 import AvatarStack from '../components/AvatarStack';
 import AnimatedSun from '../components/AnimatedSun';
 import global from '../styles/global';
@@ -33,19 +34,17 @@ export default function HomeScreen({ navigation }) {
         }
 
         const userData = userSnapshot.data();
-        const roomCollection = collection(db, 'user', userId, 'rooms');
-        const roomSnapshot = await getDocs(roomCollection);
+        
+        // Use the new getHouseRoom function to find the correct house room
+        const houseRoomData = await getHouseRoom(userId);
 
-        if (roomSnapshot.empty) {
-          console.log('No rooms found!');
+        if (!houseRoomData) {
+          console.log('No house room found!');
           return;
         }
 
-        const firstRoomDoc = roomSnapshot.docs[0];
-        const roomData = firstRoomDoc.data();
-
         setRoomData({
-          ...roomData,
+          ...houseRoomData,
           user: {
             avatar: userData.avatar,
           },
