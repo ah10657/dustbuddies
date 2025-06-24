@@ -103,7 +103,7 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: 200,
+            bottom: width * 0.3,
             left: 20,
           }}
         >
