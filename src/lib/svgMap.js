@@ -4,7 +4,7 @@ import HouseThumbnail from '../assets/images/house/house_thumbnail.svg'
 
 // Backgrounds
 import HomeScreenYard from '../assets/images/homeScreen/homeScreenYard.svg';
-import BasicBedroom from '../assets/images/house/mainBedroom';
+import BasicBedroom from '../assets/images/house/mainBedroom/basic_bedroom.svg';
 import BlueBackground from '../assets/images/tutorial/blue_background.svg';
 
 // Decor
