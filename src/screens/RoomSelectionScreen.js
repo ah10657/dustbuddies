@@ -25,10 +25,23 @@ export default function RoomSelectionScreen({ navigation }) {
         const snapshot = await getDocs(
           collection(db, 'user', userId, 'rooms')
         );
-        const roomList = snapshot.docs.map((doc) => ({
+        let roomList = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
+
+        // Hardcode layout for demonstration (remove in production)
+        roomList = roomList.map((room) => {
+          if (room.room_type === 'main_bedroom') {
+            return { ...room, layout: { x: 0, y: 0, width: 1, height: 1 } };
+          } else if (room.room_type === 'bathroom') {
+            return { ...room, layout: { x: 1, y: 0, width: 1, height: 1 } };
+          } else if (room.room_type === 'kitchen') {
+            return { ...room, layout: { x: 0, y: 1, width: 2, height: 1 } };
+          }
+          return room;
+        });
+
         setRooms(roomList);
       } catch (error) {
         console.error('Error fetching rooms:', error);
@@ -42,31 +55,29 @@ export default function RoomSelectionScreen({ navigation }) {
 
   if (loading) return <ActivityIndicator size="large" />;
 
+  // Separate house room and grid rooms
+  const houseRoom = rooms.find(r => r.room_type === 'house');
+  const gridRooms = rooms.filter(r => r.room_type !== 'house');
+
   return (
     <View style={[global.container, global.roomSelectionWrapper]}>
       <Text style={global.headerText}>Pick a room!</Text>
 
       <View style={[global.roomGrid, {
-        width: Math.max(...rooms.map(r => (r.layout?.x || 0) + (r.layout?.width || 1))) * GRID_UNIT,
-        height: Math.max(...rooms.map(r => (r.layout?.y || 0) + (r.layout?.height || 1))) * GRID_UNIT,
+        width: Math.max(...gridRooms.map(r => (r.layout?.x || 0) + (r.layout?.width || 1))) * GRID_UNIT,
+        height: Math.max(...gridRooms.map(r => (r.layout?.y || 0) + (r.layout?.height || 1))) * GRID_UNIT,
       }]}>
-        {rooms.map((room) => {
+        {gridRooms.map((room) => {
           const layout = room.layout || {};
           const x = layout.x || 0;
           const y = layout.y || 0;
           const w = layout.width || 1;
           const h = layout.height || 1;
 
-          const isHome = room.room_type === 'house';
-
           return (
             <TouchableOpacity
               key={room.id}
-              onPress={() =>
-                isHome
-                  ? navigation.navigate('Home')
-                  : navigation.navigate('Room', { roomId: room.id })
-              }
+              onPress={() => navigation.navigate('Room', { roomId: room.id })}
               style={[
                 global.roomBoxMap,
                 {
@@ -82,6 +93,15 @@ export default function RoomSelectionScreen({ navigation }) {
           );
         })}
       </View>
+
+      {houseRoom && (
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Home')}
+          style={{ marginTop: 30, padding: 16, backgroundColor: '#E0F7FA', borderRadius: 10, alignItems: 'center' }}
+        >
+          <Text style={{ fontSize: 18, color: '#00796B', fontWeight: 'bold' }}>Now go outside and play!</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
