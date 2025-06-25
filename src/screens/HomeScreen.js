@@ -55,25 +55,15 @@ export default function HomeScreen({ navigation }) {
   }, [user, userData]);
 
   const handleLogout = async () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await signOut(auth);
-              // Navigation will be handled automatically by UserContext
-            } catch (error) {
-              Alert.alert('Error', 'Failed to logout');
-            }
-          },
-        },
-      ]
-    );
+    console.log('Logout button pressed!');
+    try {
+      await signOut(auth);
+      console.log('Sign out successful');
+      // UserContext will handle redirect
+    } catch (error) {
+      console.error('Logout error:', error);
+      Alert.alert('Error', 'Failed to logout');
+    }
   };
 
   if (!roomData) {
@@ -94,13 +84,21 @@ export default function HomeScreen({ navigation }) {
           position: 'absolute',
           top: 50,
           right: 20,
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          padding: 10,
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          padding: 12,
           borderRadius: 20,
           zIndex: 1000,
+          minWidth: 60,
+          alignItems: 'center',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
         }}
+        activeOpacity={0.7}
       >
-        <Text style={{ color: '#333', fontSize: 14 }}>Logout</Text>
+        <Text style={{ color: '#333', fontSize: 14, fontWeight: 'bold' }}>Logout</Text>
       </TouchableOpacity>
 
       {Background && (
