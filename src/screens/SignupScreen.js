@@ -1,42 +1,57 @@
-// LoginScreen.js
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Alert, TouchableOpacity } from 'react-native';
 import { auth } from '../lib/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { updateUserLastLogin } from '../models/userModel';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { initializeNewUser } from '../models/userModel';
 import global from '../styles/global';
 
-export default function LoginScreen({ navigation }) {
+export default function SignupScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
+  const validateForm = () => {
+    if (!email || !password || !confirmPassword) {
       Alert.alert('Error', 'Please fill in all fields');
-      return;
+      return false;
     }
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return false;
+    }
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSignUp = async () => {
+    if (!validateForm()) return;
 
     setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      // 1. Create Firebase Auth user
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
-      
-      // Update last login time
-      await updateUserLastLogin(uid);
-      
-      Alert.alert('Success', 'Welcome back to DustBuddies!');
+
+      // 2. Create Firestore user document and starter data
+      await initializeNewUser(uid);
+
+      Alert.alert('Success', 'Account created successfully! Welcome to DustBuddies!');
       // Navigation will be handled automatically by UserContext
     } catch (error) {
-      let errorMessage = 'An error occurred during login';
-      if (error.code === 'auth/user-not-found') {
-        errorMessage = 'No account found with this email';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = 'Incorrect password';
+      let errorMessage = 'An error occurred during signup';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'An account with this email already exists';
       } else if (error.code === 'auth/invalid-email') {
         errorMessage = 'Please enter a valid email address';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Password is too weak';
       }
       Alert.alert('Error', errorMessage);
+      console.error('Signup error:', error);
     } finally {
       setLoading(false);
     }
@@ -44,8 +59,8 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={[global.container, styles.container]}>
-      <Text style={styles.title}>Welcome Back</Text>
-      <Text style={styles.subtitle}>Sign in to continue your cleaning journey!</Text>
+      <Text style={styles.title}>Create Account</Text>
+      <Text style={styles.subtitle}>Join DustBuddies and start your cleaning journey!</Text>
       
       <TextInput
         placeholder="Email"
@@ -64,21 +79,29 @@ export default function LoginScreen({ navigation }) {
         style={styles.input}
       />
       
+      <TextInput
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+        style={styles.input}
+      />
+      
       <TouchableOpacity 
         style={[styles.button, loading && styles.buttonDisabled]} 
-        onPress={handleLogin}
+        onPress={handleSignUp}
         disabled={loading}
       >
         <Text style={styles.buttonText}>
-          {loading ? 'Signing In...' : 'Sign In'}
+          {loading ? 'Creating Account...' : 'Create Account'}
         </Text>
       </TouchableOpacity>
       
       <TouchableOpacity 
         style={styles.linkButton} 
-        onPress={() => navigation.navigate('Signup')}
+        onPress={() => navigation.navigate('Login')}
       >
-        <Text style={styles.linkText}>Don't have an account? Sign up</Text>
+        <Text style={styles.linkText}>Already have an account? Log in</Text>
       </TouchableOpacity>
     </View>
   );
@@ -134,4 +157,4 @@ const styles = StyleSheet.create({
     color: '#2196f3',
     fontSize: 16,
   },
-});
+}); 
