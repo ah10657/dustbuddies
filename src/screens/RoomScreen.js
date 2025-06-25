@@ -89,7 +89,7 @@ export default function RoomScreen({ route }) {
         <Bed
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: (height - bedSize) / 2.5,
             left: (width - bedSize) / 2,
             width: bedSize,
             height: bedSize,
