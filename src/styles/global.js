@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   taskChip: {
-    backgroundColor: '#178591',
+    backgroundColor: '#147883',
+    alignSelf: 'center',
     width: '100%',
     paddingHorizontal: 10,
     paddingVertical: 5,

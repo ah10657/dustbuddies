@@ -8,13 +8,14 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
+import { getRoomTasks } from '../models/tasksModel';
 import AvatarStack from '../components/AvatarStack';
 import BackButtonIcon from '../assets/images/house/house_thumbnail.svg';
 import global from '../styles/global';
@@ -25,6 +26,8 @@ export default function RoomScreen({ route }) {
 
   const [roomData, setRoomData] = useState(null);
   const [roomTasks, setRoomTasks] = useState([]);
+  const [remainingTasks, setRemainingTasks] = useState([]);
+  const [progressPercent, setProgressPercent] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { width, height } = Dimensions.get('window');
 
@@ -42,11 +45,8 @@ export default function RoomScreen({ route }) {
             const roomData = roomSnap.data();
             const userData = userSnap.data();
 
-            const taskSnap = await getDocs(collection(roomRef, 'room_tasks'));
-            const tasks = taskSnap.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
+            // Use the new tasksModel function for better task management
+            const taskData = await getRoomTasks(userId, roomId);
 
             setRoomData({
               ...roomData,
@@ -54,7 +54,9 @@ export default function RoomScreen({ route }) {
                 avatar: userData.avatar,
               },
             });
-            setRoomTasks(tasks);
+            setRoomTasks(taskData.tasks);
+            setRemainingTasks(taskData.remainingTasks);
+            setProgressPercent(taskData.progressPercent);
           } else {
             console.log('Room not found!');
           }
@@ -67,17 +69,11 @@ export default function RoomScreen({ route }) {
     }, [roomId])
   );
 
-
   if (!roomData) return <ActivityIndicator size="large" />;
 
   const Background = decorMap[roomData.decor?.pref_wall];
   const Bed = decorMap[roomData.decor?.pref_bed];
   const bedSize = Math.min(width * 0.6, 600);
-
-  const remainingTasks = roomTasks.filter(task => !task.task_complete);
-  const totalTasks = roomTasks.length;
-  const completedCount = roomTasks.filter(task => task.task_complete).length;
-  const progressPercent = totalTasks ? Math.round((completedCount / totalTasks) * 100) : 0;
 
   return (
     <View style={[global.container, { position: 'relative' }]}>
@@ -93,7 +89,7 @@ export default function RoomScreen({ route }) {
         <Bed
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: (height - bedSize) / 2.5,
             left: (width - bedSize) / 2,
             width: bedSize,
             height: bedSize,
@@ -125,7 +121,7 @@ export default function RoomScreen({ route }) {
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <View style={global.taskChip}>
-                  <Text style={global.taskChipText}>{item.task_name}</Text>
+                  <Text style={global.taskChipText}>{item.name}</Text>
                 </View>
               )}
               contentContainerStyle={global.taskChipContainer}
@@ -139,6 +135,7 @@ export default function RoomScreen({ route }) {
             tintColor="#f7bd50"
             backgroundColor="#ffffff"
             style={{ marginTop: 10 }}
+            rotation={-90}
           >
             {
               () => (
@@ -161,11 +158,11 @@ export default function RoomScreen({ route }) {
               <TouchableOpacity
                 style={[
                   global.taskItem,
-                  item.task_complete && global.taskCompleted,
+                  item.completed && global.taskCompleted,
                 ]}
                 onPress={() =>
                   navigation.navigate('Timer', {
-                    taskName: item.task_name,
+                    taskName: item.name,
                     roomId: roomId,
                   })
                 }
@@ -173,10 +170,10 @@ export default function RoomScreen({ route }) {
                 <Text
                   style={[
                     global.taskText,
-                    item.task_complete && global.taskTextCompleted,
+                    item.completed && global.taskTextCompleted,
                   ]}
                 >
-                  {item.task_name}
+                  {item.name}
                 </Text>
               </TouchableOpacity>
             )}

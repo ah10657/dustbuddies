@@ -1,17 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { View, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
-
-
+import {
+  View,
+  TouchableOpacity,
+  Dimensions,
+  ActivityIndicator,
+  Text,
+} from 'react-native';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
+import { getGlobalTaskCompletion } from '../models/tasksModel';
+import { getHouseRoom } from '../models/roomsModel';
 import AvatarStack from '../components/AvatarStack';
+import AnimatedSun from '../components/AnimatedSun';
 import global from '../styles/global';
 
 export default function HomeScreen({ navigation }) {
   const { width, height } = Dimensions.get('window');
   const [roomData, setRoomData] = useState(null);
+  const [completionPercent, setCompletionPercent] = useState(0);
 
   useEffect(() => {
     const fetchUserAndRooms = async () => {
@@ -26,25 +34,25 @@ export default function HomeScreen({ navigation }) {
         }
 
         const userData = userSnapshot.data();
+        
+        // Use the new getHouseRoom function to find the correct house room
+        const houseRoomData = await getHouseRoom(userId);
 
-        const roomCollection = collection(db, 'user', userId, 'rooms');
-        const roomSnapshot = await getDocs(roomCollection);
-
-        if (roomSnapshot.empty) {
-          console.log('No rooms found!');
+        if (!houseRoomData) {
+          console.log('No house room found!');
           return;
         }
 
-        const firstRoomDoc = roomSnapshot.docs[0];
-        const roomData = firstRoomDoc.data();
-
         setRoomData({
-          ...roomData,
+          ...houseRoomData,
           user: {
-            avatar: userData.avatar
-          }
+            avatar: userData.avatar,
+          },
         });
 
+        // Use the new tasksModel function for better task management with auto-reset
+        const taskData = await getGlobalTaskCompletion(userId);
+        setCompletionPercent(taskData.completionPercent);
       } catch (error) {
         console.error('Error fetching user or rooms:', error);
       }
@@ -53,7 +61,6 @@ export default function HomeScreen({ navigation }) {
     fetchUserAndRooms();
   }, []);
 
-
   if (!roomData) {
     return <ActivityIndicator size="large" />;
   }
@@ -61,13 +68,10 @@ export default function HomeScreen({ navigation }) {
   const Background = decorMap[roomData.decor.background];
   const House = decorMap[roomData.decor.home];
   const Bike = decorMap[roomData.decor.bike];
-  const Sun = decorMap[roomData.decor.sun];
-  const houseSize = Math.min(width * 0.8, 600); // scale based on screen size
-
+  const houseSize = Math.min(width * 0.8, 600);
 
   return (
     <View style={[global.container]}>
-      {/* Background layer */}
       {Background && (
         <Background
           width={width}
@@ -75,13 +79,14 @@ export default function HomeScreen({ navigation }) {
           preserveAspectRatio="xMidYMax slice"
         />
       )}
+
       {House && (
         <TouchableOpacity
           onPress={() => navigation.navigate('RoomSelection')}
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: (height - houseSize) / 3,
             left: (width - houseSize) / 2,
             width: houseSize,
             height: houseSize,
@@ -90,34 +95,37 @@ export default function HomeScreen({ navigation }) {
           <House width={houseSize} height={houseSize} />
         </TouchableOpacity>
       )}
+
       {Bike && (
         <TouchableOpacity
           onPress={() => navigation.navigate('Shop')}
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: 100,
+            bottom: width * 0.3,
             left: 20,
           }}
         >
           <Bike width={100} height={100} />
         </TouchableOpacity>
       )}
-      {Sun && (
-        <Sun
-          style={{
-            position: 'absolute',
-            top: 20,
-            right: 30,
-            width: 150,
-            height: 150,
-          }}
-        />
-      )}
+
+      {/* Sun with progress overlay replaced by ProgressRing */}
+      <View
+        style={{
+          position: 'absolute',
+          top: height * 0.05,
+          right: width * 0.2,
+          width: 100,
+          height: 100,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <AnimatedSun progress={completionPercent} size={200} />
+      </View>
 
       {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
     </View>
-    
-
   );
 }
