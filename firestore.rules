@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Development rules - allows all access until July 1, 2025
+    // This is useful for getting started, but should be updated before production
+    match /{document=**} {
+      allow read, write: if request.time < timestamp.date(2025, 7, 1);
+    }
+
+    // User-specific security rules (for when you're ready to implement proper security)
+    // Uncomment these rules and remove the development rules above when ready for production
+    /*
+    match /users/{userId} {
+      // Users can only read and write their own data
+      // This automatically protects all nested data (rooms, tasks, settings, etc.)
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    */
+  }
+} 

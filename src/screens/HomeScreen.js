@@ -5,10 +5,11 @@ import {
   Dimensions,
   ActivityIndicator,
   Text,
+  Alert,
 } from 'react-native';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { getUserId } from '../lib/getUserId';
+import { signOut } from 'firebase/auth';
+import { auth } from '../lib/firebase';
+import { useUser } from '../contexts/UserContext';
 import { decorMap } from '../lib/svgMap';
 import { getGlobalTaskCompletion } from '../models/tasksModel';
 import { getHouseRoom } from '../models/roomsModel';
@@ -18,25 +19,17 @@ import global from '../styles/global';
 
 export default function HomeScreen({ navigation }) {
   const { width, height } = Dimensions.get('window');
+  const { user, userData } = useUser();
   const [roomData, setRoomData] = useState(null);
   const [completionPercent, setCompletionPercent] = useState(0);
 
   useEffect(() => {
-    const fetchUserAndRooms = async () => {
+    const fetchRooms = async () => {
       try {
-        const userId = getUserId();
-        const userDocRef = doc(db, 'user', userId);
-        const userSnapshot = await getDoc(userDocRef);
+        if (!user) return;
 
-        if (!userSnapshot.exists()) {
-          console.log('No user found!');
-          return;
-        }
-
-        const userData = userSnapshot.data();
-        
         // Use the new getHouseRoom function to find the correct house room
-        const houseRoomData = await getHouseRoom(userId);
+        const houseRoomData = await getHouseRoom(user.uid);
 
         if (!houseRoomData) {
           console.log('No house room found!');
@@ -46,20 +39,32 @@ export default function HomeScreen({ navigation }) {
         setRoomData({
           ...houseRoomData,
           user: {
-            avatar: userData.avatar,
+            avatar: userData?.avatar,
           },
         });
 
         // Use the new tasksModel function for better task management with auto-reset
-        const taskData = await getGlobalTaskCompletion(userId);
+        const taskData = await getGlobalTaskCompletion(user.uid);
         setCompletionPercent(taskData.completionPercent);
       } catch (error) {
-        console.error('Error fetching user or rooms:', error);
+        console.error('Error fetching rooms:', error);
       }
     };
 
-    fetchUserAndRooms();
-  }, []);
+    fetchRooms();
+  }, [user, userData]);
+
+  const handleLogout = async () => {
+    console.log('Logout button pressed!');
+    try {
+      await signOut(auth);
+      console.log('Sign out successful');
+      // UserContext will handle redirect
+    } catch (error) {
+      console.error('Logout error:', error);
+      Alert.alert('Error', 'Failed to logout');
+    }
+  };
 
   if (!roomData) {
     return <ActivityIndicator size="large" />;
@@ -72,6 +77,30 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={[global.container]}>
+      {/* Logout Button */}
+      <TouchableOpacity
+        onPress={handleLogout}
+        style={{
+          position: 'absolute',
+          top: 50,
+          right: 20,
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          padding: 12,
+          borderRadius: 20,
+          zIndex: 1000,
+          minWidth: 60,
+          alignItems: 'center',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }}
+        activeOpacity={0.7}
+      >
+        <Text style={{ color: '#333', fontSize: 14, fontWeight: 'bold' }}>Logout</Text>
+      </TouchableOpacity>
+
       {Background && (
         <Background
           width={width}
