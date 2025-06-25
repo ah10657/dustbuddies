@@ -25,13 +25,12 @@ export const initializeNewUser = async (userId) => {
       skin: 'skin',
       top: 'shirt',
     },
-    coins: 0,
+    coins: 100,
   });
 
   // Step 2: Room templates
   const roomData = [
     {
-      room_name: 'frontYard',
       display_name: 'Front Yard',
       room_type: 'house',
       decor: {
@@ -40,15 +39,8 @@ export const initializeNewUser = async (userId) => {
         home: 'house',
         sun: 'sun',
       },
-      layout: {
-        height: 1,
-        width: 2,
-        x: 0,
-        y: 1,
-      },
     },
     {
-      room_name: 'mainBathroom',
       display_name: 'Bathroom',
       room_type: 'bathroom',
       decor: {
@@ -60,9 +52,14 @@ export const initializeNewUser = async (userId) => {
         pref_wall: 'mainBathroom',
         pref_wall_mirror: 'wallMirror',
       },
+      layout: {
+        height: 2,
+        width: 1,
+        x: 0,
+        y: 0,
+      },
     },
     {
-      room_name: 'mainBedroom',
       display_name: 'Bedroom',
       room_type: 'bedroom',
       decor: {
@@ -72,6 +69,12 @@ export const initializeNewUser = async (userId) => {
         pref_side: '',
         pref_wall: 'basicBedroom',
         pref_window: '',
+      },
+      layout: {
+        height: 5,
+        width: 4,
+        x: 1,
+        y: 0,
       },
     },
   ];
@@ -98,7 +101,6 @@ export const initializeNewUser = async (userId) => {
   for (const room of roomData) {
     const roomRef = doc(roomsRef); // auto-ID
     await setDoc(roomRef, {
-      room_name: room.room_name,
       display_name: room.display_name,
       room_type: room.room_type,
       decor: room.decor,
