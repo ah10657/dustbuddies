@@ -54,3 +54,18 @@ export const getHouseRoom = async (userId) => {
     return null;
   }
 };
+
+// 🚪 Get all rooms for a user (for HomeScreen grouped task list)
+export const getAllRooms = async (userId) => {
+  try {
+    const roomsRef = collection(db, 'user', userId, 'rooms');
+    const roomsSnapshot = await getDocs(roomsRef);
+    return roomsSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error fetching all rooms:', error);
+    return [];
+  }
+};

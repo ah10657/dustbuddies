@@ -128,21 +128,24 @@ export default function RoomScreen({ route }) {
             />
           )}
 
-          <AnimatedCircularProgress
-            size={70}
-            width={7}
-            fill={progressPercent}
-            tintColor="#f7bd50"
-            backgroundColor="#ffffff"
-            style={{ marginTop: 10 }}
-            rotation={-90}
-          >
-            {
-              () => (
-                <Text style={global.progressText}>{progressPercent}%</Text>
-              )
-            }
-          </AnimatedCircularProgress>
+          <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ position: 'absolute', width: 65, height: 65, borderRadius: 35, backgroundColor: '#fff', zIndex: 0 }} />
+            <AnimatedCircularProgress
+              size={70}
+              width={7}
+              fill={progressPercent}
+              tintColor="#f7bd50"
+              backgroundColor="#ffffff"
+              style={{ zIndex: 1 }}
+              rotation={0}
+            >
+              {
+                () => (
+                  <Text style={global.progressText}>{progressPercent}%</Text>
+                )
+              }
+            </AnimatedCircularProgress>
+          </View>
         </View>
 
         <Text style={global.dropdownToggle}>{dropdownOpen ? '▲' : '▼'}</Text>

@@ -186,20 +186,24 @@ export default function TimerScreen({ navigation }) {
               <Text style={global.focusText}>Focus Mode</Text>
             </View>
           ) : (
-            <AnimatedCircularProgress
-              size={200}
-              width={15}
-              fill={duration > 0 ? ((duration - remaining) / duration) * 100 : 0}
-              tintColor="#f7bd50"
-              backgroundColor="#58a3bc"
-              rotation={-90}
-            >
-              {() => (
-                <Text style={global.time}>
-                  {formatTime(remaining)}
-                </Text>
-              )}
-            </AnimatedCircularProgress>
+            <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ position: 'absolute', width: 195, height: 195, borderRadius: 100, backgroundColor: '#fff', zIndex: 0 }} />
+              <AnimatedCircularProgress
+                size={200}
+                width={15}
+                fill={duration > 0 ? ((duration - remaining) / duration) * 100 : 0}
+                tintColor="#f7bd50"
+                backgroundColor="#58a3bc"
+                rotation={0}
+                style={{ zIndex: 1 }}
+              >
+                {() => (
+                  <Text style={[global.time, { color: '#F7BD50' }]}>
+                    {formatTime(remaining)}
+                  </Text>
+                )}
+              </AnimatedCircularProgress>
+            </View>
           )}
 
 
