@@ -12,12 +12,12 @@ export const getUserData = async (userId) => {
   }
 };
 
-export const initializeNewUser = async (userId) => {
+export const initializeNewUser = async (userId, options = {}) => {
   const userRef = doc(db, 'user', userId);
 
   // Step 1: Base user profile
   await setDoc(userRef, {
-    avatar: {
+    avatar: options.avatar || {
       bottom: 'pants',
       eyes: 'eyes',
       hair: 'shortHair',
@@ -26,10 +26,12 @@ export const initializeNewUser = async (userId) => {
       top: 'shirt',
     },
     coins: 100,
+    // Add any other fields from options if needed
+    ...options.otherUserData,
   });
 
   // Step 2: Room templates
-  const roomData = [
+  const roomData = options.rooms || [
     {
       display_name: 'Front Yard',
       room_type: 'house',
