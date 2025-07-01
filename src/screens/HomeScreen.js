@@ -264,7 +264,7 @@ export default function HomeScreen({ navigation }) {
                             });
                           }}
                         >
-                          <Text style={{ color: task.completed ? '#949392' : '#E7A120', fontWeight: task.completed ? 'bold' : 'bold', fontSize: 15 }}>
+                          <Text style={task.completed ? global.buttonTextCompleted : global.buttonText}>
                             {task.name}
                           </Text>
                           {task.completed ? (
