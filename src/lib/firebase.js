@@ -1,6 +1,6 @@
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 import Constants from 'expo-constants';
 
 const firebaseConfig = {
@@ -12,10 +12,11 @@ const firebaseConfig = {
   appId: Constants.expoConfig.extra.FIREBASE_APP_ID,
 };
 
-// Prevent reinitializing firebase
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
-const auth = getAuth(app);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-export { auth };
-export const db = getFirestore(app);
+export { auth, db };
