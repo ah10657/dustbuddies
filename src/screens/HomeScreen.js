@@ -250,6 +250,11 @@ export default function HomeScreen({ navigation }) {
                             marginBottom: 6,
                             borderWidth: 1,
                             borderColor: task.completed ? '#f7bd50' : '#eee',
+                            shadowColor: '#E7A120',
+                            shadowOffset: { width: 0, height: 6 },
+                            shadowOpacity: 0.18,
+                            shadowRadius: 8,
+                            elevation: 8,
                           }}
                           onPress={() => {
                             setDropdownOpen(false);
@@ -294,10 +299,15 @@ export default function HomeScreen({ navigation }) {
               height: 40,
               backgroundColor: 'transparent',
               zIndex: 101,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
             }}
             onPress={() => setDropdownOpen(false)}
             activeOpacity={0.7}
-          />
+          >
+            <Feather name="chevron-up" size={32} color="#fff" style={{ textAlign: 'center' }} />
+          </TouchableOpacity>
         </View>
       )}
 
