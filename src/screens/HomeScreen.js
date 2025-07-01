@@ -12,16 +12,21 @@ import { auth } from '../lib/firebase';
 import { useUser } from '../contexts/UserContext';
 import { decorMap } from '../lib/svgMap';
 import { getGlobalTaskCompletion } from '../models/tasksModel';
-import { getHouseRoom } from '../models/roomsModel';
+import { getHouseRoom, getAllRooms } from '../models/roomsModel';
 import AvatarStack from '../components/AvatarStack';
 import AnimatedSun from '../components/AnimatedSun';
 import global from '../styles/global';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import Animated from 'react-native-reanimated';
+import { Feather } from '@expo/vector-icons';
 
 export default function HomeScreen({ navigation }) {
   const { width, height } = Dimensions.get('window');
   const { user, userData } = useUser();
   const [roomData, setRoomData] = useState(null);
   const [completionPercent, setCompletionPercent] = useState(0);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [roomsWithTasks, setRoomsWithTasks] = useState([]);
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -46,6 +51,21 @@ export default function HomeScreen({ navigation }) {
         // Use the new tasksModel function for better task management with auto-reset
         const taskData = await getGlobalTaskCompletion(user.uid);
         setCompletionPercent(taskData.completionPercent);
+
+        // Fetch all rooms and their tasks
+        const allRooms = await getAllRooms(user.uid);
+        // Group tasks by room
+        const roomMap = {};
+        taskData.tasks.forEach(task => {
+          if (!roomMap[task.roomId]) roomMap[task.roomId] = [];
+          roomMap[task.roomId].push(task);
+        });
+        const roomsWithTasks = allRooms.map(room => ({
+          id: room.id,
+          name: room.display_name,
+          tasks: roomMap[room.id] || [],
+        }));
+        setRoomsWithTasks(roomsWithTasks);
       } catch (error) {
         console.error('Error fetching rooms:', error);
       }
@@ -140,7 +160,9 @@ export default function HomeScreen({ navigation }) {
       )}
 
       {/* Sun with progress overlay replaced by ProgressRing */}
-      <View
+      <TouchableOpacity
+        onPress={() => setDropdownOpen(!dropdownOpen)}
+        activeOpacity={0.8}
         style={{
           position: 'absolute',
           top: height * 0.05,
@@ -149,10 +171,145 @@ export default function HomeScreen({ navigation }) {
           height: 100,
           alignItems: 'center',
           justifyContent: 'center',
+          zIndex: 10,
         }}
       >
         <AnimatedSun progress={completionPercent} size={200} />
-      </View>
+      </TouchableOpacity>
+
+      {/* Dropdown Task List (All Rooms) as Full-Screen Overlay */}
+      {dropdownOpen && (
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: width,
+            height: height,
+            backgroundColor: '#E7A120', // semi-transparent overlay
+            zIndex: 100,
+            borderBottomLeftRadius: 32,
+            borderBottomRightRadius: 32,
+            paddingBottom: 32,
+            paddingTop: 0,
+            justifyContent: 'flex-start',
+          }}
+        >
+          {/* Progress Bar at the top */}
+          <View style={{ alignItems: 'center', marginTop: 40, marginBottom: 16 }}>
+            <View style={{ position: 'absolute', width: 195, height: 195, borderRadius: 100, backgroundColor: '#fff', zIndex: 0 }} />
+            <AnimatedCircularProgress
+              size={200}
+              width={25}
+              fill={completionPercent}
+              tintColor="#F7BD50"
+              backgroundColor="#f7e6b0"
+              rotation={0}
+              style={{ zIndex: 1 }}
+            >
+              {() => (
+                <Text style={{ fontSize: 50, color: '#F7BD50', fontWeight: 'bold' }}>{completionPercent}%</Text>
+              )}
+            </AnimatedCircularProgress>
+            <Text style={{ color: '#F7BD50', fontWeight: 'bold', fontSize: 18, marginTop: 4 }}>All Tasks</Text>
+          </View>
+          {/* Scrollable list of rooms and tasks */}
+          <View style={{ flex: 1, width: '100%' }}>
+            <Animated.ScrollView
+              contentContainerStyle={{ paddingHorizontal: 18, paddingBottom: 40 }}
+              showsVerticalScrollIndicator={false}
+            >
+              {roomsWithTasks.map((room) => (
+                <View key={room.id} style={{ marginBottom: 18 }}>
+                  <View style={{
+                    backgroundColor: '#F7BD50',
+                    borderTopLeftRadius: 12,
+                    borderTopRightRadius: 12,
+                    padding: 10,
+                    alignSelf: 'flex-start',
+                    marginBottom: -10,
+                  }}>
+                    <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20 }}>{room.name}</Text>
+                    
+                  </View>
+                  <View style={{ backgroundColor: '#F7BD50', borderRadius: 12, padding: 8 }}>
+                    {room.tasks.length === 0 ? (
+                      <Text style={{ color: '#E7A120', fontStyle: 'italic' }}>No tasks</Text>
+                    ) : (
+                      room.tasks.map((task) => (
+                        <TouchableOpacity
+                          key={task.id}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            backgroundColor: task.completed ? '#F2F0EF' : '#fff',
+                            borderRadius: 8,
+                            paddingVertical: 10,
+                            paddingHorizontal: 14,
+                            marginBottom: 6,
+                            borderWidth: 1,
+                            borderColor: task.completed ? '#f7bd50' : '#eee',
+                            shadowColor: '#E7A120',
+                            shadowOffset: { width: 0, height: 6 },
+                            shadowOpacity: 0.18,
+                            shadowRadius: 8,
+                            elevation: 8,
+                          }}
+                          onPress={() => {
+                            setDropdownOpen(false);
+                            navigation.navigate('Timer', {
+                              taskName: task.name,
+                              roomId: room.id,
+                            });
+                          }}
+                        >
+                          <Text style={task.completed ? global.buttonTextCompleted : global.buttonText}>
+                            {task.name}
+                          </Text>
+                          {task.completed ? (
+                            <View style={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: 14,
+                              backgroundColor: '#E7A120',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}>
+                              <Feather name="check" size={18} color="#fff" />
+                            </View>
+                          ) : (
+                            <View style={{ width: 24, height: 24 }} />
+                          )}
+                        </TouchableOpacity>
+                      ))
+                    )}
+                  </View>
+                </View>
+              ))}
+            </Animated.ScrollView>
+          </View>
+          {/* Close area at the bottom for overlay effect */}
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: width,
+              height: 40,
+              backgroundColor: 'transparent',
+              zIndex: 101,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+            }}
+            onPress={() => setDropdownOpen(false)}
+            activeOpacity={0.7}
+          >
+            <Feather name="chevron-up" size={32} color="#fff" style={{ textAlign: 'center' }} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
     </View>
