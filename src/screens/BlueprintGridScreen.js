@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Button, StyleSheet, PanResponder, Dimensions, ScrollView, TouchableOpacity, Animated } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import your firebase config and user context as needed
 
 const GRID_WIDTH = 4;
@@ -177,7 +178,32 @@ export default function BlueprintGridScreen({ route, navigation }) {
 
   const handleDone = async () => {
     if (unplacedRooms.length > 0) return;
-    navigation.goBack();
+  
+    // Ensure a 'house' (Front Yard) room exists
+    let finalRooms = rooms;
+    if (!rooms.some(r => r.room_type === 'house')) {
+      finalRooms = [
+        {
+          display_name: 'Front Yard',
+          room_type: 'house',
+          decor: {
+            background: 'homeScreenYard',
+            bike: 'bike',
+            home: 'house',
+            sun: 'sun',
+          },
+          placed: true,
+        },
+        ...rooms,
+      ];
+    }
+  
+    try {
+      await AsyncStorage.setItem('pendingBlueprint', JSON.stringify(finalRooms));
+    } catch (e) {
+      console.warn('Could not save blueprint:', e);
+    }
+    navigation.navigate('Signup');
   };
 
   return (
