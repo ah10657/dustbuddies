@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
-
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
@@ -35,16 +34,21 @@ export default function HomeScreen({ navigation }) {
           return;
         }
 
-        const firstRoomDoc = roomSnapshot.docs[0];
-        const roomData = firstRoomDoc.data();
+        const houseRoomDoc = roomSnapshot.docs.find(doc => doc.data().room_type === 'house');
+
+        if (!houseRoomDoc) {
+          console.log('No house room found!');
+          return;
+        }
+
+        const houseRoomData = houseRoomDoc.data();
 
         setRoomData({
-          ...roomData,
+          ...houseRoomData,
           user: {
-            avatar: userData.avatar
-          }
+            avatar: userData.avatar,
+          },
         });
-
       } catch (error) {
         console.error('Error fetching user or rooms:', error);
       }
@@ -53,17 +57,15 @@ export default function HomeScreen({ navigation }) {
     fetchUserAndRooms();
   }, []);
 
-
   if (!roomData) {
     return <ActivityIndicator size="large" />;
   }
 
-  const Background = decorMap[roomData.decor.background];
-  const House = decorMap[roomData.decor.home];
-  const Bike = decorMap[roomData.decor.bike];
-  const Sun = decorMap[roomData.decor.sun];
-  const houseSize = Math.min(width * 0.8, 600); // scale based on screen size
-
+  const Background = decorMap[roomData.decor?.background];
+  const House = decorMap[roomData.decor?.home];
+  const Bike = decorMap[roomData.decor?.bike];
+  const Sun = decorMap[roomData.decor?.sun];
+  const houseSize = Math.min(width * 0.8, 600); 
 
   return (
     <View style={[global.container]}>
@@ -117,7 +119,5 @@ export default function HomeScreen({ navigation }) {
 
       {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
     </View>
-    
-
   );
 }

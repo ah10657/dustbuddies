@@ -14,6 +14,9 @@ import global from '../styles/global';
 
 const GRID_UNIT = 60; // base room size (adjust as needed)
 
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+
 export default function RoomSelectionScreen({ navigation }) {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,10 +66,11 @@ export default function RoomSelectionScreen({ navigation }) {
             <TouchableOpacity
               key={room.id}
               onPress={() =>
-                isHome
+                room.room_type === 'house'
                   ? navigation.navigate('Home')
-                  : navigation.navigate('Room', { roomId: room.id })
+                  : navigation.navigate(capitalize(room.room_type), { roomId: room.id })
               }
+
               style={[
                 global.roomBoxMap,
                 {
