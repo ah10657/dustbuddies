@@ -25,6 +25,8 @@ export default function BlueprintGridScreen({ route, navigation }) {
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
   const gridRef = useRef();
   const [gridLayout, setGridLayout] = useState({ x: 0, y: 0 });
+  const numFloors = route.params.numFloors || 1;
+  const [currentFloor, setCurrentFloor] = useState(0);
 
   // Helper: Snap to grid
   const snapToGrid = (x, y) => ({
@@ -35,7 +37,10 @@ export default function BlueprintGridScreen({ route, navigation }) {
   // Helper: Check if a room would overlap any other placed room (excluding itself)
   const wouldOverlap = (testRoom, idxToIgnore = null) => {
     return rooms.some((r, i) =>
-      r.placed && i !== idxToIgnore && isOverlap(testRoom, r)
+      r.placed &&
+      i !== idxToIgnore &&
+      r.floor === currentFloor && // Only check overlap on the current floor
+      isOverlap(testRoom, r)
     );
   };
 
@@ -89,7 +94,8 @@ export default function BlueprintGridScreen({ route, navigation }) {
           ...rooms[idx].layout,
           x: snapped.x,
           y: snapped.y
-        }
+        },
+        floor: currentFloor
       };
       // Prevent off-grid and overlap
       if (!isOffGrid(newRoom) && !wouldOverlap(newRoom, idx)) {
@@ -152,6 +158,7 @@ export default function BlueprintGridScreen({ route, navigation }) {
     const newRoom = {
       ...rooms[idx],
       placed: true,
+      floor: currentFloor,
       layout: {
         ...rooms[idx].layout,
         x: snapped.x,
@@ -174,18 +181,21 @@ export default function BlueprintGridScreen({ route, navigation }) {
 
   // Unplaced and placed rooms
   const unplacedRooms = rooms.filter(r => !r.placed);
-  const placedRooms = rooms.filter(r => r.placed);
+  const placedRooms = rooms.filter(r => r.placed && r.floor === currentFloor);
 
   const handleDone = async () => {
     if (unplacedRooms.length > 0) return;
-  
-    // Ensure a 'house' (Front Yard) room exists
-    let finalRooms = rooms;
-    if (!rooms.some(r => r.room_type === 'house')) {
+    let finalRooms = rooms.map(r => ({
+      ...r,
+      floor: r.floor ?? 0,
+      ...(r.room_type === 'house' ? { placed: true } : {})
+    }));
+    if (!finalRooms.some(r => r.room_type === 'house')) {
       finalRooms = [
         {
           display_name: 'Front Yard',
           room_type: 'house',
+          floor: 0,
           decor: {
             background: 'homeScreenYard',
             bike: 'bike',
@@ -194,10 +204,9 @@ export default function BlueprintGridScreen({ route, navigation }) {
           },
           placed: true,
         },
-        ...rooms,
+        ...finalRooms,
       ];
     }
-  
     try {
       await AsyncStorage.setItem('pendingBlueprint', JSON.stringify(finalRooms));
     } catch (e) {
@@ -212,6 +221,13 @@ export default function BlueprintGridScreen({ route, navigation }) {
       onResponderMove={handleMove}
       onResponderRelease={handleRelease}
     >
+      {/* Back button */}
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 16, left: 16, zIndex: 100 }}
+        onPress={() => navigation.navigate('BlueprintSetup', { rooms: route.params.rooms, numFloors: route.params.numFloors })}
+      >
+        <Text style={{ fontSize: 24, color: '#fff' }}>{'← Back'}</Text>
+      </TouchableOpacity>
       <Text style={styles.header}>Drag your rooms onto the grid!</Text>
       {/* Horizontal scroll bar for unplaced rooms */}
       <ScrollView horizontal style={styles.scrollBar} contentContainerStyle={{ alignItems: 'center' }}>
@@ -258,6 +274,13 @@ export default function BlueprintGridScreen({ route, navigation }) {
               ]}
               {...createPlacedRoomPanResponder(room, realIdx).panHandlers}
             >
+              {/* Remove button */}
+              <TouchableOpacity
+                style={styles.removeButton}
+                onPress={() => setRooms(rooms => rooms.map((r, i) => i === realIdx ? { ...r, placed: false } : r))}
+              >
+                <Text style={{ color: '#fff', fontWeight: 'bold' }}>×</Text>
+              </TouchableOpacity>
               <Text style={styles.roomLabel}>{room.display_name}</Text>
               {/* Resize handle in bottom right */}
               <View
@@ -288,6 +311,13 @@ export default function BlueprintGridScreen({ route, navigation }) {
           </Animated.View>
         )}
       </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
+        {[...Array(numFloors)].map((_, i) => (
+          <TouchableOpacity key={i} onPress={() => setCurrentFloor(i)} style={{ margin: 4, padding: 8, backgroundColor: currentFloor === i ? '#2196f3' : '#eee', borderRadius: 8 }}>
+            <Text style={{ color: currentFloor === i ? '#fff' : '#333' }}>Floor {i + 1}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
       <Button title="I'm done!" onPress={handleDone} disabled={!!(unplacedRooms.length > 0 || dragging || resizing)} />
     </View>
   );
@@ -305,4 +335,16 @@ const styles = StyleSheet.create({
   roomLabel: { color: '#333', fontWeight: 'bold' },
   resizeHandle: { position: 'absolute', right: 0, bottom: 0, width: 20, height: 20, backgroundColor: 'rgba(0,0,0,0.2)', borderBottomRightRadius: 8, zIndex: 10 },
   floatingRoom: { backgroundColor: '#fff', borderRadius: 8, justifyContent: 'center', alignItems: 'center', elevation: 4, borderWidth: 1, borderColor: '#2196f3' },
+  removeButton: {
+    position: 'absolute',
+    top: 2,
+    right: 2,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#e53935',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 20,
+  },
 });

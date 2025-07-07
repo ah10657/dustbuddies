@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Button, StyleSheet } from 'react-native';
 
 const ROOM_TYPES = [
@@ -6,10 +6,28 @@ const ROOM_TYPES = [
   'Laundry Room', 'Bedroom'
 ];
 
-export default function BlueprintSetupScreen({ navigation }) {
+export default function BlueprintSetupScreen({ navigation, route }) {
   const [roomCounts, setRoomCounts] = useState(
     ROOM_TYPES.reduce((acc, type) => ({ ...acc, [type]: 1 }), {})
   );
+  const [numFloors, setNumFloors] = useState(1);
+
+  // Restore previous state if coming back from BlueprintGridScreen
+  useEffect(() => {
+    if (route?.params?.rooms) {
+      // Reconstruct roomCounts from the rooms array
+      const counts = { ...ROOM_TYPES.reduce((acc, type) => ({ ...acc, [type]: 0 }), {}) };
+      route.params.rooms.forEach(room => {
+        // Remove trailing numbers for multi-rooms (e.g., 'Bedroom 2' -> 'Bedroom')
+        const type = ROOM_TYPES.find(t => room.display_name.startsWith(t));
+        if (type) counts[type] += 1;
+      });
+      setRoomCounts(counts);
+    }
+    if (route?.params?.numFloors) {
+      setNumFloors(route.params.numFloors);
+    }
+  }, [route?.params]);
 
   const increment = (type) => setRoomCounts({ ...roomCounts, [type]: roomCounts[type] + 1 });
   const decrement = (type) => setRoomCounts({ ...roomCounts, [type]: Math.max(0, roomCounts[type] - 1) });
@@ -29,7 +47,7 @@ export default function BlueprintSetupScreen({ navigation }) {
         }
       }
     });
-    navigation.navigate('BlueprintGrid', { rooms });
+    navigation.navigate('BlueprintGrid', { rooms, numFloors });
   };
 
   return (
@@ -44,6 +62,12 @@ export default function BlueprintSetupScreen({ navigation }) {
             <TouchableOpacity onPress={() => increment(type)} style={styles.button}><Text>+</Text></TouchableOpacity>
           </View>
         ))}
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+          <Text style={{ fontSize: 18, marginRight: 8 }}>Floors:</Text>
+          <TouchableOpacity onPress={() => setNumFloors(Math.max(1, numFloors - 1))} style={{ padding: 8, backgroundColor: '#fff', borderRadius: 8, marginHorizontal: 4 }}><Text>-</Text></TouchableOpacity>
+          <Text style={{ fontSize: 18, marginHorizontal: 8 }}>{numFloors}</Text>
+          <TouchableOpacity onPress={() => setNumFloors(Math.min(4, numFloors + 1))} style={{ padding: 8, backgroundColor: '#fff', borderRadius: 8, marginHorizontal: 4 }}><Text>+</Text></TouchableOpacity>
+        </View>
       </View>
       <Button title="I'm done!" onPress={handleDone} />
     </View>

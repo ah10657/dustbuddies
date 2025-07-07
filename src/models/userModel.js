@@ -35,6 +35,7 @@ export const initializeNewUser = async (userId, options = {}) => {
     {
       display_name: 'Front Yard',
       room_type: 'house',
+      floor: 0,
       decor: {
         background: 'homeScreenYard',
         bike: 'bike',
@@ -45,6 +46,7 @@ export const initializeNewUser = async (userId, options = {}) => {
     {
       display_name: 'Bathroom',
       room_type: 'bathroom',
+      floor: 0,
       decor: {
         pref_floor: '',
         pref_toilet: 'toilet',
@@ -64,6 +66,7 @@ export const initializeNewUser = async (userId, options = {}) => {
     {
       display_name: 'Bedroom',
       room_type: 'bedroom',
+      floor: 0,
       decor: {
         pref_bed: 'bed',
         pref_nightstand: '',
@@ -138,6 +141,7 @@ export const initializeNewUser = async (userId, options = {}) => {
       room_type: room.room_type,
       ...(room.decor ? { decor: room.decor } : {}),
       ...(room.layout ? { layout: room.layout } : {}),
+      ...(room.floor !== undefined ? { floor: room.floor } : {}),
     });
 
     // Use starterTasks for the room_type, or defaultTasks if not found
