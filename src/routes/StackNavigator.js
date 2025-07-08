@@ -3,16 +3,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { View, ActivityIndicator } from 'react-native';
 
 import HomeScreen from '../screens/HomeScreen';
-import RoomScreen from '../screens/RoomScreen';
+import BedroomScreen from '../screens/BedroomScreen';
 import RoomSelectionScreen from '../screens/RoomSelectionScreen';
 import TimerScreen from '../screens/TimerScreen';
 import ShopScreen from '../screens/ShopScreen';
+import BathroomScreen from '../screens/BathroomScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import global from '../styles/global';
 import { TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../contexts/UserContext';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -36,7 +38,8 @@ export default function StackNavigator() {
         // Authenticated user screens
         <>
           <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Room" component={RoomScreen} />
+          <Stack.Screen name="BedroomScreen" component={BedroomScreen} />
+          <Stack.Screen name="BathroomScreen" component={BathroomScreen} />
           <Stack.Screen name="RoomSelection" component={RoomSelectionScreen} />
           <Stack.Screen name="Timer" component={TimerScreen} />
           <Stack.Screen name="Shop" component={ShopScreen} />
@@ -48,6 +51,7 @@ export default function StackNavigator() {
           <Stack.Screen name="Signup" component={SignupScreen} />
         </>
       )}
+      
     </Stack.Navigator>
   );
 }

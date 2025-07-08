@@ -14,6 +14,16 @@ import global from '../styles/global';
 
 const GRID_UNIT = 60; // base room size (adjust as needed)
 
+// Map room_type to the corresponding screen name
+const ROOM_TYPE_TO_SCREEN = {
+  bedroom: 'BedroomScreen',
+  bathroom: 'BathroomScreen',
+  kitchen: 'KitchenScreen', // Add KitchenScreen if/when it exists
+};
+
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
+
 export default function RoomSelectionScreen({ navigation }) {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -74,10 +84,19 @@ export default function RoomSelectionScreen({ navigation }) {
           const w = layout.width || 1;
           const h = layout.height || 1;
 
+          // Get the correct screen name for this room type
+          const screenName = ROOM_TYPE_TO_SCREEN[room.room_type];
+
           return (
             <TouchableOpacity
               key={room.id}
-              onPress={() => navigation.navigate('Room', { roomId: room.id })}
+              onPress={() => {
+                if (screenName) {
+                  navigation.navigate(screenName, { roomId: room.id });
+                } else {
+                  alert('Unknown room type: ' + room.room_type);
+                }
+              }}
               style={[
                 global.roomBoxMap,
                 {

@@ -6,9 +6,16 @@ import HouseThumbnail from '../assets/images/house/house_thumbnail.svg'
 import HomeScreenYard from '../assets/images/homeScreen/homeScreenYard.svg';
 import BasicBedroom from '../assets/images/house/mainBedroom/basic_bedroom.svg';
 import BlueBackground from '../assets/images/tutorial/blue_background.svg';
+import MainBathroom from '../assets/images/house/bathroom/main_bathroom.svg'
 
 // Decor
 import Bed from '../assets/images/house/mainBedroom/bed.svg';
+import Bathtub from '../assets/images/house/bathroom/bathtub.svg';
+import Toilet from '../assets/images/house/bathroom/toilet.svg';
+import ToiletPaper from '../assets/images/house/bathroom/toiletPaper.svg';
+import TrashcanSmall from '../assets/images/house/bathroom/trashcanSmall';
+import WallMirror from '../assets/images/house/bathroom/wallMirror.svg';
+
 
 // Avatar
 import BasicAvatar from '../assets/images/avatar/basic_avatar';
@@ -39,9 +46,15 @@ export const decorMap = {
   homeScreenYard: HomeScreenYard,
   basicBedroom: BasicBedroom,
   blueBackground: BlueBackground,
+  mainBathroom: MainBathroom,
 
   // Decor
   bed: Bed,
+  bathtub: Bathtub,
+  toilet: Toilet,
+  toiletPaper: ToiletPaper,
+  trashcanSmall: TrashcanSmall,
+  wallMirror: WallMirror,
   
   // Avatar
   basicAvatar: BasicAvatar,
