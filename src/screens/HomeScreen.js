@@ -19,6 +19,7 @@ import global from '../styles/global';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import Animated from 'react-native-reanimated';
 import { Feather } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function HomeScreen({ navigation }) {
   const { width, height } = Dimensions.get('window');
@@ -28,51 +29,59 @@ export default function HomeScreen({ navigation }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [roomsWithTasks, setRoomsWithTasks] = useState([]);
 
-  useEffect(() => {
-    const fetchRooms = async () => {
-      try {
-        if (!user) return;
+  const fetchRooms = async () => {
+    try {
+      if (!user) return;
 
-        // Use the new getHouseRoom function to find the correct house room
-        const houseRoomData = await getHouseRoom(user.uid);
+      // Use the new getHouseRoom function to find the correct house room
+      const houseRoomData = await getHouseRoom(user.uid);
 
-        if (!houseRoomData) {
-          console.log('No house room found!');
-          return;
-        }
-
-        setRoomData({
-          ...houseRoomData,
-          user: {
-            avatar: userData?.avatar,
-          },
-        });
-
-        // Use the new tasksModel function for better task management with auto-reset
-        const taskData = await getGlobalTaskCompletion(user.uid);
-        setCompletionPercent(taskData.completionPercent);
-
-        // Fetch all rooms and their tasks
-        const allRooms = await getAllRooms(user.uid);
-        // Group tasks by room
-        const roomMap = {};
-        taskData.tasks.forEach(task => {
-          if (!roomMap[task.roomId]) roomMap[task.roomId] = [];
-          roomMap[task.roomId].push(task);
-        });
-        const roomsWithTasks = allRooms.map(room => ({
-          id: room.id,
-          name: room.display_name,
-          tasks: roomMap[room.id] || [],
-        }));
-        setRoomsWithTasks(roomsWithTasks);
-      } catch (error) {
-        console.error('Error fetching rooms:', error);
+      if (!houseRoomData) {
+        console.log('No house room found!');
+        return;
       }
-    };
 
+      setRoomData({
+        ...houseRoomData,
+        user: {
+          avatar: userData?.avatar,
+        },
+      });
+
+      // Use the new tasksModel function for better task management with auto-reset
+      const taskData = await getGlobalTaskCompletion(user.uid);
+      setCompletionPercent(taskData.completionPercent);
+
+      // Fetch all rooms and their tasks
+      const allRooms = await getAllRooms(user.uid);
+      // Group tasks by room
+      const roomMap = {};
+      taskData.tasks.forEach(task => {
+        if (!roomMap[task.roomId]) roomMap[task.roomId] = [];
+        roomMap[task.roomId].push(task);
+      });
+      const roomsWithTasks = allRooms.map(room => ({
+        id: room.id,
+        name: room.display_name,
+        tasks: roomMap[room.id] || [],
+      }));
+      setRoomsWithTasks(roomsWithTasks);
+    } catch (error) {
+      console.error('Error fetching rooms:', error);
+    }
+  };
+
+  // Fetch data when component mounts
+  useEffect(() => {
     fetchRooms();
   }, [user, userData]);
+
+  // Refresh data when screen comes into focus (e.g., after completing a task)
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchRooms();
+    }, [user, userData])
+  );
 
   const handleLogout = async () => {
     console.log('Logout button pressed!');

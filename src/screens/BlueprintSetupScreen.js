@@ -52,6 +52,13 @@ export default function BlueprintSetupScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
+      {/* Back button to WelcomeScreen */}
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 16, left: 16, zIndex: 100 }}
+        onPress={() => navigation.navigate('Welcome')}
+      >
+        <Text style={{ fontSize: 24, color: '#fff' }}>{'← Back'}</Text>
+      </TouchableOpacity>
       <Text style={styles.header}>Create your home!</Text>
       <View style={styles.form}>
         {ROOM_TYPES.map(type => (

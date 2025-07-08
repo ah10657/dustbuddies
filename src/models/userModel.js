@@ -1,4 +1,4 @@
-import { doc, getDoc,setDoc, collection } from 'firebase/firestore';
+import { doc, getDoc,setDoc, collection, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase'; // Your initialized Firestore
 import { serverTimestamp } from 'firebase/firestore';
 
@@ -9,6 +9,18 @@ export const getUserData = async (userId) => {
     return userDoc.data();
   } else {
     return null;
+  }
+};
+
+export const updateUserLastLogin = async (userId) => {
+  try {
+    const userRef = doc(db, 'user', userId);
+    await updateDoc(userRef, {
+      last_login_at: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error('Error updating last login time:', error);
+    // Don't throw error as this is not critical for login flow
   }
 };
 

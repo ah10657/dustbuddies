@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Button, StyleSheet, PanResponder, Dimensions, ScrollView, TouchableOpacity, Animated } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import global from '../styles/global';
 // import your firebase config and user context as needed
 
 const GRID_WIDTH = 4;
@@ -216,7 +217,7 @@ export default function BlueprintGridScreen({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}
+    <View style={global.gridContainer}
       onMoveShouldSetResponder={() => !!dragging}
       onResponderMove={handleMove}
       onResponderRelease={handleRelease}
@@ -228,7 +229,7 @@ export default function BlueprintGridScreen({ route, navigation }) {
       >
         <Text style={{ fontSize: 24, color: '#fff' }}>{'← Back'}</Text>
       </TouchableOpacity>
-      <Text style={styles.header}>Drag your rooms onto the grid!</Text>
+      <Text style={global.headerText}>Drag your rooms onto the grid!</Text>
       {/* Horizontal scroll bar for unplaced rooms */}
       <ScrollView horizontal style={styles.scrollBar} contentContainerStyle={{ alignItems: 'center' }}>
         {unplacedRooms.map((room, idx) => {
@@ -246,14 +247,14 @@ export default function BlueprintGridScreen({ route, navigation }) {
       </ScrollView>
       {/* Grid with placed rooms */}
       <View
-        style={styles.grid}
+        style={[global.grid, { width: GRID_WIDTH * CELL_SIZE, height: GRID_HEIGHT * CELL_SIZE }]}
         ref={gridRef}
         onLayout={e => setGridLayout(e.nativeEvent.layout)}
       >
         {[...Array(GRID_HEIGHT)].map((_, row) => (
-          <View key={row} style={styles.gridRow}>
+          <View key={row} style={global.gridRow}>
             {[...Array(GRID_WIDTH)].map((_, col) => (
-              <View key={col} style={styles.gridCell} />
+              <View key={col} style={[global.gridCell, { width: CELL_SIZE, height: CELL_SIZE }]} />
             ))}
           </View>
         ))}
@@ -263,7 +264,7 @@ export default function BlueprintGridScreen({ route, navigation }) {
             <Animated.View
               key={room.display_name}
               style={[
-                styles.room,
+                global.roomBoxMap,
                 {
                   left: room.layout.x * CELL_SIZE,
                   top: room.layout.y * CELL_SIZE,
@@ -276,15 +277,15 @@ export default function BlueprintGridScreen({ route, navigation }) {
             >
               {/* Remove button */}
               <TouchableOpacity
-                style={styles.removeButton}
+                style={global.removeButton}
                 onPress={() => setRooms(rooms => rooms.map((r, i) => i === realIdx ? { ...r, placed: false } : r))}
               >
                 <Text style={{ color: '#fff', fontWeight: 'bold' }}>×</Text>
               </TouchableOpacity>
-              <Text style={styles.roomLabel}>{room.display_name}</Text>
+              <Text style={global.roomBoxMapText}>{room.display_name}</Text>
               {/* Resize handle in bottom right */}
               <View
-                style={styles.resizeHandle}
+                style={global.resizeHandle}
                 {...createResizePanResponder(room, realIdx).panHandlers}
               />
             </Animated.View>
@@ -295,7 +296,7 @@ export default function BlueprintGridScreen({ route, navigation }) {
           <Animated.View
             pointerEvents="none"
             style={[
-              styles.floatingRoom,
+              global.roomBoxMap,
               {
                 position: 'absolute',
                 left: dragPos.x - gridLayout.x,
@@ -307,7 +308,7 @@ export default function BlueprintGridScreen({ route, navigation }) {
               }
             ]}
           >
-            <Text style={styles.roomLabel}>{rooms[dragging.idx].display_name}</Text>
+            <Text style={global.roomBoxMapText}>{rooms[dragging.idx].display_name}</Text>
           </Animated.View>
         )}
       </View>
@@ -324,27 +325,7 @@ export default function BlueprintGridScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#6EC1E4' },
-  header: { fontSize: 20, color: 'white', marginBottom: 8 },
   scrollBar: { minHeight: 60, maxHeight: 60, marginBottom: 8 },
   unplacedRoom: { backgroundColor: '#fff', borderRadius: 8, padding: 12, marginHorizontal: 8, elevation: 2 },
-  grid: { position: 'relative', width: CELL_SIZE * GRID_WIDTH, height: CELL_SIZE * GRID_HEIGHT, backgroundColor: '#A7D8F5', borderRadius: 16, alignSelf: 'center', marginBottom: 16 },
-  gridRow: { flexDirection: 'row' },
-  gridCell: { width: CELL_SIZE, height: CELL_SIZE, borderWidth: 0.5, borderColor: '#fff' },
-  room: { position: 'absolute', backgroundColor: '#fff', borderRadius: 8, justifyContent: 'center', alignItems: 'center', elevation: 2 },
   roomLabel: { color: '#333', fontWeight: 'bold' },
-  resizeHandle: { position: 'absolute', right: 0, bottom: 0, width: 20, height: 20, backgroundColor: 'rgba(0,0,0,0.2)', borderBottomRightRadius: 8, zIndex: 10 },
-  floatingRoom: { backgroundColor: '#fff', borderRadius: 8, justifyContent: 'center', alignItems: 'center', elevation: 4, borderWidth: 1, borderColor: '#2196f3' },
-  removeButton: {
-    position: 'absolute',
-    top: 2,
-    right: 2,
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: '#e53935',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 20,
-  },
 });

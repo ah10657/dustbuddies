@@ -1,4 +1,4 @@
-import { collection, getDocs, doc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 export class Task {
@@ -33,9 +33,11 @@ export class Task {
     }
   }
 
-  resetIfNeeded() {
+  async resetIfNeeded(userId) {
     if (this.shouldReset()) {
       this.completed = false;
+      // Update the database to reflect the reset
+      await this.saveToDatabase(userId);
     }
   }
 
@@ -47,6 +49,17 @@ export class Task {
       recurrence: this.recurrence,
       last_completed_at: this.lastCompletedAt ? this.lastCompletedAt.toISOString() : null,
     };
+  }
+
+  // Save current state to Firestore
+  async saveToDatabase(userId) {
+    try {
+      const taskRef = doc(db, 'user', userId, 'rooms', this.roomId, 'room_tasks', this.id);
+      await updateDoc(taskRef, this.toFirestoreData());
+    } catch (error) {
+      console.error('Error saving task to database:', error);
+      throw error;
+    }
   }
 }
 
@@ -63,11 +76,11 @@ export const fetchAllUserTasks = async (userId) => {
       const tasksRef = collection(db, 'user', userId, 'rooms', roomId, 'room_tasks');
       const tasksSnapshot = await getDocs(tasksRef);
 
-      tasksSnapshot.forEach((taskDoc) => {
+      for (const taskDoc of tasksSnapshot.docs) {
         const task = new Task(taskDoc.id, taskDoc.data(), roomId);
-        task.resetIfNeeded(); // Apply auto-reset
+        await task.resetIfNeeded(userId); // Apply auto-reset and save to database
         allTasks.push(task);
-      });
+      }
     }
 
     return allTasks;
@@ -103,11 +116,12 @@ export const getRoomTasks = async (userId, roomId) => {
     const tasksRef = collection(db, 'user', userId, 'rooms', roomId, 'room_tasks');
     const tasksSnapshot = await getDocs(tasksRef);
 
-    const tasks = tasksSnapshot.docs.map(taskDoc => {
+    const tasks = [];
+    for (const taskDoc of tasksSnapshot.docs) {
       const task = new Task(taskDoc.id, taskDoc.data(), roomId);
-      task.resetIfNeeded(); // Apply auto-reset
-      return task;
-    });
+      await task.resetIfNeeded(userId); // Apply auto-reset and save to database
+      tasks.push(task);
+    }
 
     const remainingTasks = tasks.filter(task => !task.completed);
     const totalTasks = tasks.length;
@@ -143,7 +157,7 @@ export const getTaskByName = async (userId, roomId, taskName) => {
     
     if (taskDoc) {
       const task = new Task(taskDoc.id, taskDoc.data(), roomId);
-      task.resetIfNeeded(); // Apply auto-reset
+      await task.resetIfNeeded(userId); // Apply auto-reset and save to database
       return task;
     }
     

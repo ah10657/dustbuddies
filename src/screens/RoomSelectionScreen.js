@@ -62,10 +62,18 @@ export default function RoomSelectionScreen({ navigation }) {
         ))}
       </View>
 
-      <View style={[global.roomGrid, {
+      <View style={[global.grid, {
         width: GRID_WIDTH * GRID_UNIT,
         height: GRID_HEIGHT * GRID_UNIT,
       }]}>
+        {/* Render grid background cells for visual consistency */}
+        {[...Array(GRID_HEIGHT)].map((_, row) => (
+          <View key={row} style={global.gridRow}>
+            {[...Array(GRID_WIDTH)].map((_, col) => (
+              <View key={col} style={[global.gridCell, { width: GRID_UNIT, height: GRID_UNIT }]} />
+            ))}
+          </View>
+        ))}
         {gridRooms.map((room) => {
           const layout = room.layout || {};
           const x = layout.x || 0;
