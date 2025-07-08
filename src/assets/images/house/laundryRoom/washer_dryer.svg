@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="washer_dryer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 113.11 73.72">
+  <rect x=".25" y="58.11" width="52.28" height="15.36" rx="2.41" ry="2.41" fill="#eaeaea" stroke="#c4c4c4" stroke-miterlimit="10" stroke-width=".5"/>
+  <rect x="60.57" y="58.11" width="52.28" height="15.36" rx="2.41" ry="2.41" fill="#eaeaea" stroke="#c4c4c4" stroke-miterlimit="10" stroke-width=".5"/>
+  <rect x=".25" y=".25" width="52.28" height="60.99" rx="2.98" ry="2.98" fill="#eaeaea" stroke="#c4c4c4" stroke-miterlimit="10" stroke-width=".5"/>
+  <circle cx="27.01" cy="35.03" r="18.42" fill="#c6c6c6" stroke="#bcbcbc" stroke-miterlimit="10" stroke-width=".25"/>
+  <rect x="1.86" y="1.63" width="49.3" height="8.48" rx="1.76" ry="1.76" fill="#ddd" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="26.93" cy="5.91" r="2.6" fill="#dbdbdb" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="26.93" cy="5.91" r="1.61" fill="#9b9b9b" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="40.97" cy="5.91" r="1.13" fill="#9b9b9b" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="46.34" cy="5.91" r="1.13" fill="#9b9b9b" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="31.36" y1="3.69" x2="34.64" y2="3.69" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="31.36" y1="5.87" x2="34.64" y2="5.87" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="31.36" y1="8.05" x2="34.64" y2="8.05" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="19.24" y1="3.69" x2="22.53" y2="3.69" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="19.24" y1="5.87" x2="22.53" y2="5.87" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="19.24" y1="8.05" x2="22.53" y2="8.05" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <path d="M43.4,35.03c0,9.05-7.34,16.38-16.38,16.38s-16.38-7.34-16.38-16.38c0-5.93,3.44-11.43,8.27-14.24.98-.57,4.04-2.3,8.11-2.15,7.16.27,16.38,6.35,16.38,16.38Z" fill="#7fccc5"/>
+  <path d="M17.8,21.74c-1.15.81-2.93,2.27-4.43,4.61-.78,1.22-2.99,5.01-2.57,10.18.37,4.62,2.61,7.67,3.1,8.32,2.21,2.91,4.89,4.21,6.11,4.78,2.6,1.23,4.84,1.46,5.31,1.51.74.07,1.37.07,1.82.06-1.4-.51-3.5-1.47-5.62-3.25-4.15-3.48-5.59-7.78-6.02-9.3-1.22-4.26-.59-7.77-.18-9.92.59-3.06,1.65-5.44,2.48-7Z" fill="#456b77"/>
+  <rect x="7.29" y="31.31" width="1.24" height="7.44" rx=".32" ry=".32" fill="#c6c6c6" stroke="#bcbcbc" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="27.01" cy="35.03" r="16.38" fill="none" stroke="#bcbcbc" stroke-miterlimit="10"/>
+  <rect x="60.56" y=".25" width="52.28" height="60.99" rx="2.98" ry="2.98" fill="#eaeaea" stroke="#c4c4c4" stroke-miterlimit="10" stroke-width=".5"/>
+  <circle cx="87.33" cy="35.03" r="18.73" fill="#c6c6c6" stroke="#bcbcbc" stroke-miterlimit="10" stroke-width=".25"/>
+  <rect x="62.16" y="1.63" width="49.3" height="8.48" rx="1.76" ry="1.76" fill="#ddd" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="87.23" cy="5.91" r="2.6" fill="#dbdbdb" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="87.23" cy="5.91" r="1.61" fill="#9b9b9b" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="101.28" cy="5.91" r="1.13" fill="#9b9b9b" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="106.64" cy="5.91" r="1.13" fill="#9b9b9b" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="91.66" y1="3.69" x2="94.95" y2="3.69" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="91.66" y1="5.87" x2="94.95" y2="5.87" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="91.66" y1="8.05" x2="94.95" y2="8.05" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="79.55" y1="3.69" x2="82.84" y2="3.69" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="79.55" y1="5.87" x2="82.84" y2="5.87" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <line x1="79.55" y1="8.05" x2="82.84" y2="8.05" fill="none" stroke="#bfbfbf" stroke-miterlimit="10" stroke-width=".25"/>
+  <path d="M103.99,35.03c0,9.2-7.46,16.66-16.66,16.66s-16.66-7.46-16.66-16.66c0-6.02,3.49-11.61,8.41-14.47.99-.58,4.11-2.34,8.25-2.18,7.28.28,16.66,6.45,16.66,16.66Z" fill="#9398a5"/>
+  <path d="M77.97,21.52c-1.17.82-2.98,2.31-4.5,4.68-.8,1.24-3.04,5.09-2.61,10.35.38,4.69,2.65,7.8,3.15,8.46,2.24,2.96,4.97,4.28,6.21,4.86,2.64,1.25,4.93,1.49,5.4,1.53.75.07,1.39.07,1.85.06-1.42-.52-3.56-1.5-5.72-3.3-4.22-3.54-5.68-7.91-6.12-9.45-1.24-4.33-.6-7.9-.18-10.08.6-3.11,1.68-5.53,2.52-7.11Z" fill="#6b768e"/>
+  <rect x="67.28" y="31.25" width="1.26" height="7.56" rx=".32" ry=".32" fill="#c6c6c6" stroke="#bcbcbc" stroke-miterlimit="10" stroke-width=".25"/>
+  <circle cx="87.33" cy="35.03" r="16.66" fill="none" stroke="#bcbcbc" stroke-miterlimit="10"/>
+  <rect x="65.43" y="3.8" width="9.4" height="4.24" rx=".83" ry=".83" fill="#9b9b9b" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+  <rect x="4.89" y="3.8" width="9.4" height="4.24" rx=".83" ry=".83" fill="#9b9b9b" stroke="#c6c6c6" stroke-miterlimit="10" stroke-width=".25"/>
+</svg>
