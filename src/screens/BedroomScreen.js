@@ -8,13 +8,15 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { Feather } from '@expo/vector-icons';
 
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
+import { getRoomTasks } from '../models/tasksModel';
 import AvatarStack from '../components/AvatarStack';
 import BackButtonIcon from '../assets/images/house/house_thumbnail.svg';
 import global from '../styles/global';
@@ -25,6 +27,8 @@ export default function RoomScreen({ route }) {
 
   const [roomData, setRoomData] = useState(null);
   const [roomTasks, setRoomTasks] = useState([]);
+  const [remainingTasks, setRemainingTasks] = useState([]);
+  const [progressPercent, setProgressPercent] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { width, height } = Dimensions.get('window');
 
@@ -42,11 +46,8 @@ export default function RoomScreen({ route }) {
             const roomData = roomSnap.data();
             const userData = userSnap.data();
 
-            const taskSnap = await getDocs(collection(roomRef, 'room_tasks'));
-            const tasks = taskSnap.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
+            // Use the new tasksModel function for better task management
+            const taskData = await getRoomTasks(userId, roomId);
 
             setRoomData({
               ...roomData,
@@ -54,7 +55,9 @@ export default function RoomScreen({ route }) {
                 avatar: userData.avatar,
               },
             });
-            setRoomTasks(tasks);
+            setRoomTasks(taskData.tasks);
+            setRemainingTasks(taskData.remainingTasks);
+            setProgressPercent(taskData.progressPercent);
           } else {
             console.log('Room not found!');
           }
@@ -67,17 +70,11 @@ export default function RoomScreen({ route }) {
     }, [roomId])
   );
 
-
   if (!roomData) return <ActivityIndicator size="large" />;
 
   const Background = decorMap[roomData.decor?.pref_wall];
   const Bed = decorMap[roomData.decor?.pref_bed];
   const bedSize = Math.min(width * 0.6, 600);
-
-  const remainingTasks = roomTasks.filter(task => !task.task_complete);
-  const totalTasks = roomTasks.length;
-  const completedCount = roomTasks.filter(task => task.task_complete).length;
-  const progressPercent = totalTasks ? Math.round((completedCount / totalTasks) * 100) : 0;
 
   return (
     <View style={[global.container, { position: 'relative' }]}>
@@ -93,7 +90,7 @@ export default function RoomScreen({ route }) {
         <Bed
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: (height - bedSize) / 2.5,
             left: (width - bedSize) / 2,
             width: bedSize,
             height: bedSize,
@@ -124,28 +121,53 @@ export default function RoomScreen({ route }) {
               horizontal
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <View style={global.taskChip}>
-                  <Text style={global.taskChipText}>{item.task_name}</Text>
-                </View>
+                <TouchableOpacity
+                  style={[
+                    global.button,
+                    item.completed && global.buttonCompleted,
+                    { backgroundColor: '#fff', minWidth: 90, marginRight: 8 },
+                  ]}
+                  onPress={() =>
+                    navigation.navigate('Timer', {
+                      taskName: item.name,
+                      roomId: roomId,
+                    })
+                  }
+                >
+                  <Text style={item.completed ? global.buttonTextCompleted : global.buttonText}>
+                    {item.name}
+                  </Text>
+                  {item.completed ? (
+                    <View style={global.taskCheckCircle}>
+                      <Feather name="check" size={18} color="#fff" />
+                    </View>
+                  ) : (
+                    <View style={{ width: 24, height: 24 }} />
+                  )}
+                </TouchableOpacity>
               )}
               contentContainerStyle={global.taskChipContainer}
             />
           )}
 
-          <AnimatedCircularProgress
-            size={70}
-            width={7}
-            fill={progressPercent}
-            tintColor="#f7bd50"
-            backgroundColor="#ffffff"
-            style={{ marginTop: 10 }}
-          >
-            {
-              () => (
-                <Text style={global.progressText}>{progressPercent}%</Text>
-              )
-            }
-          </AnimatedCircularProgress>
+          <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ position: 'absolute', width: 65, height: 65, borderRadius: 35, backgroundColor: '#fff', zIndex: 0 }} />
+            <AnimatedCircularProgress
+              size={70}
+              width={7}
+              fill={progressPercent}
+              tintColor="#f7bd50"
+              backgroundColor="#ffffff"
+              style={{ zIndex: 1 }}
+              rotation={0}
+            >
+              {
+                () => (
+                  <Text style={global.progressText}>{progressPercent}%</Text>
+                )
+              }
+            </AnimatedCircularProgress>
+          </View>
         </View>
 
         <Text style={global.dropdownToggle}>{dropdownOpen ? '▲' : '▼'}</Text>
@@ -153,34 +175,96 @@ export default function RoomScreen({ route }) {
 
       {/* Dropdown Task List */}
       {dropdownOpen && (
-        <View style={global.dropdown}>
+        <View
+          style={[
+            global.taskDropdownContainer,
+            {
+              width: width,
+              height: height * 0.66,
+              backgroundColor: '#5EB1CC',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              borderTopLeftRadius: 32,
+              borderTopRightRadius: 32,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              zIndex: 100,
+              paddingBottom: 0,
+              justifyContent: 'flex-start',
+            },
+          ]}
+        >
+          {/* Progress Bar and Room Header */}
+          <View style={{ alignItems: 'center', marginTop: 24, marginBottom: 8 }}>
+            <View style={{ position: 'absolute', width: 90, height: 90, borderRadius: 45, backgroundColor: '#fff', zIndex: 0 }} />
+            <AnimatedCircularProgress
+              size={90}
+              width={10}
+              fill={progressPercent}
+              tintColor="#f7bd50"
+              backgroundColor="#ffffff"
+              style={{ zIndex: 1 }}
+              rotation={0}
+            >
+              {() => (
+                <Text style={{ fontSize: 28, color: '#F7BD50', fontWeight: 'bold' }}>{progressPercent}%</Text>
+              )}
+            </AnimatedCircularProgress>
+            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 4 }}>{roomData.name}</Text>
+          </View>
+          {/* Task List */}
           <FlatList
             data={roomTasks}
             keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingHorizontal: 18, paddingBottom: 40 }}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[
-                  global.taskItem,
-                  item.task_complete && global.taskCompleted,
-                ]}
-                onPress={() =>
-                  navigation.navigate('Timer', {
-                    taskName: item.task_name,
-                    roomId: roomId,
-                  })
-                }
-              >
-                <Text
+              <View style={[global.taskRoomBox, { backgroundColor: '#5EB1CC' }]}> {/* blue group box */}
+                <TouchableOpacity
                   style={[
-                    global.taskText,
-                    item.task_complete && global.taskTextCompleted,
+                    global.button,
+                    item.completed && global.buttonCompleted,
                   ]}
+                  onPress={() =>
+                    navigation.navigate('Timer', {
+                      taskName: item.name,
+                      roomId: roomId,
+                    })
+                  }
                 >
-                  {item.task_name}
-                </Text>
-              </TouchableOpacity>
+                  <Text style={item.completed ? global.buttonTextCompleted : global.buttonText}>
+                    {item.name}
+                  </Text>
+                  {item.completed ? (
+                    <View style={global.taskCheckCircle}>
+                      <Feather name="check" size={18} color="#fff" />
+                    </View>
+                  ) : (
+                    <View style={{ width: 24, height: 24 }} />
+                  )}
+                </TouchableOpacity>
+              </View>
             )}
           />
+          {/* Close area at the bottom for overlay effect */}
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: width,
+              height: 40,
+              backgroundColor: 'transparent',
+              zIndex: 101,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+            }}
+            onPress={() => setDropdownOpen(false)}
+            activeOpacity={0.7}
+          >
+            <Feather name="chevron-up" size={32} color="#fff" style={{ textAlign: 'center' }} />
+          </TouchableOpacity>
         </View>
       )}
     </View>

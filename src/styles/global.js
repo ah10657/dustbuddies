@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   taskChip: {
-    backgroundColor: '#178591',
+    backgroundColor: '#147883',
+    alignSelf: 'center',
     width: '100%',
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -340,6 +341,68 @@ const styles = StyleSheet.create({
     marginBottom: 20 
   },
 
+  // Task Dropdown Overlay/Container
+  taskDropdownContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 100,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
+    paddingBottom: 32,
+    paddingTop: 0,
+    justifyContent: 'flex-start',
+  },
+  // Room header (inside dropdown)
+  taskRoomHeader: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    padding: 10,
+    alignSelf: 'flex-start',
+    marginBottom: -10,
+  },
+  // Room group box (background for tasks)
+  taskRoomBox: {
+    borderRadius: 12,
+    padding: 8,
+  },
+  // Individual button (was taskButton)
+  button: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: '#eee',
+  },
+  buttonCompleted: {
+    backgroundColor: '#F2F0EF',
+    borderColor: '#f7bd50',
+  },
+  buttonText: {
+    color: '#E7A120',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  buttonTextCompleted: {
+    color: '#949392',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  taskCheckCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#E7A120',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 export default styles;

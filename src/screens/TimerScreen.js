@@ -12,6 +12,7 @@ import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
 import global from '../styles/global';
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
+import { getTaskByName } from '../models/tasksModel';
 
 
 const { width, height } = Dimensions.get('window');
@@ -25,9 +26,23 @@ export default function TimerScreen({ navigation }) {
   const [started, setStarted] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [currentTask, setCurrentTask] = useState(null);
   const confettiRef = useRef(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
+  // Fetch task data when component mounts
+  useEffect(() => {
+    const fetchTask = async () => {
+      try {
+        const userId = getUserId();
+        const task = await getTaskByName(userId, roomId, taskName);
+        setCurrentTask(task);
+      } catch (error) {
+        console.error('Error fetching task:', error);
+      }
+    };
+    fetchTask();
+  }, [taskName, roomId]);
 
   
   useEffect(() => {
@@ -79,19 +94,31 @@ export default function TimerScreen({ navigation }) {
     setCompleted(true);
     setShowConfetti(true);
 
-    //Firestore update
+    // Update task using Task class and Firestore
     try {
       const userId = getUserId();
-      const taskQuery = collection(db, 'user', userId, 'rooms', roomId, 'room_tasks');
-      const snapshot = await getDocs(taskQuery);
       
-      const matchingDoc = snapshot.docs.find(doc => doc.data().task_name === taskName);
-      if (matchingDoc) {
-        const taskRef = doc(db, 'user', userId, 'rooms', roomId, 'room_tasks', matchingDoc.id);
-        await updateDoc(taskRef, {
-          task_complete: true,
-          last_completed_at: new Date().toISOString(),
-        });
+      if (currentTask) {
+        // Update the task instance
+        currentTask.completed = true;
+        currentTask.lastCompletedAt = new Date();
+        
+        // Convert to Firestore format and update
+        const taskRef = doc(db, 'user', userId, 'rooms', roomId, 'room_tasks', currentTask.id);
+        await updateDoc(taskRef, currentTask.toFirestoreData());
+      } else {
+        // Fallback to original method if task not found
+        const taskQuery = collection(db, 'user', userId, 'rooms', roomId, 'room_tasks');
+        const snapshot = await getDocs(taskQuery);
+        
+        const matchingDoc = snapshot.docs.find(doc => doc.data().task_name === taskName);
+        if (matchingDoc) {
+          const taskRef = doc(db, 'user', userId, 'rooms', roomId, 'room_tasks', matchingDoc.id);
+          await updateDoc(taskRef, {
+            task_complete: true,
+            last_completed_at: new Date().toISOString(),
+          });
+        }
       }
     } catch (err) {
       console.error('Failed to mark task complete:', err);
@@ -159,19 +186,24 @@ export default function TimerScreen({ navigation }) {
               <Text style={global.focusText}>Focus Mode</Text>
             </View>
           ) : (
-            <AnimatedCircularProgress
-              size={200}
-              width={15}
-              fill={duration > 0 ? ((duration - remaining) / duration) * 100 : 0}
-              tintColor="#f7bd50"
-              backgroundColor="#58a3bc"
-            >
-              {() => (
-                <Text style={global.time}>
-                  {formatTime(remaining)}
-                </Text>
-              )}
-            </AnimatedCircularProgress>
+            <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ position: 'absolute', width: 195, height: 195, borderRadius: 100, backgroundColor: '#fff', zIndex: 0 }} />
+              <AnimatedCircularProgress
+                size={200}
+                width={15}
+                fill={duration > 0 ? ((duration - remaining) / duration) * 100 : 0}
+                tintColor="#f7bd50"
+                backgroundColor="#58a3bc"
+                rotation={0}
+                style={{ zIndex: 1 }}
+              >
+                {() => (
+                  <Text style={[global.time, { color: '#F7BD50' }]}>
+                    {formatTime(remaining)}
+                  </Text>
+                )}
+              </AnimatedCircularProgress>
+            </View>
           )}
 
 
