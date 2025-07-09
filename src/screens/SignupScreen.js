@@ -4,6 +4,7 @@ import { auth } from '../lib/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { initializeNewUser } from '../models/userModel';
 import global from '../styles/global';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignupScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -36,8 +37,24 @@ export default function SignupScreen({ navigation }) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
 
-      // 2. Create Firestore user document and starter data
-      await initializeNewUser(uid);
+      // 2. Load locally stored blueprint and avatar data
+      let rooms = null;
+      let avatar = null;
+      try {
+        const roomsStr = await AsyncStorage.getItem('pendingBlueprint');
+        const avatarStr = await AsyncStorage.getItem('pendingAvatar');
+        if (roomsStr) rooms = JSON.parse(roomsStr);
+        if (avatarStr) avatar = JSON.parse(avatarStr);
+      } catch (e) {
+        console.warn('Could not load local blueprint/avatar:', e);
+      }
+
+      // 3. Create Firestore user document and starter data
+      await initializeNewUser(uid, { rooms, avatar });
+
+      // 4. Clear local storage
+      await AsyncStorage.removeItem('pendingBlueprint');
+      await AsyncStorage.removeItem('pendingAvatar');
 
       Alert.alert('Success', 'Account created successfully! Welcome to DustBuddies!');
       // Navigation will be handled automatically by UserContext

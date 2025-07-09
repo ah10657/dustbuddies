@@ -103,9 +103,8 @@ export default function TimerScreen({ navigation }) {
         currentTask.completed = true;
         currentTask.lastCompletedAt = new Date();
         
-        // Convert to Firestore format and update
-        const taskRef = doc(db, 'user', userId, 'rooms', roomId, 'room_tasks', currentTask.id);
-        await updateDoc(taskRef, currentTask.toFirestoreData());
+        // Save to database using the new method
+        await currentTask.saveToDatabase(userId);
       } else {
         // Fallback to original method if task not found
         const taskQuery = collection(db, 'user', userId, 'rooms', roomId, 'room_tasks');

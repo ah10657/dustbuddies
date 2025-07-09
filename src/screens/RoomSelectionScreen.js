@@ -12,13 +12,18 @@ import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import global from '../styles/global';
 
-const GRID_UNIT = 60; // base room size (adjust as needed)
+const GRID_WIDTH = 4;
+const GRID_HEIGHT = 5;
+const GRID_UNIT = 60;
 
 // Map room_type to the corresponding screen name
 const ROOM_TYPE_TO_SCREEN = {
   bedroom: 'BedroomScreen',
   bathroom: 'BathroomScreen',
-  kitchen: 'KitchenScreen', // Add KitchenScreen if/when it exists
+  kitchen: 'KitchenScreen',
+  livingroom: 'LivingRoomScreen',
+  laundryroom: 'LaundryRoomScreen',
+  storageroom: 'StorageRoomScreen'
 };
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -27,6 +32,7 @@ const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 export default function RoomSelectionScreen({ navigation }) {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentFloor, setCurrentFloor] = useState(0);
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -39,18 +45,6 @@ export default function RoomSelectionScreen({ navigation }) {
           id: doc.id,
           ...doc.data(),
         }));
-
-        // Hardcode layout for demonstration (remove in production)
-        roomList = roomList.map((room) => {
-          if (room.room_type === 'main_bedroom') {
-            return { ...room, layout: { x: 0, y: 0, width: 1, height: 1 } };
-          } else if (room.room_type === 'bathroom') {
-            return { ...room, layout: { x: 1, y: 0, width: 1, height: 1 } };
-          } else if (room.room_type === 'kitchen') {
-            return { ...room, layout: { x: 0, y: 1, width: 2, height: 1 } };
-          }
-          return room;
-        });
 
         setRooms(roomList);
       } catch (error) {
@@ -67,16 +61,32 @@ export default function RoomSelectionScreen({ navigation }) {
 
   // Separate house room and grid rooms
   const houseRoom = rooms.find(r => r.room_type === 'house');
-  const gridRooms = rooms.filter(r => r.room_type !== 'house');
+  const gridRooms = rooms.filter(r => r.room_type !== 'house' && ((r.floor ?? 0) === currentFloor));
 
   return (
     <View style={[global.container, global.roomSelectionWrapper]}>
       <Text style={global.headerText}>Pick a room!</Text>
 
-      <View style={[global.roomGrid, {
-        width: Math.max(...gridRooms.map(r => (r.layout?.x || 0) + (r.layout?.width || 1))) * GRID_UNIT,
-        height: Math.max(...gridRooms.map(r => (r.layout?.y || 0) + (r.layout?.height || 1))) * GRID_UNIT,
+      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
+        {[...Array(rooms.reduce((max, r) => Math.max(max, (r.floor ?? 0) + 1), 1))].map((_, i) => (
+          <TouchableOpacity key={i} onPress={() => setCurrentFloor(i)} style={{ margin: 4, padding: 8, backgroundColor: currentFloor === i ? '#2196f3' : '#eee', borderRadius: 8 }}>
+            <Text style={{ color: currentFloor === i ? '#fff' : '#333' }}>Floor {i + 1}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <View style={[global.grid, {
+        width: GRID_WIDTH * GRID_UNIT,
+        height: GRID_HEIGHT * GRID_UNIT,
       }]}>
+        {/* Render grid background cells for visual consistency */}
+        {[...Array(GRID_HEIGHT)].map((_, row) => (
+          <View key={row} style={global.gridRow}>
+            {[...Array(GRID_WIDTH)].map((_, col) => (
+              <View key={col} style={[global.gridCell, { width: GRID_UNIT, height: GRID_UNIT }]} />
+            ))}
+          </View>
+        ))}
         {gridRooms.map((room) => {
           const layout = room.layout || {};
           const x = layout.x || 0;

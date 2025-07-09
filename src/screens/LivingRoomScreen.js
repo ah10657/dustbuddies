@@ -21,7 +21,7 @@ import AvatarStack from '../components/AvatarStack';
 import BackButtonIcon from '../assets/images/house/house_thumbnail.svg';
 import global from '../styles/global';
 
-export default function BedroomScreen({ route }) {
+export default function LivingRoomScreen({ route }) {
   const navigation = useNavigation();
   const { roomId } = route.params;
 
@@ -46,7 +46,6 @@ export default function BedroomScreen({ route }) {
             const roomData = roomSnap.data();
             const userData = userSnap.data();
 
-            // Use the new tasksModel function for better task management
             const taskData = await getRoomTasks(userId, roomId);
 
             setRoomData({
@@ -73,11 +72,13 @@ export default function BedroomScreen({ route }) {
   if (!roomData) return <ActivityIndicator size="large" />;
 
   const Background = decorMap[roomData.decor?.pref_wall];
-  const Bed = decorMap[roomData.decor?.pref_bed];
-  const bedSize = Math.min(width * 0.6, 600);
+  const Couch = decorMap[roomData.decor?.pref_couch];
+  const WallDecor = decorMap[roomData.decor?.pref_wall_decor];
+  const Side = decorMap[roomData.decor?.pref_side];
+  const Window = decorMap[roomData.decor?.pref_window];
 
   return (
-    <View style={[global.container, { position: 'relative' }]}>
+    <View style={[global.container, { position: 'relative' }]}> 
       {Background && (
         <Background
           width={width}
@@ -86,14 +87,47 @@ export default function BedroomScreen({ route }) {
           style={{ position: 'absolute', top: 0, left: 0 }}
         />
       )}
-      {Bed && (
-        <Bed
+      {Couch && (
+        <Couch
           style={{
             position: 'absolute',
-            bottom: (height - bedSize) / 2.5,
-            left: (width - bedSize) / 2,
-            width: bedSize,
-            height: bedSize,
+            bottom: 120,
+            left: width * 0.1,
+            width: width * 0.8,
+            height: 120,
+          }}
+        />
+      )}
+      {WallDecor && (
+        <WallDecor
+          style={{
+            position: 'absolute',
+            top: 80,
+            left: width * 0.5 - 60,
+            width: 120,
+            height: 60,
+          }}
+        />
+      )}
+      {Side && (
+        <Side
+          style={{
+            position: 'absolute',
+            bottom: 120,
+            right: width * 0.1,
+            width: 80,
+            height: 80,
+          }}
+        />
+      )}
+      {Window && (
+        <Window
+          style={{
+            position: 'absolute',
+            top: 80,
+            right: width * 0.1,
+            width: 80,
+            height: 80,
           }}
         />
       )}
@@ -269,4 +303,4 @@ export default function BedroomScreen({ route }) {
       )}
     </View>
   );
-}
+} 
