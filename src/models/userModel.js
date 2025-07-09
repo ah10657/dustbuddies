@@ -102,7 +102,7 @@ export const initializeNewUser = async (userId, options = {}) => {
       { task_name: 'Vacuum', recurrence: 'daily' },
       { task_name: 'Make Bed', recurrence: 'daily' },
       { task_name: 'Dust', recurrence: 'weekly' },
-      { task_name: 'Organize Closet', recurrence: 'weekly' },
+      { task_name: 'Organize Storage Room', recurrence: 'weekly' },
     ],
     bathroom: [
       { task_name: 'Clean Sink', recurrence: 'daily' },
@@ -129,7 +129,7 @@ export const initializeNewUser = async (userId, options = {}) => {
       { task_name: 'Dust', recurrence: 'weekly' },
       { task_name: 'Clean Upholstery', recurrence: 'monthly' },
     ],
-    closet: [
+    storageroom: [
       { task_name: 'Declutter', recurrence: 'monthly' },
       { task_name: 'Dust', recurrence: 'monthly' },
     ],
@@ -146,12 +146,66 @@ export const initializeNewUser = async (userId, options = {}) => {
   // Step 4: Create rooms and tasks
   const roomsRef = collection(userRef, 'rooms');
 
+  // Default decor for each room type
+  const defaultDecor = {
+    bedroom: {
+      pref_bed: 'bed',
+      pref_nightstand: '',
+      pref_rug: '',
+      pref_side: 'standingMirror',
+      pref_wall_decor: 'framedPicture',
+      pref_floor: '',
+      pref_wall: 'basicBedroom',
+      pref_window: '',
+    },
+    bathroom: {
+      pref_floor: '',
+      pref_toilet: 'toilet',
+      pref_toilet_paper: 'toiletPaper',
+      pref_trashcan: 'trashcanSmall',
+      pref_tub: 'bathtub',
+      pref_wall: 'mainBathroom',
+      pref_wall_mirror: 'wallMirror',
+    },
+    kitchen: {
+      pref_floor: '',
+      pref_wall: 'mainKitchen',
+      pref_cupboards: 'cupboards',
+    },
+    laundryroom: {
+      pref_floor: '',
+      pref_wall: 'mainLaundry',
+      pref_washer_dryer: 'washerDryer',
+      pref_shelf: 'laundryShelf',
+    },
+    livingroom: {
+      pref_floor: '',
+      pref_wall: 'mainLivingroom',
+      pref_wall_decor: 'framedPictureSun',
+      pref_couch: 'couch',
+      pref_coffee_table: '',
+      pref_side: 'pottedPlant',
+      pref_window: 'windowBasic'
+    },
+    storageroom: {
+      pref_wall: 'storageRoom'},
+    house: {
+      background: 'homeScreenYard',
+      bike: 'bike',
+      home: 'house',
+      sun: 'sun',
+    },
+    // Add more as needed
+  };
+
   for (const room of roomData) {
+    const roomType = room.room_type;
+    const decor = room.decor || defaultDecor[roomType] || {};
     const roomRef = doc(roomsRef); // auto-ID
     await setDoc(roomRef, {
       display_name: room.display_name,
       room_type: room.room_type,
-      ...(room.decor ? { decor: room.decor } : {}),
+      decor, // always assign decor
       ...(room.layout ? { layout: room.layout } : {}),
       ...(room.floor !== undefined ? { floor: room.floor } : {}),
     });

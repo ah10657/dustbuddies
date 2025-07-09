@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Button, StyleSheet } from 'react-native';
 
 const ROOM_TYPES = [
-  'Kitchen', 'Living Room', 'Bathroom', 'Closet',
+  'Kitchen', 'Living Room', 'Bathroom', 'Storage Room',
   'Laundry Room', 'Bedroom'
 ];
 

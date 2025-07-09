@@ -20,7 +20,10 @@ const GRID_UNIT = 60;
 const ROOM_TYPE_TO_SCREEN = {
   bedroom: 'BedroomScreen',
   bathroom: 'BathroomScreen',
-  kitchen: 'KitchenScreen', // Add KitchenScreen if/when it exists
+  kitchen: 'KitchenScreen',
+  livingroom: 'LivingRoomScreen',
+  laundryroom: 'LaundryRoomScreen',
+  storageroom: 'StorageRoomScreen'
 };
 
 const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
