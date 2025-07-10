@@ -71,7 +71,12 @@ export default function BedroomScreen({ route }) {
   if (!roomData) return <ActivityIndicator size="large" />;
 
   const Background = decorMap[roomData.decor?.pref_wall];
-  const Bed = decorMap[roomData.decor?.pref_bed];
+  const Floor = decorMap[roomData.decor?.pref_floor];
+  const Toilet = decorMap[roomData.decor?.pref_toilet];
+  const ToiletPaper = decorMap[roomData.decor?.pref_toilet_paper];
+  const Trashcan = decorMap[roomData.decor?.pref_trashcan];
+  const Tub = decorMap[roomData.decor?.pref_tub];
+  const WallMirror = decorMap[roomData.decor?.pref_wall_mirror];
   const bedSize = Math.min(width * 0.6, 600);
 
   const remainingTasks = roomTasks.filter(task => !task.task_complete);
@@ -89,14 +94,75 @@ export default function BedroomScreen({ route }) {
           style={{ position: 'absolute', top: 0, left: 0 }}
         />
       )}
-      {Bed && (
-        <Bed
+      {Floor && (
+        <Floor
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: width,
+            height: height * 0.2,
+            zIndex: 1,
+          }}
+        />
+      )}
+      {Tub && (
+        <Tub
           style={{
             position: 'absolute',
             bottom: 120,
-            left: (width - bedSize) / 2,
-            width: bedSize,
-            height: bedSize,
+            left: width * 0.1,
+            width: width * 0.5,
+            height: 120,
+            zIndex: 2,
+          }}
+        />
+      )}
+      {Toilet && (
+        <Toilet
+          style={{
+            position: 'absolute',
+            bottom: 120,
+            right: width * 0.1,
+            width: 60,
+            height: 60,
+            zIndex: 3,
+          }}
+        />
+      )}
+      {ToiletPaper && (
+        <ToiletPaper
+          style={{
+            position: 'absolute',
+            bottom: 120,
+            right: width * 0.1 + 70,
+            width: 30,
+            height: 30,
+            zIndex: 4,
+          }}
+        />
+      )}
+      {Trashcan && (
+        <Trashcan
+          style={{
+            position: 'absolute',
+            bottom: 120,
+            right: width * 0.1 + 110,
+            width: 30,
+            height: 30,
+            zIndex: 4,
+          }}
+        />
+      )}
+      {WallMirror && (
+        <WallMirror
+          style={{
+            position: 'absolute',
+            top: 80,
+            left: width / 2 - 60,
+            width: 120,
+            height: 60,
+            zIndex: 5,
           }}
         />
       )}
