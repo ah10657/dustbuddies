@@ -74,6 +74,12 @@ export default function BedroomScreen({ route }) {
 
   const Background = decorMap[roomData.decor?.pref_wall];
   const Bed = decorMap[roomData.decor?.pref_bed];
+  const Nightstand = decorMap[roomData.decor?.pref_nightstand];
+  const Rug = decorMap[roomData.decor?.pref_rug];
+  const Side = decorMap[roomData.decor?.pref_side];
+  const WallDecor = decorMap[roomData.decor?.pref_wall_decor];
+  const Floor = decorMap[roomData.decor?.pref_floor];
+  const Window = decorMap[roomData.decor?.pref_window];
   const bedSize = Math.min(width * 0.6, 600);
 
   return (
@@ -86,6 +92,30 @@ export default function BedroomScreen({ route }) {
           style={{ position: 'absolute', top: 0, left: 0 }}
         />
       )}
+      {Floor && (
+        <Floor
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: width,
+            height: height * 0.2,
+            zIndex: 1,
+          }}
+        />
+      )}
+      {Rug && (
+        <Rug
+          style={{
+            position: 'absolute',
+            bottom: (height - bedSize) / 2.5 - 30,
+            left: (width - bedSize) / 2 + 20,
+            width: bedSize * 0.8,
+            height: 40,
+            zIndex: 2,
+          }}
+        />
+      )}
       {Bed && (
         <Bed
           style={{
@@ -94,6 +124,55 @@ export default function BedroomScreen({ route }) {
             left: (width - bedSize) / 2,
             width: bedSize,
             height: bedSize,
+            zIndex: 3,
+          }}
+        />
+      )}
+      {Nightstand && (
+        <Nightstand
+          style={{
+            position: 'absolute',
+            bottom: (height - bedSize) / 2.5 + 40,
+            left: (width - bedSize) / 2 - 60,
+            width: 60,
+            height: 60,
+            zIndex: 4,
+          }}
+        />
+      )}
+      {Side && (
+        <Side
+          style={{
+            position: 'absolute',
+            bottom: (height - bedSize) / 2.5 + 40,
+            right: (width - bedSize) / 2 - 60,
+            width: 60,
+            height: 60,
+            zIndex: 4,
+          }}
+        />
+      )}
+      {WallDecor && (
+        <WallDecor
+          style={{
+            position: 'absolute',
+            top: 80,
+            left: width / 2 - 60,
+            width: 120,
+            height: 60,
+            zIndex: 5,
+          }}
+        />
+      )}
+      {Window && (
+        <Window
+          style={{
+            position: 'absolute',
+            top: 80,
+            right: 40,
+            width: 80,
+            height: 80,
+            zIndex: 5,
           }}
         />
       )}

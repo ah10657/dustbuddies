@@ -37,7 +37,6 @@ export default function HomeScreen({ navigation }) {
       const houseRoomData = await getHouseRoom(user.uid);
 
       if (!houseRoomData) {
-        console.log('No house room found!');
         return;
       }
 
@@ -67,7 +66,7 @@ export default function HomeScreen({ navigation }) {
       }));
       setRoomsWithTasks(roomsWithTasks);
     } catch (error) {
-      console.error('Error fetching rooms:', error);
+      console.error('[fetchRooms] Error fetching rooms:', error);
     }
   };
 

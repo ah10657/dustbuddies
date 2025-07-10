@@ -30,15 +30,12 @@ export const getHouseRoom = async (userId) => {
     const roomsSnapshot = await getDocs(roomsRef);
 
     const houseRoomDoc = roomsSnapshot.docs.find(doc => doc.data().room_type === 'house');
-    
     if (houseRoomDoc) {
       return {
         id: houseRoomDoc.id,
         ...houseRoomDoc.data()
       };
     }
-    
-    console.warn('No house room found, falling back to first room');
     // Fallback to first room if no house room is found
     const firstRoomDoc = roomsSnapshot.docs[0];
     if (firstRoomDoc) {
@@ -47,10 +44,9 @@ export const getHouseRoom = async (userId) => {
         ...firstRoomDoc.data()
       };
     }
-    
     return null;
   } catch (error) {
-    console.error('Error fetching house room:', error);
+    console.error('[getHouseRoom] Error fetching house room:', error);
     return null;
   }
 };
