@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="blue_geometric_wall" xmlns="http://www.w3.org/2000/svg" width="1.9in" height="3.86in" viewBox="0 0 136.8 277.57">
+  <rect x="-1.54" y="-1.4" width="139.87" height="280.2" fill="#454759"/>
+  <line x1="-8.42" y1="111.42" x2="145.67" y2="10.98" fill="none" stroke="#deceb2" stroke-miterlimit="10" stroke-width=".75"/>
+  <line x1="-38.68" y1="226.98" x2="171.81" y2="130.68" fill="none" stroke="#deceb2" stroke-miterlimit="10" stroke-width=".75"/>
+  <line x1="-34.1" y1="5.02" x2="175.02" y2="47.67" fill="none" stroke="#deceb2" stroke-miterlimit="10" stroke-width=".75"/>
+  <line x1="-37.3" y1="149.24" x2="167.7" y2="103.15" fill="none" stroke="#deceb2" stroke-miterlimit="10" stroke-width=".75"/>
+  <line x1="-16.65" y1="36.45" x2="147.03" y2="200.14" fill="none" stroke="#deceb2" stroke-miterlimit="10" stroke-width=".75"/>
+  <line x1="41.11" y1="-13.78" x2="159.43" y2="171.95" fill="none" stroke="#deceb2" stroke-miterlimit="10" stroke-width=".75"/>
+</svg>
