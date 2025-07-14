@@ -71,25 +71,39 @@ export default function LaundryRoomScreen({ route }) {
 
   if (!roomData) return <ActivityIndicator size="large" />;
 
-  const Background = decorMap[roomData.decor?.pref_wall];
+  const Wall = decorMap['laundryWall'];
+  const Floor = decorMap['laundryFloor'];
   const WasherDryer = decorMap[roomData.decor?.pref_washer_dryer];
   const Shelf = decorMap[roomData.decor?.pref_shelf];
+  const floorHeight = height * 0.2;
 
   return (
     <View style={[global.container, { position: 'relative' }]}> 
-      {Background && (
-        <Background
+      {Wall && (
+        <Wall
           width={width}
           height={height}
           preserveAspectRatio="xMidYMax slice"
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
+        />
+      )}
+      {Floor && (
+        <Floor
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: width,
+            height: floorHeight,
+            zIndex: 1,
+          }}
         />
       )}
       {WasherDryer && (
         <WasherDryer
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             left: width * 0.1,
             width: width * 0.5,
             height: 120,
@@ -100,7 +114,7 @@ export default function LaundryRoomScreen({ route }) {
         <Shelf
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             right: width * 0.1,
             width: width * 0.3,
             height: 80,

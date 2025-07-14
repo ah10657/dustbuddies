@@ -71,27 +71,41 @@ export default function LivingRoomScreen({ route }) {
 
   if (!roomData) return <ActivityIndicator size="large" />;
 
-  const Background = decorMap[roomData.decor?.pref_wall];
+  const Wall = decorMap['livingRoomWall'];
+  const Floor = null;
   const Couch = decorMap[roomData.decor?.pref_couch];
   const WallDecor = decorMap[roomData.decor?.pref_wall_decor];
   const Side = decorMap[roomData.decor?.pref_side];
   const Window = decorMap[roomData.decor?.pref_window];
+  const floorHeight = height * 0.2;
 
   return (
     <View style={[global.container, { position: 'relative' }]}> 
-      {Background && (
-        <Background
+      {Wall && (
+        <Wall
           width={width}
           height={height}
           preserveAspectRatio="xMidYMax slice"
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
+        />
+      )}
+      {Floor && (
+        <Floor
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: width,
+            height: floorHeight,
+            zIndex: 1,
+          }}
         />
       )}
       {Couch && (
         <Couch
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             left: width * 0.1,
             width: width * 0.8,
             height: 120,
@@ -113,7 +127,7 @@ export default function LivingRoomScreen({ route }) {
         <Side
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             right: width * 0.1,
             width: 80,
             height: 80,

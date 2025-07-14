@@ -71,16 +71,30 @@ export default function StorageRoomScreen({ route }) {
 
   if (!roomData) return <ActivityIndicator size="large" />;
 
-  const Background = decorMap[roomData.decor?.pref_wall];
+  const Wall = decorMap[roomData.decor?.pref_wall];
+  const Floor = decorMap[roomData.decor?.pref_floor];
+  const floorHeight = height * 0.2;
 
   return (
     <View style={[global.container, { position: 'relative' }]}> 
-      {Background && (
-        <Background
+      {Wall && (
+        <Wall
           width={width}
           height={height}
           preserveAspectRatio="xMidYMax slice"
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
+        />
+      )}
+      {Floor && (
+        <Floor
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: width,
+            height: floorHeight,
+            zIndex: 1,
+          }}
         />
       )}
       {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}

@@ -71,24 +71,38 @@ export default function KitchenScreen({ route }) {
 
   if (!roomData) return <ActivityIndicator size="large" />;
 
-  const Background = decorMap[roomData.decor?.pref_wall];
+  const Wall = decorMap['kitchenWall'];
+  const Floor = decorMap['kitchenFloor'];
   const Cupboards = decorMap[roomData.decor?.pref_cupboards];
+  const floorHeight = height * 0.2;
 
   return (
     <View style={[global.container, { position: 'relative' }]}> 
-      {Background && (
-        <Background
+      {Wall && (
+        <Wall
           width={width}
           height={height}
           preserveAspectRatio="xMidYMax slice"
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
+        />
+      )}
+      {Floor && (
+        <Floor
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: width,
+            height: floorHeight,
+            zIndex: 1,
+          }}
         />
       )}
       {Cupboards && (
         <Cupboards
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             left: width * 0.1,
             width: width * 0.8,
             height: 120,

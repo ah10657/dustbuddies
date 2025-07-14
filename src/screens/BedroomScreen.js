@@ -72,24 +72,25 @@ export default function BedroomScreen({ route }) {
 
   if (!roomData) return <ActivityIndicator size="large" />;
 
-  const Background = decorMap[roomData.decor?.pref_wall];
+  const Wall = decorMap['bedroomWall'];
+  const Floor = decorMap['bedroomFloor'];
   const Bed = decorMap[roomData.decor?.pref_bed];
   const Nightstand = decorMap[roomData.decor?.pref_nightstand];
   const Rug = decorMap[roomData.decor?.pref_rug];
   const Side = decorMap[roomData.decor?.pref_side];
   const WallDecor = decorMap[roomData.decor?.pref_wall_decor];
-  const Floor = decorMap[roomData.decor?.pref_floor];
   const Window = decorMap[roomData.decor?.pref_window];
   const bedSize = Math.min(width * 0.6, 600);
+  const floorHeight = height * 0.2;
 
   return (
     <View style={[global.container, { position: 'relative' }]}>
-      {Background && (
-        <Background
+      {Wall && (
+        <Wall
           width={width}
           height={height}
           preserveAspectRatio="xMidYMax slice"
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
         />
       )}
       {Floor && (
@@ -99,7 +100,7 @@ export default function BedroomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: height * 0.2,
+            height: floorHeight,
             zIndex: 1,
           }}
         />
@@ -108,7 +109,7 @@ export default function BedroomScreen({ route }) {
         <Rug
           style={{
             position: 'absolute',
-            bottom: (height - bedSize) / 2.5 - 30,
+            bottom: floorHeight + 30,
             left: (width - bedSize) / 2 + 20,
             width: bedSize * 0.8,
             height: 40,
@@ -120,7 +121,7 @@ export default function BedroomScreen({ route }) {
         <Bed
           style={{
             position: 'absolute',
-            bottom: (height - bedSize) / 2.5,
+            bottom: floorHeight,
             left: (width - bedSize) / 2,
             width: bedSize,
             height: bedSize,
@@ -132,7 +133,7 @@ export default function BedroomScreen({ route }) {
         <Nightstand
           style={{
             position: 'absolute',
-            bottom: (height - bedSize) / 2.5 + 40,
+            bottom: floorHeight + 40,
             left: (width - bedSize) / 2 - 60,
             width: 60,
             height: 60,
@@ -144,7 +145,7 @@ export default function BedroomScreen({ route }) {
         <Side
           style={{
             position: 'absolute',
-            bottom: (height - bedSize) / 2.5 + 40,
+            bottom: floorHeight + 40,
             right: (width - bedSize) / 2 - 60,
             width: 60,
             height: 60,

@@ -98,13 +98,15 @@ export default function HomeScreen({ navigation }) {
     return <ActivityIndicator size="large" />;
   }
 
-  const Background = decorMap[roomData.decor.background];
+  const Sky = decorMap[roomData.decor.sky] || decorMap[roomData.decor.background];
+  const Ground = decorMap[roomData.decor.ground] || decorMap['yard_ground'];
   const House = decorMap[roomData.decor.home];
   const Bike = decorMap[roomData.decor.bike];
   const houseSize = Math.min(width * 0.8, 600);
+  const groundHeight = height * 0.2;
 
   return (
-    <View style={[global.container]}>
+    <View style={[global.container, { position: 'relative' }]}>
       {/* Logout Button */}
       <TouchableOpacity
         onPress={handleLogout}
@@ -129,44 +131,56 @@ export default function HomeScreen({ navigation }) {
         <Text style={{ color: '#333', fontSize: 14, fontWeight: 'bold' }}>Logout</Text>
       </TouchableOpacity>
 
-      {Background && (
-        <Background
+      {Sky && (
+        <Sky
           width={width}
           height={height}
           preserveAspectRatio="xMidYMax slice"
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
         />
       )}
-
+      {Ground && (
+        <Ground
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: width,
+            height: groundHeight,
+            zIndex: 1,
+          }}
+        />
+      )}
       {House && (
         <TouchableOpacity
           onPress={() => navigation.navigate('RoomSelection')}
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: (height - houseSize) / 3,
+            bottom: groundHeight + 30,
             left: (width - houseSize) / 2,
             width: houseSize,
             height: houseSize,
+            zIndex: 2,
           }}
         >
           <House width={houseSize} height={houseSize} />
         </TouchableOpacity>
       )}
-
       {Bike && (
         <TouchableOpacity
           onPress={() => navigation.navigate('Shop')}
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: width * 0.3,
+            bottom: groundHeight + 30,
             left: 20,
+            zIndex: 2,
           }}
         >
           <Bike width={100} height={100} />
         </TouchableOpacity>
       )}
-
       {/* Sun with progress overlay replaced by ProgressRing */}
       <TouchableOpacity
         onPress={() => setDropdownOpen(!dropdownOpen)}
@@ -238,7 +252,7 @@ export default function HomeScreen({ navigation }) {
                     marginBottom: -10,
                   }}>
                     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 20 }}>{room.name}</Text>
-                    
+
                   </View>
                   <View style={{ backgroundColor: '#F7BD50', borderRadius: 12, padding: 8 }}>
                     {room.tasks.length === 0 ? (

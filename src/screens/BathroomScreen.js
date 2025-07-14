@@ -70,14 +70,15 @@ export default function BedroomScreen({ route }) {
 
   if (!roomData) return <ActivityIndicator size="large" />;
 
-  const Background = decorMap[roomData.decor?.pref_wall];
-  const Floor = decorMap[roomData.decor?.pref_floor];
+  const Wall = decorMap['bathroomWall'];
+  const Floor = decorMap['bathroomFloor'];
   const Toilet = decorMap[roomData.decor?.pref_toilet];
   const ToiletPaper = decorMap[roomData.decor?.pref_toilet_paper];
   const Trashcan = decorMap[roomData.decor?.pref_trashcan];
   const Tub = decorMap[roomData.decor?.pref_tub];
   const WallMirror = decorMap[roomData.decor?.pref_wall_mirror];
   const bedSize = Math.min(width * 0.6, 600);
+  const floorHeight = height * 0.2;
 
   const remainingTasks = roomTasks.filter(task => !task.task_complete);
   const totalTasks = roomTasks.length;
@@ -86,12 +87,12 @@ export default function BedroomScreen({ route }) {
 
   return (
     <View style={[global.container, { position: 'relative' }]}>
-      {Background && (
-        <Background
+      {Wall && (
+        <Wall
           width={width}
           height={height}
           preserveAspectRatio="xMidYMax slice"
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}
         />
       )}
       {Floor && (
@@ -101,7 +102,7 @@ export default function BedroomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: height * 0.2,
+            height: floorHeight,
             zIndex: 1,
           }}
         />
@@ -110,7 +111,7 @@ export default function BedroomScreen({ route }) {
         <Tub
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             left: width * 0.1,
             width: width * 0.5,
             height: 120,
@@ -122,7 +123,7 @@ export default function BedroomScreen({ route }) {
         <Toilet
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             right: width * 0.1,
             width: 60,
             height: 60,
@@ -134,7 +135,7 @@ export default function BedroomScreen({ route }) {
         <ToiletPaper
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             right: width * 0.1 + 70,
             width: 30,
             height: 30,
@@ -146,7 +147,7 @@ export default function BedroomScreen({ route }) {
         <Trashcan
           style={{
             position: 'absolute',
-            bottom: 120,
+            bottom: floorHeight + 120,
             right: width * 0.1 + 110,
             width: 30,
             height: 30,
