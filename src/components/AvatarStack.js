@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { decorMap } from '../lib/svgMap';
 
-export default function AvatarStack({ avatar, size = 100 }) {
+export default function AvatarStack({ avatar, size = 100, style }) {
   const AvatarSkin = decorMap[avatar?.skin];
   const AvatarEyes = decorMap[avatar?.eyes];
   const AvatarHair = decorMap[avatar?.hair];
@@ -11,7 +11,7 @@ export default function AvatarStack({ avatar, size = 100 }) {
   const AvatarShoes = decorMap[avatar?.shoes];
 
   return (
-    <View style={[styles.avatarContainer, { width: size, height: size }]}>
+    <View style={[styles.avatarContainer, { width: size, height: size }, style]}>
       {AvatarSkin && <AvatarSkin width={size} height={size} style={styles.layer} />}
       {AvatarEyes && <AvatarEyes width={size} height={size} style={styles.layer} />}
       {AvatarBottom && <AvatarBottom width={size} height={size} style={styles.layer} />}

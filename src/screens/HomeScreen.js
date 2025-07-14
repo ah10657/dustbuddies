@@ -99,11 +99,10 @@ export default function HomeScreen({ navigation }) {
   }
 
   const Sky = decorMap[roomData.decor.sky] || decorMap[roomData.decor.background];
-  const Ground = decorMap[roomData.decor.ground] || decorMap['yard_ground'];
+  const Ground = decorMap[roomData.decor.ground] || decorMap['yardGround'];
   const House = decorMap[roomData.decor.home];
   const Bike = decorMap[roomData.decor.bike];
   const houseSize = Math.min(width * 0.8, 600);
-  const groundHeight = height * 0.2;
 
   return (
     <View style={[global.container, { position: 'relative' }]}>
@@ -141,15 +140,16 @@ export default function HomeScreen({ navigation }) {
       )}
       {Ground && (
         <Ground
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: width,
-            height: groundHeight,
-            zIndex: 1,
-          }}
-        />
+        preserveAspectRatio="none"
+        width={width}
+        height={height}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          zIndex: 1,
+        }}
+      />
       )}
       {House && (
         <TouchableOpacity
@@ -157,7 +157,7 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: groundHeight + 30,
+            bottom: height / 4,
             left: (width - houseSize) / 2,
             width: houseSize,
             height: houseSize,
@@ -173,7 +173,7 @@ export default function HomeScreen({ navigation }) {
           activeOpacity={0.8}
           style={{
             position: 'absolute',
-            bottom: groundHeight + 30,
+            bottom: height / 4,
             left: 20,
             zIndex: 2,
           }}
@@ -333,7 +333,17 @@ export default function HomeScreen({ navigation }) {
         </View>
       )}
 
-      {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
+      {roomData.user?.avatar && (
+        <AvatarStack
+          avatar={roomData.user.avatar}
+          size={height / 5}
+          style={{
+            right: width / 10, // Center horizontally for size 150
+            bottom: height / 10,           // Place above ground, adjust as needed
+            zIndex: 10,
+          }}
+        />
+      )}
     </View>
   );
 }

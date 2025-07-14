@@ -121,7 +121,17 @@ export default function LaundryRoomScreen({ route }) {
           }}
         />
       )}
-      {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
+      {roomData.user?.avatar && (
+        <AvatarStack
+          avatar={roomData.user.avatar}
+          size={150}
+          style={{
+            left: width / 2 - 75,
+            bottom: floorHeight + 10,
+            zIndex: 10,
+          }}
+        />
+      )}
 
       {BackButtonIcon && (
         <TouchableOpacity

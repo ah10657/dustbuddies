@@ -145,7 +145,17 @@ export default function LivingRoomScreen({ route }) {
           }}
         />
       )}
-      {roomData.user?.avatar && <AvatarStack avatar={roomData.user.avatar} size={150} />}
+      {roomData.user?.avatar && (
+        <AvatarStack
+          avatar={roomData.user.avatar}
+          size={150}
+          style={{
+            left: width / 2 - 75,
+            bottom: 60,
+            zIndex: 10,
+          }}
+        />
+      )}
 
       {BackButtonIcon && (
         <TouchableOpacity
