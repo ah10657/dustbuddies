@@ -11,6 +11,7 @@ import {
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import Feather from 'react-native-vector-icons/Feather';
 
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
@@ -102,8 +103,7 @@ export default function BedroomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: floorHeight,
-            zIndex: 1,
+            height: height,
           }}
         />
       )}
@@ -111,7 +111,7 @@ export default function BedroomScreen({ route }) {
         <Tub
           style={{
             position: 'absolute',
-            bottom: floorHeight + 120,
+            bottom: height * 0.2 + 120,
             left: width * 0.1,
             width: width * 0.5,
             height: 120,
@@ -123,7 +123,7 @@ export default function BedroomScreen({ route }) {
         <Toilet
           style={{
             position: 'absolute',
-            bottom: floorHeight + 120,
+            bottom: height * 0.2 + 120,
             right: width * 0.1,
             width: 60,
             height: 60,
@@ -135,7 +135,7 @@ export default function BedroomScreen({ route }) {
         <ToiletPaper
           style={{
             position: 'absolute',
-            bottom: floorHeight + 120,
+            bottom: height * 0.2 + 120,
             right: width * 0.1 + 70,
             width: 30,
             height: 30,
@@ -147,7 +147,7 @@ export default function BedroomScreen({ route }) {
         <Trashcan
           style={{
             position: 'absolute',
-            bottom: floorHeight + 120,
+            bottom: height * 0.2 + 120,
             right: width * 0.1 + 110,
             width: 30,
             height: 30,
@@ -173,7 +173,7 @@ export default function BedroomScreen({ route }) {
           size={150}
           style={{
             left: width / 2 - 75,
-            bottom: floorHeight + 10,
+            bottom: height * 0.2 + 10,
             zIndex: 10,
           }}
         />
@@ -230,34 +230,96 @@ export default function BedroomScreen({ route }) {
 
       {/* Dropdown Task List */}
       {dropdownOpen && (
-        <View style={global.dropdown}>
+        <View
+          style={[
+            global.taskDropdownContainer,
+            {
+              width: width,
+              height: height * 0.66,
+              backgroundColor: '#5EB1CC',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              borderTopLeftRadius: 32,
+              borderTopRightRadius: 32,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+              zIndex: 100,
+              paddingBottom: 0,
+              justifyContent: 'flex-start',
+            },
+          ]}
+        >
+          {/* Progress Bar and Room Header */}
+          <View style={{ alignItems: 'center', marginTop: 24, marginBottom: 8 }}>
+            <View style={{ position: 'absolute', width: 90, height: 90, borderRadius: 45, backgroundColor: '#fff', zIndex: 0 }} />
+            <AnimatedCircularProgress
+              size={90}
+              width={10}
+              fill={progressPercent}
+              tintColor="#f7bd50"
+              backgroundColor="#ffffff"
+              style={{ zIndex: 1 }}
+              rotation={0}
+            >
+              {() => (
+                <Text style={{ fontSize: 28, color: '#F7BD50', fontWeight: 'bold' }}>{progressPercent}%</Text>
+              )}
+            </AnimatedCircularProgress>
+            <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 4 }}>{roomData.display_name || 'Bathroom'}</Text>
+          </View>
+          {/* Task List */}
           <FlatList
             data={roomTasks}
             keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingHorizontal: 18, paddingBottom: 40 }}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={[
-                  global.taskItem,
-                  item.task_complete && global.taskCompleted,
-                ]}
-                onPress={() =>
-                  navigation.navigate('Timer', {
-                    taskName: item.task_name,
-                    roomId: roomId,
-                  })
-                }
-              >
-                <Text
+              <View style={[global.taskRoomBox, { backgroundColor: '#5EB1CC' }]}> {/* blue group box */}
+                <TouchableOpacity
                   style={[
-                    global.taskText,
-                    item.task_complete && global.taskTextCompleted,
+                    global.button,
+                    item.task_complete && global.buttonCompleted,
                   ]}
+                  onPress={() =>
+                    navigation.navigate('Timer', {
+                      taskName: item.task_name,
+                      roomId: roomId,
+                    })
+                  }
                 >
-                  {item.task_name}
-                </Text>
-              </TouchableOpacity>
+                  <Text style={item.task_complete ? global.buttonTextCompleted : global.buttonText}>
+                    {item.task_name}
+                  </Text>
+                  {item.task_complete ? (
+                    <View style={global.taskCheckCircle}>
+                      <Feather name="check" size={18} color="#fff" />
+                    </View>
+                  ) : (
+                    <View style={{ width: 24, height: 24 }} />
+                  )}
+                </TouchableOpacity>
+              </View>
             )}
           />
+          {/* Close area at the bottom for overlay effect */}
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: width,
+              height: 40,
+              backgroundColor: 'transparent',
+              zIndex: 101,
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row',
+            }}
+            onPress={() => setDropdownOpen(false)}
+            activeOpacity={0.7}
+          >
+            <Feather name="chevron-up" size={32} color="#fff" style={{ textAlign: 'center' }} />
+          </TouchableOpacity>
         </View>
       )}
     </View>

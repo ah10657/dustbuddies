@@ -93,8 +93,7 @@ export default function KitchenScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: floorHeight,
-            zIndex: 1,
+            height: height,
           }}
         />
       )}
@@ -102,7 +101,7 @@ export default function KitchenScreen({ route }) {
         <Cupboards
           style={{
             position: 'absolute',
-            bottom: floorHeight + 120,
+            bottom: height * 0.2 + 120,
             left: width * 0.1,
             width: width * 0.8,
             height: 120,
@@ -115,7 +114,7 @@ export default function KitchenScreen({ route }) {
           size={150}
           style={{
             left: width / 2 - 75,
-            bottom: floorHeight + 10,
+            bottom: height * 0.2 + 10,
             zIndex: 10,
           }}
         />

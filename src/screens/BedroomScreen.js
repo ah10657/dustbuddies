@@ -100,8 +100,7 @@ export default function BedroomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: floorHeight,
-            zIndex: 1,
+            height: height,
           }}
         />
       )}
@@ -109,7 +108,7 @@ export default function BedroomScreen({ route }) {
         <Rug
           style={{
             position: 'absolute',
-            bottom: floorHeight + 30,
+            bottom: height * 0.2 + 30,
             left: (width - bedSize) / 2 + 20,
             width: bedSize * 0.8,
             height: 40,
@@ -121,7 +120,7 @@ export default function BedroomScreen({ route }) {
         <Bed
           style={{
             position: 'absolute',
-            bottom: floorHeight,
+            bottom: height * 0.2,
             left: (width - bedSize) / 2,
             width: bedSize,
             height: bedSize,
@@ -133,7 +132,7 @@ export default function BedroomScreen({ route }) {
         <Nightstand
           style={{
             position: 'absolute',
-            bottom: floorHeight + 40,
+            bottom: height * 0.2 + 40,
             left: (width - bedSize) / 2 - 60,
             width: 60,
             height: 60,
@@ -145,7 +144,7 @@ export default function BedroomScreen({ route }) {
         <Side
           style={{
             position: 'absolute',
-            bottom: floorHeight + 40,
+            bottom: height * 0.2 + 40,
             right: (width - bedSize) / 2 - 60,
             width: 60,
             height: 60,
@@ -183,7 +182,7 @@ export default function BedroomScreen({ route }) {
           size={150}
           style={{
             left: width / 2 - 75,
-            bottom: floorHeight + 10,
+            bottom: height * 0.2 + 10,
             zIndex: 10,
           }}
         />

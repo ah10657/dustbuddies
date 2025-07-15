@@ -94,8 +94,7 @@ export default function LaundryRoomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: floorHeight,
-            zIndex: 1,
+            height: height,
           }}
         />
       )}
@@ -103,7 +102,7 @@ export default function LaundryRoomScreen({ route }) {
         <WasherDryer
           style={{
             position: 'absolute',
-            bottom: floorHeight + 120,
+            bottom: height * 0.2 + 120,
             left: width * 0.1,
             width: width * 0.5,
             height: 120,
@@ -114,7 +113,7 @@ export default function LaundryRoomScreen({ route }) {
         <Shelf
           style={{
             position: 'absolute',
-            bottom: floorHeight + 120,
+            bottom: height * 0.2 + 120,
             right: width * 0.1,
             width: width * 0.3,
             height: 80,
@@ -127,7 +126,7 @@ export default function LaundryRoomScreen({ route }) {
           size={150}
           style={{
             left: width / 2 - 75,
-            bottom: floorHeight + 10,
+            bottom: height * 0.2 + 10,
             zIndex: 10,
           }}
         />
