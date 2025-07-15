@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="store_hardware" xmlns="http://www.w3.org/2000/svg" width=".59in" height=".41in" viewBox="0 0 42.21 29.31">
+  <rect x="2.33" y="7.32" width="38.6" height="21.85" fill="#c68d55" stroke="#aa6933" stroke-miterlimit="10" stroke-width=".27"/>
+  <rect x="19.52" y="12.6" width="16.79" height="15.56" fill="#d3eaea" stroke="#59524b" stroke-miterlimit="10" stroke-width=".25"/>
+  <rect x="6.43" y="16.01" width="6.56" height="12.56" fill="#d3eaea" stroke="#59524b" stroke-miterlimit="10" stroke-width=".74"/>
+  <path d="M19.58,28.13c5.56-.03,11.13-.06,16.69-.09v-.73c-1.94-.61-4.8-1.26-8.29-1.27-3.53,0-6.42.66-8.38,1.27,0,.27,0,.54-.01.81Z" fill="#b0c1c0"/>
+  <polygon points="37.49 10.25 0 10.25 1.97 1.06 35.51 1.06 37.49 10.25" fill="none"/>
+  <path d="M6.56,24.56c2.17-1.85,4.34-3.71,6.51-5.56.01.23.03.46.04.68-1.92,2.09-3.84,4.18-5.76,6.27-.26-.03-.52-.07-.79-.1v-1.3Z" fill="#f3fffe" opacity=".31"/>
+  <path d="M6.42,21.55c2.24-1.54,4.49-3.09,6.73-4.63-.03.05-.05.11-.07.18-.04.14-.03.26-.02.34-2.18,1.81-4.37,3.63-6.55,5.44l-.15-.55c.02-.26.04-.53.07-.79Z" fill="#f3fffe" opacity=".31"/>
+  <rect x="6.43" y="16.01" width="6.56" height="12.56" fill="none" stroke="#59524b" stroke-miterlimit="10" stroke-width=".99"/>
+  <rect x="1.65" y=".13" width="39.88" height="8.62" fill="#c68d55" stroke="#aa6933" stroke-miterlimit="10" stroke-width=".27"/>
+  <rect x="1.02" y="2.55" width="41.05" height="3.4" fill="#a06107" stroke="#7f4b06" stroke-miterlimit="10" stroke-width=".27"/>
+  <rect x="11.74" y="1.58" width="21.74" height="5.45" fill="#f6f1ee" stroke="#59524b" stroke-miterlimit="10" stroke-width=".44"/>
+  <g>
+    <path d="M14.87,5.37v-1.12h-1.06v1.12h-.38v-2.57h.38v1.11h1.06v-1.11h.38v2.57h-.38Z"/>
+    <path d="M17.64,5.37v-.3h0c-.14.23-.38.35-.65.35-.56,0-1.02-.42-1.02-.98,0-.62.44-1.05,1.01-1.05.28,0,.52.1.67.32h0v-.27h.36v1.93h-.36ZM17.65,4.41c0-.38-.27-.69-.67-.69-.36,0-.66.31-.66.69s.3.68.66.68.67-.31.67-.68Z"/>
+    <path d="M18.78,5.37v-1.93h.34v.17h0c.09-.13.24-.21.49-.23v.37c-.31.01-.47.2-.47.53v1.08h-.36Z"/>
+    <path d="M21.78,5.37v-.27h0c-.15.21-.4.32-.68.32-.56,0-1-.42-1-.99s.42-1.04.99-1.04c.26,0,.51.09.66.29h0v-.88h.36v2.57h-.33ZM21.11,3.72c-.37,0-.66.31-.66.69s.3.68.66.68.67-.3.67-.66c0-.39-.26-.7-.67-.7Z"/>
+    <path d="M24.47,5.37l-.42-1.3h0l-.42,1.3h-.2l-.72-1.93h.39l.43,1.25h0l.4-1.25h.24l.4,1.25h0l.42-1.25h.39l-.71,1.93h-.2Z"/>
+    <path d="M27.49,5.37v-.3h0c-.14.23-.38.35-.65.35-.56,0-1.02-.42-1.02-.98,0-.62.44-1.05,1.01-1.05.28,0,.52.1.67.32h0v-.27h.36v1.93h-.36ZM27.5,4.41c0-.38-.27-.69-.67-.69-.36,0-.66.31-.66.69s.3.68.66.68.67-.31.67-.68Z"/>
+    <path d="M28.64,5.37v-1.93h.34v.17h0c.09-.13.24-.21.49-.23v.37c-.31.01-.47.2-.47.53v1.08h-.36Z"/>
+    <path d="M30.3,4.56c.08.32.34.53.63.53.23,0,.44-.12.55-.32h.36c-.15.4-.51.65-.93.65-.54,0-.98-.48-.98-1,0-.61.46-1.03.97-1.03.57,0,1,.44,1,.99,0,.06,0,.12-.01.18h-1.6ZM31.55,4.29c-.03-.33-.32-.56-.63-.56s-.59.23-.62.56h1.25Z"/>
+  </g>
+  <rect x="6.6" y="21.82" width="6.24" height=".87" fill="#59524b"/>
+  <rect x="6.6" y="27.66" width="6.24" height=".87" fill="#59524b"/>
+  <path d="M6.31,15.25h6.82c-.21-1.71-1.67-3-3.38-3.02-1.73-.02-3.22,1.29-3.44,3.02Z" fill="#d3eaea" stroke="#59524b" stroke-miterlimit="10" stroke-width=".64"/>
+  <line x1="9.74" y1="12.31" x2="9.74" y2="15.08" fill="none" stroke="#59524b" stroke-miterlimit="10" stroke-width=".5"/>
+  <line x1="11.85" y1="12.97" x2="9.97" y2="15.02" fill="none" stroke="#59524b" stroke-miterlimit="10" stroke-width=".5"/>
+  <line x1="7.62" y1="12.97" x2="9.5" y2="15.02" fill="none" stroke="#59524b" stroke-miterlimit="10" stroke-width=".5"/>
+  <g>
+    <rect x="21.8" y="17.33" width="5.03" height="10.07" fill="#e9e9eb"/>
+    <rect x="22.29" y="17.35" width=".52" height="10.07" fill="#c8ccbd"/>
+    <rect x="23.45" y="17.35" width=".52" height="10.07" fill="#c8ccbd"/>
+    <rect x="24.6" y="17.35" width=".52" height="10.07" fill="#c8ccbd"/>
+    <rect x="25.75" y="17.35" width=".52" height="10.07" fill="#c8ccbd"/>
+  </g>
+  <polygon points="31.98 22.81 31.93 22.46 31.29 22.46 31.31 22.81 31.98 22.81" fill="#494643"/>
+  <polygon points="32.66 22.81 32.58 22.46 31.94 22.46 31.98 22.81 32.66 22.81" fill="#f8f9f4"/>
+  <rect x="31.96" y="22.46" width="0" height=".35" transform="translate(-2.75 4.49) rotate(-7.7)" fill="#c0c7c9"/>
+  <polygon points="33.33 22.81 33.23 22.46 32.58 22.46 32.66 22.81 33.33 22.81" fill="#494643"/>
+  <rect x="32.62" y="22.46" width="0" height=".36" transform="translate(-4.17 7.71) rotate(-12.68)" fill="#b0c2c6"/>
+  <polygon points="33.77 22.81 33.77 22.46 33.23 22.46 33.34 22.81 33.77 22.81" fill="#f8f9f4"/>
+  <rect x="33.28" y="22.46" width="0" height=".36" transform="translate(-5.26 11.05) rotate(-17.48)" fill="#c0c7c9"/>
+  <polygon points="30.63 22.81 30.63 22.81 30.64 22.46 30 22.46 29.95 22.81 29.95 22.81 29.95 22.81 30.63 22.81" fill="#494643"/>
+  <polygon points="31.3 22.81 31.29 22.46 30.65 22.46 30.63 22.81 31.3 22.81" fill="#f8f9f4"/>
+  <rect x="31.3" y="22.46" width="0" height=".35" transform="translate(-.99 1.44) rotate(-2.59)" fill="#c0c7c9"/>
+  <rect x="30.46" y="22.63" width=".35" height="0" transform="translate(6.66 52.24) rotate(-87.45)" fill="#c0c7c9"/>
+  <polygon points="31.32 23.19 32.03 23.19 31.98 22.81 31.31 22.81 31.32 23.19 31.32 23.19" fill="#f8f9f4"/>
+  <rect x="31.31" y="22.81" width=".67" height="0" transform="translate(-2.75 4.41) rotate(-7.63)" fill="#c0c7c9"/>
+  <polygon points="32.74 23.19 32.66 22.81 31.98 22.81 32.04 23.19 32.74 23.19" fill="#494643"/>
+  <rect x="31.98" y="22.81" width=".67" height="0" transform="translate(-4.2 7.61) rotate(-12.61)" fill="#b0c2c6"/>
+  <polygon points="32.03 23.19 32.04 23.19 31.98 22.81 31.98 22.81 32.03 23.19 32.03 23.19" fill="#b0c2c6"/>
+  <rect x="31.98" y="22.81" width="0" height="0" transform="translate(-2.79 4.53) rotate(-7.77)" fill="#b0c2c6"/>
+  <polygon points="33.45 23.19 33.34 22.81 32.66 22.81 32.75 23.19 33.45 23.19" fill="#f8f9f4"/>
+  <rect x="32.66" y="22.81" width=".67" height="0" transform="translate(-5.31 10.92) rotate(-17.41)" fill="#c0c7c9"/>
+  <rect x="32.7" y="22.81" width="0" height=".39" transform="translate(-4.25 7.74) rotate(-12.68)" fill="#c0c7c9"/>
+  <rect x="32.66" y="22.81" width="0" height="0" transform="translate(-4.21 7.72) rotate(-12.68)" fill="#c0c7c9"/>
+  <polygon points="33.46 23.19 33.77 23.19 33.77 22.81 33.34 22.81 33.46 23.19" fill="#494643"/>
+  <rect x="33.34" y="22.81" width=".43" height="0" fill="#b0c2c6"/>
+  <polygon points="33.45 23.19 33.46 23.19 33.46 23.19 33.34 22.81 33.34 22.81 33.45 23.19" fill="#b0c2c6"/>
+  <rect x="33.33" y="22.81" width="0" height="0" transform="translate(-5.31 11.06) rotate(-17.47)" fill="#b0c2c6"/>
+  <polygon points="30.61 23.19 30.61 23.19 30.63 22.81 29.95 22.81 29.9 23.19 29.9 23.19 30.61 23.19" fill="#f8f9f4"/>
+  <rect x="29.95" y="22.81" width=".68" height="0" fill="#c0c7c9"/>
+  <polygon points="31.3 22.81 30.63 22.81 30.61 23.19 31.32 23.19 31.3 22.81" fill="#494643"/>
+  <rect x="30.63" y="22.81" width=".67" height="0" transform="translate(-.98 1.39) rotate(-2.54)" fill="#b0c2c6"/>
+  <rect x="31.31" y="22.81" width="0" height=".38" transform="translate(-1.01 1.44) rotate(-2.59)" fill="#b0c2c6"/>
+  <rect x="31.3" y="22.81" width="0" height="0" transform="translate(-1 1.45) rotate(-2.6)" fill="#b0c2c6"/>
+  <polygon points="30.63 22.81 30.63 22.81 30.63 22.81 30.61 23.19 30.61 23.19 30.63 22.81" fill="#b0c2c6"/>
+  <rect x="30.63" y="22.81" width="0" height="0" fill="#b0c2c6"/>
+  <rect x="30.63" y="22.81" width="0" height="0" transform="translate(6.48 52.4) rotate(-87.46)" fill="#b0c2c6"/>
+  <polygon points="32.03 23.19 32.03 23.19 31.32 23.19 31.34 23.61 32.09 23.61 32.03 23.19" fill="#494643"/>
+  <rect x="31.32" y="23.19" width=".71" height="0" transform="translate(-2.82 4.46) rotate(-7.71)" fill="#b0c2c6"/>
+  <rect x="32.03" y="23.19" width="0" height="0" transform="translate(-2.82 4.5) rotate(-7.71)" fill="#b0c2c6"/>
+  <polygon points="32.84 23.61 32.74 23.19 32.04 23.19 32.09 23.61 32.84 23.61" fill="#f8f9f4"/>
+  <rect x="32.04" y="23.19" width=".71" height="0" transform="translate(-4.3 7.68) rotate(-12.69)" fill="#c0c7c9"/>
+  <rect x="32.06" y="23.19" width="0" height=".42" transform="translate(-2.85 4.51) rotate(-7.7)" fill="#c0c7c9"/>
+  <rect x="32.03" y="23.19" width="0" height="0" transform="translate(-2.82 4.5) rotate(-7.71)" fill="#c0c7c9"/>
+  <polygon points="32.84 23.61 33.59 23.61 33.46 23.19 32.75 23.19 32.84 23.61" fill="#494643"/>
+  <rect x="32.75" y="23.19" width=".71" height="0" fill="#b0c2c6"/>
+  <rect x="32.79" y="23.19" width="0" height=".43" fill="#b0c2c6"/>
+  <rect x="32.74" y="23.19" width="0" height="0" transform="translate(-4.29 7.76) rotate(-12.69)" fill="#b0c2c6"/>
+  <polygon points="33.46 23.19 33.59 23.61 33.77 23.61 33.77 23.19 33.46 23.19 33.46 23.19" fill="#f8f9f4"/>
+  <rect x="33.46" y="23.19" width=".31" height="0" fill="#c0c7c9"/>
+  <rect x="33.46" y="23.19" width="0" height="0" fill="#c0c7c9"/>
+  <rect x="33.52" y="23.18" width="0" height=".44" fill="#c0c7c9"/>
+  <rect x="33.45" y="23.19" width="0" height="0" transform="translate(-5.42 11.12) rotate(-17.48)" fill="#c0c7c9"/>
+  <polygon points="30.61 23.19 29.9 23.19 29.84 23.61 30.59 23.61 30.61 23.19" fill="#494643"/>
+  <rect x="29.9" y="23.19" width=".71" height="0" fill="#b0c2c6"/>
+  <polygon points="31.32 23.19 30.61 23.19 30.59 23.61 31.34 23.61 31.32 23.19" fill="#f8f9f4"/>
+  <rect x="30.61" y="23.19" width=".71" height="0" fill="#c0c7c9"/>
+  <polygon points="31.34 23.61 31.32 23.19 31.32 23.19 31.32 23.19 31.34 23.61 31.34 23.61 31.34 23.61" fill="#c0c7c9"/>
+  <rect x="31.32" y="23.19" width="0" height="0" transform="translate(-1.02 1.45) rotate(-2.6)" fill="#c0c7c9"/>
+  <rect x="31.32" y="23.19" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="30.61 23.19 30.61 23.19 30.61 23.19 30.59 23.61 30.59 23.61 30.61 23.19" fill="#c0c7c9"/>
+  <rect x="30.61" y="23.19" width="0" height="0" fill="#c0c7c9"/>
+  <rect x="30.61" y="23.19" width="0" height="0" transform="translate(6.08 52.75) rotate(-87.46)" fill="#c0c7c9"/>
+  <polygon points="32.09 23.62 31.34 23.62 31.34 23.62 31.36 24.09 32.15 24.09 32.09 23.62" fill="#f8f9f4"/>
+  <rect x="31.34" y="23.61" width=".75" height="0" transform="translate(-2.86 4.42) rotate(-7.63)" fill="#c0c7c9"/>
+  <rect x="31.34" y="23.61" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="32.09 23.62 32.16 24.09 32.94 24.09 32.84 23.62 32.09 23.62" fill="#494643"/>
+  <rect x="32.09" y="23.61" width=".75" height="0" transform="translate(-2.89 4.59) rotate(-7.74)" fill="#b0c2c6"/>
+  <rect x="32.12" y="23.62" width="0" height=".47" fill="#b0c2c6"/>
+  <rect x="32.09" y="23.61" width="0" height="0" transform="translate(-2.85 4.47) rotate(-7.63)" fill="#b0c2c6"/>
+  <polygon points="32.95 24.09 33.74 24.09 33.59 23.62 32.84 23.62 32.95 24.09" fill="#f8f9f4"/>
+  <rect x="32.84" y="23.61" width=".75" height="0" fill="#c0c7c9"/>
+  <rect x="32.89" y="23.61" width="0" height=".48" transform="translate(-4.43 7.79) rotate(-12.67)" fill="#c0c7c9"/>
+  <rect x="32.84" y="23.61" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="33.74 24.09 33.77 24.09 33.77 23.62 33.59 23.62 33.74 24.09" fill="#494643"/>
+  <rect x="33.59" y="23.61" width=".18" height="0" fill="#b0c2c6"/>
+  <polygon points="33.74 24.09 33.74 24.09 33.74 24.09 33.59 23.62 33.59 23.62 33.74 24.09" fill="#b0c2c6"/>
+  <rect x="33.59" y="23.61" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="30.57 24.09 30.59 23.62 29.84 23.62 29.84 23.61 29.78 24.09 29.78 24.09 30.57 24.09" fill="#f8f9f4"/>
+  <rect x="30.21" y="23.24" width="0" height=".75" transform="translate(5.27 52.75) rotate(-87.44)" fill="#c0c7c9"/>
+  <polygon points="31.34 23.62 30.59 23.62 30.57 24.09 31.36 24.09 31.34 23.62" fill="#494643"/>
+  <rect x="30.59" y="23.61" width=".75" height="0" fill="#b0c2c6"/>
+  <rect x="31.35" y="23.62" width="0" height=".47" fill="#b0c2c6"/>
+  <rect x="31.34" y="23.61" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="30.57 24.09 30.59 23.62 30.59 23.62 30.57 24.09 30.57 24.09 30.57 24.09" fill="#b0c2c6"/>
+  <rect x="30.59" y="23.61" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="32.15 24.09 31.36 24.09 31.39 24.61 32.22 24.61 32.15 24.09" fill="#494643"/>
+  <rect x="31.36" y="24.09" width=".79" height="0" fill="#b0c2c6"/>
+  <polygon points="32.23 24.61 33.06 24.61 33.06 24.61 32.95 24.09 32.16 24.09 32.23 24.61" fill="#f8f9f4"/>
+  <rect x="32.16" y="24.09" width=".79" height="0" fill="#c0c7c9"/>
+  <rect x="32.19" y="24.09" width="0" height=".53" fill="#c0c7c9"/>
+  <rect x="32.15" y="24.09" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="32.95 24.09 33.07 24.61 33.77 24.61 33.77 24.21 33.74 24.09 32.95 24.09" fill="#494643"/>
+  <rect x="32.95" y="24.08" width=".79" height="0" transform="translate(-4.48 7.92) rotate(-12.69)" fill="#b0c2c6"/>
+  <rect x="33" y="24.08" width="0" height=".53" fill="#b0c2c6"/>
+  <rect x="32.95" y="24.08" width="0" height="0" transform="translate(-4.47 7.8) rotate(-12.65)" fill="#b0c2c6"/>
+  <polygon points="30.54 24.61 30.57 24.09 29.78 24.09 29.71 24.61 29.71 24.61 29.71 24.61 30.54 24.61" fill="#494643"/>
+  <rect x="29.78" y="24.09" width=".79" height="0" fill="#b0c2c6"/>
+  <polygon points="31.36 24.09 30.57 24.09 30.57 24.09 30.55 24.61 31.38 24.61 31.36 24.09" fill="#f8f9f4"/>
+  <rect x="30.57" y="24.09" width=".79" height="0" transform="translate(-1.04 1.4) rotate(-2.54)" fill="#c0c7c9"/>
+  <rect x="30.57" y="24.09" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="31.39 24.61 31.36 24.09 31.36 24.09 31.38 24.61 31.39 24.61 31.39 24.61" fill="#c0c7c9"/>
+  <rect x="31.36" y="24.09" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="30.55 24.61 30.57 24.09 30.57 24.09 30.54 24.61 30.55 24.61 30.55 24.61" fill="#c0c7c9"/>
+  <rect x="30.57" y="24.09" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="29.95 22.81 29.95 22.81 30 22.46 29.35 22.46 29.27 22.81 29.95 22.81" fill="#f8f9f4"/>
+  <polygon points="28.59 22.81 28.7 22.46 28.13 22.46 28.13 22.81 28.59 22.81" fill="#f8f9f4"/>
+  <polygon points="29.27 22.81 29.35 22.46 28.7 22.46 28.6 22.81 29.27 22.81" fill="#494643"/>
+  <polygon points="29.27 22.81 29.27 22.81 29.35 22.46 29.35 22.46 29.27 22.81 29.27 22.81" fill="#b0c2c6"/>
+  <rect x="28.47" y="22.63" width=".36" height="0" transform="translate(-1.54 43.17) rotate(-72.54)" fill="#b0c2c6"/>
+  <polygon points="29.19 23.19 29.9 23.19 29.9 23.19 29.9 23.19 29.95 22.81 29.27 22.81 29.19 23.19" fill="#494643"/>
+  <rect x="29.61" y="22.47" width="0" height=".68" transform="translate(.86 46.69) rotate(-77.32)" fill="#b0c2c6"/>
+  <polygon points="28.59 22.81 28.13 22.81 28.13 23.19 28.47 23.19 28.59 22.81" fill="#494643"/>
+  <rect x="28.36" y="22.58" width="0" height=".46" transform="translate(-1.93 42.99) rotate(-72.47)" fill="#b0c2c6"/>
+  <polygon points="29.18 23.19 29.27 22.81 29.27 22.81 28.59 22.81 28.48 23.19 29.18 23.19" fill="#f8f9f4"/>
+  <rect x="28.93" y="22.47" width="0" height=".67" transform="translate(.33 46.03) rotate(-77.32)" fill="#c0c7c9"/>
+  <rect x="29.27" y="22.81" width="0" height="0" transform="translate(.59 46.36) rotate(-77.32)" fill="#c0c7c9"/>
+  <rect x="29.23" y="22.81" width="0" height=".39" fill="#c0c7c9"/>
+  <rect x="29.27" y="22.81" width="0" height="0" transform="translate(.59 46.36) rotate(-77.32)" fill="#c0c7c9"/>
+  <polygon points="28.47 23.19 28.48 23.19 28.59 22.81 28.59 22.81 28.47 23.19 28.47 23.19" fill="#c0c7c9"/>
+  <rect x="28.59" y="22.81" width="0" height="0" transform="translate(-1.73 43.27) rotate(-72.59)" fill="#c0c7c9"/>
+  <polygon points="29.09 23.61 29.84 23.61 29.84 23.62 29.9 23.19 29.19 23.19 29.09 23.61" fill="#f8f9f4"/>
+  <rect x="29.54" y="22.84" width="0" height=".71" transform="translate(.43 46.92) rotate(-77.31)" fill="#c0c7c9"/>
+  <polygon points="28.47 23.19 28.47 23.19 28.13 23.19 28.13 23.61 28.34 23.61 28.47 23.19" fill="#f8f9f4"/>
+  <rect x="28.13" y="23.19" width=".34" height="0" fill="#c0c7c9"/>
+  <rect x="28.47" y="23.19" width="0" height="0" transform="translate(-2.19 43.41) rotate(-72.57)" fill="#c0c7c9"/>
+  <polygon points="28.34 23.61 29.09 23.61 29.18 23.19 28.47 23.19 28.34 23.61" fill="#494643"/>
+  <rect x="28.47" y="23.19" width=".71" height="0" fill="#b0c2c6"/>
+  <rect x="29.14" y="23.19" width="0" height=".43" fill="#b0c2c6"/>
+  <rect x="29.18" y="23.19" width="0" height="0" fill="#b0c2c6"/>
+  <rect x="28.4" y="23.18" width="0" height=".44" fill="#b0c2c6"/>
+  <rect x="28.47" y="23.19" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="28.98 24.09 29.78 24.09 29.84 23.62 29.09 23.62 28.98 24.09" fill="#494643"/>
+  <rect x="29.46" y="23.24" width="0" height=".75" transform="translate(-.03 47.2) rotate(-77.36)" fill="#b0c2c6"/>
+  <polygon points="28.34 23.62 28.13 23.62 28.13 24.09 28.19 24.09 28.34 23.62" fill="#494643"/>
+  <rect x="28.13" y="23.61" width=".2" height="0" fill="#b0c2c6"/>
+  <polygon points="28.19 24.09 28.98 24.09 29.09 23.62 28.34 23.62 28.19 24.09" fill="#f8f9f4"/>
+  <rect x="28.34" y="23.61" width=".75" height="0" fill="#c0c7c9"/>
+  <rect x="29.03" y="23.61" width="0" height=".48" fill="#c0c7c9"/>
+  <rect x="29.09" y="23.61" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="28.19 24.09 28.34 23.62 28.34 23.62 28.19 24.09 28.19 24.09 28.19 24.09" fill="#c0c7c9"/>
+  <rect x="28.34" y="23.61" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="28.98 24.09 28.87 24.61 28.87 24.61 29.71 24.61 29.71 24.61 29.78 24.09 29.78 24.09 28.98 24.09" fill="#f8f9f4"/>
+  <rect x="28.98" y="24.09" width=".79" height="0" fill="#c0c7c9"/>
+  <polygon points="28.19 24.09 28.13 24.09 28.13 24.26 28.19 24.09 28.19 24.09" fill="#bccebc"/>
+  <rect x="28.13" y="24.08" width=".06" height="0" fill="#c0c7c9"/>
+  <rect x="28.19" y="24.09" width="0" height="0" transform="translate(-3.25 43.74) rotate(-72.52)" fill="#c0c7c9"/>
+  <polygon points="28.98 24.09 28.19 24.09 28.13 24.28 28.13 24.61 28.86 24.61 28.98 24.09" fill="#494643"/>
+  <rect x="28.19" y="24.08" width=".79" height="0" fill="#b0c2c6"/>
+  <rect x="28.92" y="24.08" width="0" height=".54" fill="#b0c2c6"/>
+  <rect x="28.98" y="24.08" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="28.19 24.09 28.13 24.26 28.13 24.28 28.19 24.09 28.19 24.09" fill="#b0c2c6"/>
+  <rect x="28.19" y="24.08" width="0" height="0" transform="translate(-3.25 43.74) rotate(-72.52)" fill="#b0c2c6"/>
+  <polygon points="32.22 24.61 31.39 24.61 31.39 24.61 31.41 25.2 32.3 25.2 32.22 24.61" fill="#f8f9f4"/>
+  <rect x="31.39" y="24.61" width=".84" height="0" transform="translate(-3 4.46) rotate(-7.66)" fill="#c0c7c9"/>
+  <rect x="31.39" y="24.61" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="32.31 25.2 33.2 25.2 33.06 24.61 32.23 24.61 32.31 25.2" fill="#494643"/>
+  <rect x="32.23" y="24.61" width=".84" height="0" transform="translate(-3 4.59) rotate(-7.69)" fill="#b0c2c6"/>
+  <rect x="32.26" y="24.61" width="0" height=".59" fill="#b0c2c6"/>
+  <rect x="32.22" y="24.61" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="33.2 25.2 33.77 25.2 33.77 24.61 33.07 24.61 33.2 25.2" fill="#f8f9f4"/>
+  <rect x="33.07" y="24.61" width=".71" height="0" fill="#c0c7c9"/>
+  <polygon points="33.06 24.61 33.2 25.2 33.2 25.2 33.2 25.2 33.07 24.61 33.06 24.61 33.06 24.61" fill="#c0c7c9"/>
+  <rect x="33.06" y="24.61" width="0" height="0" fill="#c0c7c9"/>
+  <rect x="33.06" y="24.61" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="30.52 25.2 30.54 24.61 29.71 24.61 29.63 25.2 30.52 25.2 30.52 25.2" fill="#f8f9f4"/>
+  <rect x="29.71" y="24.61" width=".84" height="0" fill="#c0c7c9"/>
+  <polygon points="31.38 24.61 30.55 24.61 30.55 24.61 30.52 25.2 31.41 25.2 31.38 24.61" fill="#494643"/>
+  <rect x="30.55" y="24.61" width=".84" height="0" transform="translate(-1.08 1.42) rotate(-2.59)" fill="#b0c2c6"/>
+  <rect x="30.55" y="24.61" width="0" height="0" fill="#b0c2c6"/>
+  <rect x="31.4" y="24.61" width="0" height=".59" fill="#b0c2c6"/>
+  <rect x="31.38" y="24.61" width="0" height="0" fill="#b0c2c6"/>
+  <rect x="30.53" y="24.61" width="0" height=".59" fill="#b0c2c6"/>
+  <rect x="30.54" y="24.61" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="32.3 25.21 31.41 25.21 31.44 25.88 32.39 25.88 32.3 25.21" fill="#494643"/>
+  <rect x="31.41" y="25.2" width=".89" height="0" transform="translate(-1.1 1.46) rotate(-2.58)" fill="#b0c2c6"/>
+  <polygon points="32.4 25.88 33.35 25.88 33.2 25.21 32.31 25.21 32.4 25.88" fill="#f8f9f4"/>
+  <rect x="32.31" y="25.2" width=".89" height="0" fill="#c0c7c9"/>
+  <rect x="32.35" y="25.2" width="0" height=".68" fill="#c0c7c9"/>
+  <rect x="32.3" y="25.2" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="33.2 25.21 33.35 25.88 33.77 25.88 33.77 25.21 33.2 25.21 33.2 25.21" fill="#494643"/>
+  <rect x="33.2" y="25.2" width=".57" height="0" fill="#b0c2c6"/>
+  <rect x="33.2" y="25.2" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="33.35 25.88 33.35 25.88 33.35 25.88 33.2 25.21 33.2 25.21 33.35 25.88" fill="#b0c2c6"/>
+  <rect x="33.2" y="25.2" width="0" height="0" transform="translate(-4.71 7.88) rotate(-12.65)" fill="#b0c2c6"/>
+  <polygon points="30.49 25.88 30.52 25.21 29.63 25.21 29.63 25.2 29.54 25.88 30.49 25.88 30.49 25.88" fill="#494643"/>
+  <rect x="30.07" y="24.76" width="0" height=".89" transform="translate(3.54 54.11) rotate(-87.42)" fill="#b0c2c6"/>
+  <polygon points="31.41 25.21 30.52 25.21 30.49 25.88 31.44 25.88 31.41 25.21" fill="#f8f9f4"/>
+  <rect x="30.52" y="25.2" width=".89" height="0" fill="#c0c7c9"/>
+  <rect x="31.43" y="25.21" width="0" height=".67" transform="translate(-1.12 1.44) rotate(-2.58)" fill="#c0c7c9"/>
+  <rect x="31.41" y="25.2" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="30.52 25.21 30.52 25.21 30.52 25.21 30.49 25.88 30.49 25.88 30.52 25.21" fill="#c0c7c9"/>
+  <rect x="30.52" y="25.2" width="0" height="0" fill="#c0c7c9"/>
+  <rect x="30.52" y="25.2" width="0" height="0" transform="translate(3.99 54.58) rotate(-87.46)" fill="#c0c7c9"/>
+  <polygon points="31.45 25.88 31.48 26.65 32.5 26.65 32.39 25.88 31.45 25.88" fill="#f8f9f4"/>
+  <rect x="31.45" y="25.88" width=".95" height="0" transform="translate(-1.14 1.47) rotate(-2.6)" fill="#c0c7c9"/>
+  <polygon points="32.4 25.88 32.5 26.65 33.52 26.65 33.35 25.88 32.4 25.88" fill="#494643"/>
+  <rect x="32.4" y="25.88" width=".95" height="0" fill="#b0c2c6"/>
+  <rect x="32.45" y="25.88" width="0" height=".77" transform="translate(-3.22 4.57) rotate(-7.67)" fill="#b0c2c6"/>
+  <rect x="32.39" y="25.88" width="0" height="0" transform="translate(-3.17 4.56) rotate(-7.68)" fill="#b0c2c6"/>
+  <polygon points="33.35 25.88 33.52 26.65 33.77 26.65 33.77 25.88 33.35 25.88 33.35 25.88" fill="#f8f9f4"/>
+  <rect x="33.35" y="25.88" width=".42" height="0" fill="#c0c7c9"/>
+  <rect x="33.35" y="25.88" width="0" height="0" fill="#c0c7c9"/>
+  <rect x="33.43" y="25.87" width="0" height=".79" fill="#c0c7c9"/>
+  <rect x="33.35" y="25.88" width="0" height="0" transform="translate(-4.87 7.95) rotate(-12.68)" fill="#c0c7c9"/>
+  <polygon points="30.49 25.88 29.54 25.88 29.43 26.65 30.45 26.65 30.49 25.88" fill="#f8f9f4"/>
+  <rect x="29.54" y="25.88" width=".95" height="0" fill="#c0c7c9"/>
+  <polygon points="29.54 25.88 29.54 25.88 29.54 25.88 29.54 25.88" fill="#c0c7c9"/>
+  <polygon points="31.44 25.88 30.49 25.88 30.46 26.65 31.48 26.65 31.44 25.88" fill="#494643"/>
+  <rect x="30.97" y="25.4" width="0" height=".95" transform="translate(3.73 55.66) rotate(-87.44)" fill="#b0c2c6"/>
+  <rect x="31.46" y="25.88" width="0" height=".77" transform="translate(-1.15 1.44) rotate(-2.58)" fill="#b0c2c6"/>
+  <rect x="31.44" y="25.88" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="30.49 25.88 30.49 25.88 30.45 26.65 30.46 26.65 30.49 25.88 30.49 25.88" fill="#b0c2c6"/>
+  <rect x="30.49" y="25.88" width="0" height="0" fill="#b0c2c6"/>
+  <rect x="30.77" y="25.65" width="0" height="0" transform="translate(3.77 55.25) rotate(-87.44)" fill="#b0c2c6"/>
+  <polygon points="31.48 26.65 31.51 27.38 32.6 27.38 32.5 26.65 31.48 26.65" fill="#494643"/>
+  <rect x="31.48" y="26.65" width="1.02" height="0" transform="translate(-1.17 1.47) rotate(-2.58)" fill="#b0c2c6"/>
+  <polygon points="32.5 26.65 32.6 27.38 33.68 27.38 33.52 26.65 32.5 26.65" fill="#f8f9f4"/>
+  <rect x="32.5" y="26.65" width="1.02" height="0" transform="translate(-3.27 4.66) rotate(-7.69)" fill="#c0c7c9"/>
+  <rect x="32.55" y="26.65" width="0" height=".73" transform="translate(-3.32 4.59) rotate(-7.67)" fill="#c0c7c9"/>
+  <rect x="32.5" y="26.65" width="0" height="0" transform="translate(-3.26 4.57) rotate(-7.67)" fill="#c0c7c9"/>
+  <polygon points="33.52 26.65 33.69 27.38 33.77 27.38 33.77 26.65 33.52 26.65" fill="#494643"/>
+  <rect x="33.52" y="26.65" width=".25" height="0" fill="#b0c2c6"/>
+  <rect x="33.6" y="26.64" width="0" height=".74" transform="translate(-5.11 8.03) rotate(-12.67)" fill="#b0c2c6"/>
+  <rect x="33.52" y="26.65" width="0" height="0" transform="translate(-5.04 8.02) rotate(-12.69)" fill="#b0c2c6"/>
+  <polygon points="30.45 26.65 29.43 26.65 29.43 26.65 29.33 27.38 30.42 27.38 30.45 26.65" fill="#494643"/>
+  <rect x="29.94" y="26.14" width="0" height="1.02" transform="translate(-.46 52.77) rotate(-82.33)" fill="#b0c2c6"/>
+  <polygon points="30.46 26.65 30.43 27.38 31.51 27.38 31.48 26.65 30.46 26.65" fill="#f8f9f4"/>
+  <rect x="30.97" y="26.14" width="0" height="1.02" transform="translate(2.97 56.4) rotate(-87.45)" fill="#c0c7c9"/>
+  <rect x="31.49" y="26.65" width="0" height=".73" transform="translate(-1.18 1.44) rotate(-2.58)" fill="#c0c7c9"/>
+  <rect x="31.48" y="26.65" width="0" height="0" transform="translate(-1.17 1.44) rotate(-2.58)" fill="#c0c7c9"/>
+  <rect x="30.08" y="27.01" width=".73" height="0" transform="translate(2.08 56.21) rotate(-87.42)" fill="#c0c7c9"/>
+  <rect x="30.45" y="26.65" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="28.73 25.2 29.63 25.2 29.63 25.21 29.71 24.61 28.87 24.61 28.73 25.2" fill="#494643"/>
+  <rect x="29.28" y="24.19" width="0" height=".84" transform="translate(-1.15 47.79) rotate(-77.33)" fill="#b0c2c6"/>
+  <polygon points="28.86 24.61 28.13 24.61 28.13 25.2 28.73 25.2 28.86 24.61" fill="#f8f9f4"/>
+  <rect x="28.13" y="24.61" width=".73" height="0" fill="#f8f9f4"/>
+  <polygon points="28.86 24.61 28.73 25.2 28.73 25.2 28.87 24.61 28.87 24.61 28.86 24.61" fill="#c0c7c9"/>
+  <rect x="28.86" y="24.61" width="0" height="0" transform="translate(-1.48 47.38) rotate(-77.33)" fill="#c0c7c9"/>
+  <rect x="28.86" y="24.61" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="28.58 25.88 29.54 25.88 29.63 25.21 28.73 25.21 28.58 25.88" fill="#f8f9f4"/>
+  <rect x="29.18" y="24.76" width="0" height=".89" transform="translate(-1.82 48.14) rotate(-77.31)" fill="#c0c7c9"/>
+  <polygon points="28.58 25.88 28.73 25.21 28.13 25.21 28.13 25.88 28.58 25.88 28.58 25.88" fill="#494643"/>
+  <rect x="28.13" y="25.2" width=".6" height="0" fill="#b0c2c6"/>
+  <rect x="28.65" y="25.2" width="0" height=".69" fill="#b0c2c6"/>
+  <rect x="28.73" y="25.2" width="0" height="0" fill="#b0c2c6"/>
+  <polygon points="28.58 25.88 28.41 26.65 29.43 26.65 29.43 26.65 29.54 25.88 29.54 25.88 29.54 25.88 28.58 25.88" fill="#494643"/>
+  <rect x="28.58" y="25.88" width=".95" height="0" fill="#b0c2c6"/>
+  <polygon points="28.13 25.88 28.13 26.65 28.41 26.65 28.58 25.88 28.13 25.88" fill="#f8f9f4"/>
+  <rect x="28.13" y="25.88" width=".45" height="0" fill="#c0c7c9"/>
+  <polygon points="28.58 25.88 28.41 26.65 28.41 26.65 28.58 25.88 28.58 25.88 28.58 25.88" fill="#c0c7c9"/>
+  <rect x="28.58" y="25.88" width="0" height="0" fill="#c0c7c9"/>
+  <rect x="28.58" y="25.88" width="0" height="0" fill="#c0c7c9"/>
+  <polygon points="28.41 26.65 28.24 27.38 29.33 27.38 29.43 26.65 28.41 26.65" fill="#f8f9f4"/>
+  <rect x="28.92" y="26.14" width="0" height="1.02" transform="translate(-3.42 49.03) rotate(-77.34)" fill="#c0c7c9"/>
+  <polygon points="28.13 26.65 28.13 27.38 28.24 27.38 28.4 26.65 28.13 26.65" fill="#494643"/>
+  <rect x="28.13" y="26.65" width=".27" height="0" fill="#b0c2c6"/>
+  <rect x="28.32" y="26.64" width="0" height=".74" fill="#b0c2c6"/>
+  <rect x="28.4" y="26.65" width="0" height="0" transform="translate(-3.82 48.52) rotate(-77.34)" fill="#b0c2c6"/>
+  <rect x="6.15" y="20.92" width=".45" height="2.54" rx=".04" ry=".04" fill="#877c51"/>
+  <rect x="6.21" y="20.87" width=".45" height="2.54" rx=".05" ry=".05" fill="#d1bf74"/>
+  <path d="M31.15,15.34c-.46.29-.93.59-1.39.88.01.03.03.09.03.16,0,.08-.02.14-.03.17h2.78s-.03-.09-.04-.15c0-.08,0-.15.02-.19-.46-.29-.91-.58-1.37-.86Z" fill="#8c9998"/>
+  <line x1="31.14" y1="12.65" x2="31.14" y2="15.75" fill="#8c9998" stroke="#8c9998" stroke-miterlimit="10" stroke-width=".25"/>
+  <path d="M19.58,25.16c4.87-4.14,9.74-8.27,14.61-12.41.64-.01,1.29-.03,1.94-.04-5.19,5.16-10.37,10.32-15.56,15.48-.32,0-.64.01-.97.02,0-1.02-.01-2.04-.02-3.05Z" fill="#f3fffe" opacity=".31"/>
+  <path d="M19.61,17.74c2.37-1.73,4.74-3.46,7.11-5.19.3.02.59.03.89.05-2.7,2.32-5.39,4.64-8.09,6.96,0-.14,0-.28,0-.42.03-.47.06-.93.09-1.4Z" fill="#f3fffe" opacity=".31"/>
+  <rect x="19.52" y="12.6" width="16.79" height="15.56" fill="none" stroke="#59524b" stroke-miterlimit="10" stroke-width=".25"/>
+</svg>
