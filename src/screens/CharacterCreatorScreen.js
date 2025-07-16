@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
+import { avatarParts } from '../lib/svgMap';
 
 // SVG Imports
 import LongHair from '../assets/images/avatar/long_hair.svg';
@@ -15,51 +16,74 @@ import Pants from '../assets/images/avatar/pants.svg';
 import Dress from '../assets/images/avatar/dress.svg';
 import Shoes from '../assets/images/avatar/shoes.svg';
 import AvatarBase from '../assets/images/avatar/skin.svg';
+import AvatarStack from '../components/AvatarStack';
+import global from '../styles/global';
 
-const ITEM_CATEGORIES = {
-  hair: ['long_hair.svg', 'short_hair.svg', 'eyes.svg'],
-  shirt: ['shirt.svg'],
-  pants: ['dress.svg', 'pants.svg'],
-  shoes: ['shoes.svg'],
-};
+const { width, height } = Dimensions.get('window');
+const ITEM_CATEGORIES = Object.keys(avatarParts);
+const CATEGORY_LABELS = Object.fromEntries(
+  Object.entries(avatarParts).map(([key, val]) => [key, val.label])
+);
 
-const CATEGORY_LABELS = {
-  hair: 'Hair/Makeup',
-  shirt: 'Shirts',
-  pants: 'Pants/Skirts',
-  shoes: 'Shoes',
-};
+const DEFAULT_AVATAR = Object.fromEntries(
+  Object.entries(avatarParts).map(([part, { options }]) => [
+    part,
+    Object.keys(options)[0] // first available option for each part
+  ])
+);
 
-const creatorAssetMap = {
-  'long_hair.svg': LongHair,
-  'short_hair.svg': ShortHair,
-  'eyes.svg': Eyes,
-  'shirt.svg': Shirt,
-  'pants.svg': Pants,
-  'dress.svg': Dress,
-  'shoes.svg': Shoes,
-};
+const MAIN_TABS = [
+  { key: 'appearance', label: 'Appearance', categories: ['skin', 'eyes', 'hair'] },
+  { key: 'clothes', label: 'Clothes', categories: ['top', 'bottom', 'shoes'] },
+];
 
 export default function CharacterCreatorScreen() {
   const navigation = useNavigation();
-  const [selectedCategory, setSelectedCategory] = useState('hair');
-  const [selectedItems, setSelectedItems] = useState({
-    hair: null,
-    eyes: null,
-    shirt: null,
-    pants: null,
-    shoes: null,
-  });
+  const [mainTab, setMainTab] = useState(MAIN_TABS[0].key);
+  const [selectedCategory, setSelectedCategory] = useState(MAIN_TABS[0].categories[0]);
+  const [selectedItems, setSelectedItems] = useState(DEFAULT_AVATAR);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      try {
+        const userId = getUserId();
+        const userRef = doc(db, 'user', userId);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().avatar) {
+          setSelectedItems({
+            ...DEFAULT_AVATAR,
+            ...userSnap.data().avatar,
+          });
+        } else {
+          setSelectedItems(DEFAULT_AVATAR);
+        }
+      } catch (error) {
+        console.error('Error fetching avatar:', error);
+        setSelectedItems(DEFAULT_AVATAR);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAvatar();
+  }, []);
+
+  // When mainTab changes, reset selectedCategory to the first in that tab
+  useEffect(() => {
+    const tabObj = MAIN_TABS.find(t => t.key === mainTab);
+    if (tabObj && !tabObj.categories.includes(selectedCategory)) {
+      setSelectedCategory(tabObj.categories[0]);
+    }
+  }, [mainTab]);
+
+  if (loading) {
+    return <View style={styles.avatarPreview}><Text>Loading...</Text></View>;
+  }
 
   const handleSelectItem = (item) => {
-    let key = selectedCategory;
-    if (selectedCategory === 'hair') {
-      key = item.includes('eyes') ? 'eyes' : 'hair';
-    }
-    const current = selectedItems[key];
     setSelectedItems({
       ...selectedItems,
-      [key]: current === item ? null : item,
+      [selectedCategory]: selectedItems[selectedCategory] === item ? null : item,
     });
   };
 
@@ -67,8 +91,18 @@ export default function CharacterCreatorScreen() {
     try {
       const userId = getUserId();
       const userRef = doc(db, 'user', userId);
+      // Fetch the current avatar to preserve features like skin
+      const userSnap = await getDoc(userRef);
+      const prevAvatar = userSnap.exists() && userSnap.data().avatar ? userSnap.data().avatar : {};
+      // Merge unchanged features
+      const mappedAvatar = { ...prevAvatar };
+      Object.entries(selectedItems).forEach(([key, value]) => {
+        if (value) {
+          mappedAvatar[key] = value; // value is always a decorMap key
+        }
+      });
       await updateDoc(userRef, {
-        avatar: selectedItems,
+        avatar: mappedAvatar,
       });
       navigation.goBack();
     } catch (error) {
@@ -76,89 +110,70 @@ export default function CharacterCreatorScreen() {
     }
   };
 
+  // Get the categories for the current main tab
+  const currentTabObj = MAIN_TABS.find(t => t.key === mainTab);
+  const visibleCategories = currentTabObj ? currentTabObj.categories : [];
+
   return (
-    <View style={styles.container}>
-      {/* Avatar Preview */}
-      <View style={styles.avatarPreview}>
-        <View style={styles.avatarPlatform} />
-        <AvatarBase width={200} height={200} style={[styles.avatarItem, { zIndex: 2 }]} />
-
-        {selectedItems.eyes && (() => {
-          const EyesComponent = creatorAssetMap[selectedItems.eyes];
-          return EyesComponent ? (
-            <EyesComponent
-              width={60}
-              height={30}
-              style={[
-                styles.avatarItem,
-                {
-                  zIndex: 3,
-                },
-              ]}
-            />
-          ) : null;
-        })()}
-
-        {selectedItems.hair && (() => {
-          const HairComponent = creatorAssetMap[selectedItems.hair];
-          return HairComponent ? (
-            <HairComponent
-              width={200}
-              height={200}
-              style={[styles.avatarItem, { zIndex: 4 }]}
-            />
-          ) : null;
-        })()}
-
-        {selectedItems.shirt && (() => {
-          const ShirtComponent = creatorAssetMap[selectedItems.shirt];
-          return ShirtComponent ? (
-            <ShirtComponent
-              width={200}
-              height={200}
-              style={[styles.avatarItem, { zIndex: 5 }]}
-            />
-          ) : null;
-        })()}
-
-        {selectedItems.pants && (() => {
-          const PantsComponent = creatorAssetMap[selectedItems.pants];
-          return PantsComponent ? (
-            <PantsComponent
-              width={200}
-              height={200}
-              style={[styles.avatarItem, { zIndex: 5 }]}
-            />
-          ) : null;
-        })()}
-
-        {selectedItems.shoes && (() => {
-          const ShoesComponent = creatorAssetMap[selectedItems.shoes];
-          return ShoesComponent ? (
-            <ShoesComponent
-              width={200}
-              height={200}
-              style={[styles.avatarItem, { zIndex: 6 }]}
-            />
-          ) : null;
-        })()}
+    <View style={[styles.container, { backgroundColor: '#5EB1CC', flex: 1, alignItems: 'center' }]}> {/* Use your app's blue as background */}
+      {/* Avatar Preview Area - flush to top */}
+      <View style={{ alignItems: 'center', width: '70%', marginBottom: 10, borderRadius: 30, backgroundColor: '#fff' }}>
+        <AvatarStack
+          avatar={selectedItems}
+          size={height / 2}
+          style={{ alignSelf: 'center' }}
+        />
       </View>
 
-      {/* Tabs */}
-      <View style={styles.tabContainer}>
-        {Object.keys(ITEM_CATEGORIES).map((category) => (
+      {/* Main Tabs (Appearance/Clothes) */}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%'}}>
+        {MAIN_TABS.map(tab => (
+          <TouchableOpacity
+            key={tab.key}
+            onPress={() => setMainTab(tab.key)}
+            style={[
+              styles.tab,
+              mainTab === tab.key && styles.activeTab,
+              { paddingHorizontal: 18, paddingVertical: 8, width: '50%', borderTopLeftRadius: 10, borderTopRightRadius: 10 },
+            ]}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                mainTab === tab.key && styles.activeTabText,
+                { fontWeight: 'bold', fontSize: 16, textAlign: 'center' },
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* Customization Tabs (filtered by main tab) */}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+        {visibleCategories.map((category) => (
           <TouchableOpacity
             key={category}
             onPress={() => setSelectedCategory(category)}
             style={[
               styles.tab,
               selectedCategory === category && styles.activeTab,
+              {
+                width: `${100 / visibleCategories.length}%`,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginHorizontal: 0,
+                paddingHorizontal: 0,
+                paddingVertical: 10,
+              },
             ]}
           >
             <Text
               style={[
                 styles.tabText,
                 selectedCategory === category && styles.activeTabText,
+                { fontWeight: 'bold', textAlign: 'center' },
               ]}
             >
               {CATEGORY_LABELS[category]}
@@ -167,33 +182,42 @@ export default function CharacterCreatorScreen() {
         ))}
       </View>
 
-      {/* Item Scroll */}
-      <FlatList
-          data={ITEM_CATEGORIES[selectedCategory]}
+      {/* Customization Options - bottom 1/3, 2 rows, 3 columns */}
+      <View style={{ justifyContent: 'flex-end', backgroundColor: '#95CCDD', paddingBottom: 100 }}>
+        <FlatList
+          data={Object.keys(avatarParts[selectedCategory].options)}
           keyExtractor={(item) => item}
-          numColumns={4} // Adjust based on screen width
-          contentContainerStyle={styles.itemsGrid}
+          numColumns={3}
+          contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
           renderItem={({ item }) => {
-            const Component = creatorAssetMap[item];
-            const isSelected = Object.values(selectedItems).includes(item);
+            const Component = avatarParts[selectedCategory].options[item];
+            const isSelected = selectedItems[selectedCategory] === item;
             return (
               <TouchableOpacity
                 onPress={() => handleSelectItem(item)}
                 style={[
                   styles.squareTile,
                   isSelected && { borderColor: '#ff9c33', borderWidth: 2 },
+                  { backgroundColor: '#fff', margin: 8, borderRadius: 12, width: width * .30, height: width * .30, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
                 ]}
               >
-                {Component && <Component width={50} height={50} />}
+                {Component && <Component />}
               </TouchableOpacity>
             );
           }}
         />
+      </View>
 
-      {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={handleSaveAndGoBack}>
-        <Text style={styles.backButtonText}>← Back</Text>
-      </TouchableOpacity>
+      {/* I'm done! Button fixed at the bottom */}
+      <View style={styles.bottomButtonContainer} pointerEvents="box-none">
+        <View style={styles.bottomButtonBackground} />
+        <TouchableOpacity
+          style={global.shopButton}
+          onPress={handleSaveAndGoBack}
+        >
+          <Text style={global.shopButtonText}>I'm done!</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -201,7 +225,7 @@ export default function CharacterCreatorScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#d4e9ff',
+    backgroundColor: '#5EB1CC',
     paddingTop: 20,
   },
   avatarPreview: {
@@ -209,15 +233,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-  },
-  avatarPlatform: {
-    position: 'absolute',
-    bottom: 30,
-    width: 160,
-    height: 250,
-    borderRadius: 80,
-    backgroundColor: '#b4dcff',
-    zIndex: 1,
+    height: 500,
+
   },
   avatarItem: {
     width: 200,
@@ -233,7 +250,6 @@ const styles = StyleSheet.create({
   },
   tab: {
     padding: 10,
-    borderRadius: 10,
     backgroundColor: '#ffd580',
   },
   activeTab: {
@@ -272,8 +288,25 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   backButtonText: {
-    color: '#fff',
+    color: '#ff9c33',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  bottomButtonContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 80,
+    zIndex: 10,
+  },
+  bottomButtonBackground: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#95CCDD', // or your preferred color
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    height: 80,
   },
 });

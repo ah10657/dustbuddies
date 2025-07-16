@@ -56,6 +56,11 @@ import StoreCognacCarpet from '../assets/images/store/store_walls_floors/cognac_
 import StoreDarkGreenCarpet from '../assets/images/store/store_walls_floors/dark_green_carpet.svg';
 import StoreGreenStripeWall from '../assets/images/store/store_walls_floors/green_stripe_wall.svg';
 import StoreWhiteStripeWall from '../assets/images/store/store_walls_floors/white_stripe_wall.svg';
+import StoreMap from '../assets/images/store/store_map/store_map.svg';
+import StoreBoutique from '../assets/images/store/store_map/store_boutique.svg';
+import StoreFurniture from '../assets/images/store/store_map/store_furniture.svg';
+import StoreHardware from '../assets/images/store/store_map/store_hardware.svg';
+import StoreSalon from '../assets/images/store/store_map/store_salon.svg';
 
 // Mascot Logo
 import Logo from '../assets/images/mascot_logo/logo.svg';
@@ -198,6 +203,11 @@ export const decorMap = {
   storeDarkGreenCarpet: StoreDarkGreenCarpet,
   storeGreenStripeWall: StoreGreenStripeWall,
   storeWhiteStripeWall: StoreWhiteStripeWall,
+  storeMap: StoreMap,
+  storeBoutique: StoreBoutique,
+  storeFurniture: StoreFurniture,
+  storeHardware: StoreHardware,
+  storeSalon: StoreSalon,
   // Mascot Logo
   logo: Logo,
   mascot: Mascot,
@@ -272,4 +282,84 @@ export const decorMap = {
   taskbar: Taskbar,
   complete5Btn: Complete5Btn,
 
+};
+
+export const avatarParts = {
+  skin: {
+    label: 'Skin',
+    options: {
+      skin: Skin,
+      skinBrown: SkinBrown,
+      skinEbony: SkinEbony,
+      skinLight: SkinLight,
+      skinOlive: SkinOlive,
+      skinTan: SkinTan,
+      skinBeige: SkinBeige,
+    },
+  },
+  eyes: {
+    label: 'Eyes',
+    options: {
+      eyes: Eyes,
+      eyesBlue: EyesBlue,
+      eyesBrown: EyesBrown,
+      eyesEmerald: EyesEmerald,
+      eyesGold: EyesGold,
+      eyesGreen: EyesGreen,
+      eyesHazel: EyesHazel,
+      eyesPurple: EyesPurple,
+      eyesTeal: EyesTeal,
+    },
+  },
+  hair: {
+    label: 'Hair',
+    options: {
+      longHair: LongHair,
+      shortHair: ShortHair,
+      brownBuns: BrownBuns,
+      brownAfro: BrownAfro,
+      greenMohawk: GreenMohawk,
+      pinkMediumBraids: PinkMediumBraids,
+      redAfro: RedAfro,
+      orangeLongHair: OrangeLongHair,
+      blackBraidBuns: BlackBraidBuns,
+      blondeShortHair: BlondeShortHair,
+      blueBraidBuns: BlueBraidBuns,
+      blondeMediumBraids: BlondeMediumBraids,
+      blueMohawk: BlueMohawk,
+    },
+  },
+  top: {
+    label: 'Top',
+    options: {
+      shirt: Shirt,
+      whiteTunicShirt: WhiteTunicShirt,
+      yellowShirt: YellowShirt,
+      greenLongShirt: GreenLongShirt,
+      whiteStripeShirt: WhiteStripeShirt,
+      // Add more shirts as needed
+    },
+  },
+  bottom: {
+    label: 'Bottom',
+    options: {
+      pants: Pants,
+      dress: Dress,
+      blackPants: BlackPants,
+      lightBaggyJeans: LightBaggyJeans,
+      lightJeanShorts: LightJeanShorts,
+      // Add more bottoms as needed
+    },
+  },
+  shoes: {
+    label: 'Shoes',
+    options: {
+      shoes: Shoes,
+      blackShoes: BlackShoes,
+      leatherShoes: LeatherShoes,
+      redShoes: RedShoes,
+      whiteLaceShoes: WhiteLaceShoes,
+      // Add more shoes as needed
+    },
+  },
 };

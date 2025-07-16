@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="kitchen_floor" xmlns="http://www.w3.org/2000/svg" width="1.93in" height="1.66in" viewBox="0 0 138.79 119.68">
+<svg id="kitchen_floor" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 138.79 119.68">
   <polygon points="94.44 8.83 93.3 .38 77.63 .38 78.01 8.83 94.44 8.83" fill="#ddd5d0" stroke="#eae3df" stroke-miterlimit="10" stroke-width=".75"/>
   <polygon points="110.98 8.83 109.08 .38 93.4 .38 94.54 8.83 110.98 8.83" fill="#dbd0ca" stroke="#eae3df" stroke-miterlimit="10" stroke-width=".75"/>
   <polygon points="94.54 8.83 93.4 .38 93.3 .38 94.44 8.83 94.54 8.83" fill="#dbd0ca" stroke="#eae3df" stroke-miterlimit="10" stroke-width=".75"/>

@@ -1,4 +1,4 @@
-import { doc, getDoc,setDoc, collection, updateDoc } from 'firebase/firestore';
+import { doc, getDoc,setDoc, collection, updateDoc, getDocs, deleteDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase'; // Your initialized Firestore
 import { serverTimestamp } from 'firebase/firestore';
 
@@ -181,7 +181,7 @@ export const initializeNewUser = async (userId, options = {}) => {
       pref_shelf: 'laundryShelf',
     },
     livingroom: {
-      pref_floor: '',
+      pref_floor: 'bedroomFloor',
       pref_wall: 'livingRoomWall',
       pref_wall_decor: 'framedPictureSun',
       pref_couch: 'couch',
@@ -228,3 +228,22 @@ export const initializeNewUser = async (userId, options = {}) => {
     }
   }
 };
+
+// Delete all user data and the authenticated user
+export async function deleteUserAccount(userId, user) {
+  // Delete all rooms and their tasks
+  const roomsSnap = await getDocs(collection(db, 'user', userId, 'rooms'));
+  for (const roomDoc of roomsSnap.docs) {
+    // Delete all tasks in this room
+    const tasksSnap = await getDocs(collection(db, 'user', userId, 'rooms', roomDoc.id, 'room_tasks'));
+    for (const taskDoc of tasksSnap.docs) {
+      await deleteDoc(doc(db, 'user', userId, 'rooms', roomDoc.id, 'room_tasks', taskDoc.id));
+    }
+    // Delete the room itself
+    await deleteDoc(doc(db, 'user', userId, 'rooms', roomDoc.id));
+  }
+  // Delete the user document
+  await deleteDoc(doc(db, 'user', userId));
+  // Delete the authenticated user
+  await user.delete();
+}

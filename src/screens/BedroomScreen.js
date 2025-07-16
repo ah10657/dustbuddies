@@ -98,7 +98,8 @@ export default function BedroomScreen({ route }) {
   const WallDecor = decorMap[roomData.decor?.pref_wall_decor];
   const Window = decorMap[roomData.decor?.pref_window];
   const bedSize = Math.min(width * 0.6, 600);
-  const floorHeight = height * 0.2;
+  const floorSvgAspect = 122.67 / 142.42;
+  const floorHeight = width * floorSvgAspect;
 
   const enterEditMode = () => {
     setLocalTasks(roomTasks.map(task => ({ ...task })));
@@ -190,7 +191,7 @@ export default function BedroomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: height,
+            zIndex: 2,
           }}
           preserveAspectRatio="xMidYMax slice"
         />
@@ -199,7 +200,7 @@ export default function BedroomScreen({ route }) {
         <Rug
           style={{
             position: 'absolute',
-            bottom: height * 0.2 + 30,
+            bottom: floorHeight + 30,
             left: (width - bedSize) / 2 + 20,
             width: bedSize * 0.8,
             height: 40,
@@ -211,7 +212,7 @@ export default function BedroomScreen({ route }) {
         <Bed
           style={{
             position: 'absolute',
-            bottom: height * 0.2,
+            bottom: floorHeight - (bedSize / 2),
             left: (width - bedSize) / 2,
             width: bedSize,
             height: bedSize,
@@ -223,7 +224,7 @@ export default function BedroomScreen({ route }) {
         <Nightstand
           style={{
             position: 'absolute',
-            bottom: height * 0.2 + 40,
+            bottom: floorHeight - (bedSize / 2),
             left: (width - bedSize) / 2 - 60,
             width: 60,
             height: 60,
@@ -236,14 +237,14 @@ export default function BedroomScreen({ route }) {
           onPress={() => navigation.navigate('CharacterCreator')}
           style={{
             position: 'absolute',
-            bottom: height * 0.2 + 40,
-            right: (width - bedSize) / 2 - 60,
-            width: 60,
-            height: 60,
+            bottom: floorHeight / 3,
+            right: 0,
+            width: width * 0.4,
+            height: width * 0.4,
             zIndex: 4,
           }}
         >
-          <Side width={60} height={60} />
+          <Side width={width * 0.4} height={width * 0.4} />
         </TouchableOpacity>
       )}
       
@@ -274,8 +275,8 @@ export default function BedroomScreen({ route }) {
       {roomData.user?.avatar && (
         <AvatarStack
           avatar={roomData.user.avatar}
-          size={150}
-          style={[global.avatar, { left: width / 2 - 75, bottom: height * 0.2 + 10 }]}
+          size={height * .3}
+          style={[global.avatar, {  bottom: floorHeight / 2 }]}
         />
       )}
 

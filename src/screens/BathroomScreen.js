@@ -95,6 +95,9 @@ export default function BathroomScreen({ route }) {
   const Tub = decorMap[roomData.decor?.pref_tub];
   const WallMirror = decorMap[roomData.decor?.pref_wall_mirror];
 
+  const floorSvgAspect = 122.67 / 142.42; // Use the same as BedroomScreen or update to match bathroom floor SVG viewBox
+  const floorHeight = width * floorSvgAspect;
+
   const progressCircleSize = width * 0.4; // 40% of screen width
   const progressCircleStroke = progressCircleSize * 0.12; // 12% of the circle size
 
@@ -217,8 +220,7 @@ export default function BathroomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: height * 0.5,
-            zIndex: 1,
+            zIndex: 2,
           }}
           preserveAspectRatio="xMidYMax slice"
         />
@@ -228,7 +230,7 @@ export default function BathroomScreen({ route }) {
       <View
         style={{
           position: 'absolute',
-          bottom: 0,
+          bottom: floorHeight,
           left: 0,
           width: width,
           height: height * 0.4,
@@ -239,7 +241,7 @@ export default function BathroomScreen({ route }) {
           <Tub
             style={{
               position: 'absolute',
-              bottom: height * .38,
+              bottom: 0,
               left: 0,
               width: width * 0.6,
               height: width * 0.6,
@@ -251,7 +253,7 @@ export default function BathroomScreen({ route }) {
           <Toilet
             style={{
               position: 'absolute',
-              bottom: height * .38,
+              bottom: 0,
               right: 0,
               width: width * 0.3,
               height: width * 0.3,
@@ -262,7 +264,7 @@ export default function BathroomScreen({ route }) {
           <ToiletPaper
             style={{
               position: 'absolute',
-              bottom: height * .38 + ((width * 0.3) / 2),
+              bottom: (width * 0.3) / 2,
               right: width * 0.2,
               width: width * 0.1, // 6% of screen width
               height: width * 0.1, // 4% of screen height
@@ -273,7 +275,7 @@ export default function BathroomScreen({ route }) {
           <Trashcan
             style={{
               position: 'absolute',
-              bottom: height * .38,
+              bottom: 0,
               right: 0,
               width: width * 0.1, // 7% of screen width
               height: width * 0.1, // 6% of screen height
@@ -300,8 +302,8 @@ export default function BathroomScreen({ route }) {
       {roomData.user?.avatar && (
         <AvatarStack
           avatar={roomData.user.avatar}
-          size={Math.min(width * 0.4, height * 0.4)}
-          style={[global.avatar, { left: width / 2 - 75, bottom: height * 0.2 + 10 }]}
+          size={height * .3}
+          style={[global.avatar, { left: width / 2 - 75, bottom: floorHeight / 2 }]}
         />
       )}
 

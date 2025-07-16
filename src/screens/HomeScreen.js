@@ -9,8 +9,6 @@ import {
   TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { signOut } from 'firebase/auth';
-import { auth } from '../lib/firebase';
 import { useUser } from '../contexts/UserContext';
 import { decorMap } from '../lib/svgMap';
 import { getGlobalTaskCompletion } from '../models/tasksModel';
@@ -25,6 +23,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import { db } from '../lib/firebase';
 import { collection, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { Animated as RNAnimated } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
   const { width, height } = Dimensions.get('window');
@@ -44,6 +43,72 @@ export default function HomeScreen({ navigation }) {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const originalRoomsRef = useRef([]);
 
+  // Animation for house and sun (opposite grow/shrink)
+  const scaleAnim = React.useRef(new RNAnimated.Value(0)).current;
+  // Animation for bike (wobble)
+  const bikeWobbleAnim = React.useRef(new RNAnimated.Value(0)).current;
+
+  React.useEffect(() => {
+    const scaleLoop = RNAnimated.loop(
+      RNAnimated.sequence([
+        RNAnimated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 900,
+          useNativeDriver: true,
+        }),
+        RNAnimated.timing(scaleAnim, {
+          toValue: 0,
+          duration: 900,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    scaleLoop.start();
+    const bikeLoop = RNAnimated.loop(
+      RNAnimated.sequence([
+        RNAnimated.timing(bikeWobbleAnim, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        RNAnimated.timing(bikeWobbleAnim, {
+          toValue: -1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        RNAnimated.timing(bikeWobbleAnim, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    bikeLoop.start();
+    return () => {
+      scaleLoop.stop();
+      bikeLoop.stop();
+    };
+  }, [scaleAnim, bikeWobbleAnim]);
+
+  // Interpolate for gentle scale effect (more subtle)
+  const houseScale = scaleAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, 1.007],
+  });
+  const sunScale = scaleAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1.015, 1],
+  });
+  // Interpolate for bike wobble (rotate/skew, subtle)
+  const bikeRotate = bikeWobbleAnim.interpolate({
+    inputRange: [-1, 0, 1],
+    outputRange: ['-2deg', '0deg', '2deg'],
+  });
+  const bikeSkew = bikeWobbleAnim.interpolate({
+    inputRange: [-1, 0, 1],
+    outputRange: ['-1deg', '0deg', '1deg'],
+  });
+
   const fetchRooms = async () => {
     try {
       if (!user) return;
@@ -54,7 +119,6 @@ export default function HomeScreen({ navigation }) {
       if (!houseRoomData) {
         return;
       }
-
       setRoomData({
         ...houseRoomData,
         user: {
@@ -96,18 +160,6 @@ export default function HomeScreen({ navigation }) {
       fetchRooms();
     }, [user, userData])
   );
-
-  const handleLogout = async () => {
-    console.log('Logout button pressed!');
-    try {
-      await signOut(auth);
-      console.log('Sign out successful');
-      // UserContext will handle redirect
-    } catch (error) {
-      console.error('Logout error:', error);
-      Alert.alert('Error', 'Failed to logout');
-    }
-  };
 
   // Enter/exit edit mode
   const enterEditMode = () => {
@@ -207,29 +259,6 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[global.container, { position: 'relative', flex: 1 }]} edges={['top', 'bottom']}>
-      {/* Logout Button */}
-      <TouchableOpacity
-        onPress={handleLogout}
-        style={{
-          position: 'absolute',
-          top: 50,
-          right: 20,
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          padding: 12,
-          borderRadius: 20,
-          zIndex: 1000,
-          minWidth: 60,
-          alignItems: 'center',
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }}
-        activeOpacity={0.7}
-      >
-        <Text style={{ color: '#333', fontSize: 14, fontWeight: 'bold' }}>Logout</Text>
-      </TouchableOpacity>
 
       {Sky && (
         <Sky
@@ -265,7 +294,13 @@ export default function HomeScreen({ navigation }) {
             zIndex: 2,
           }}
         >
-          <House width={houseSize} height={houseSize} />
+          <RNAnimated.View style={{
+            transform: [
+              { scale: houseScale },
+            ],
+          }}>
+            <House width={houseSize} height={houseSize} />
+          </RNAnimated.View>
         </TouchableOpacity>
       )}
       {Bike && (
@@ -279,7 +314,14 @@ export default function HomeScreen({ navigation }) {
             zIndex: 2,
           }}
         >
-          <Bike width={100} height={100} />
+          <RNAnimated.View style={{
+            transform: [
+              { rotate: bikeRotate },
+              { skewX: bikeSkew },
+            ],
+          }}>
+            <Bike width={100} height={100} />
+          </RNAnimated.View>
         </TouchableOpacity>
       )}
       {/* Sun with progress overlay replaced by ProgressRing */}
@@ -297,7 +339,9 @@ export default function HomeScreen({ navigation }) {
           zIndex: 10,
         }}
       >
-        <AnimatedSun progress={completionPercent} size={200} />
+        <RNAnimated.View style={{ transform: [{ scale: sunScale }] }}>
+          <AnimatedSun progress={completionPercent} size={200} />
+        </RNAnimated.View>
       </TouchableOpacity>
 
       {/* Dropdown Task List (All Rooms) as Full-Screen Overlay */}
@@ -498,51 +542,51 @@ export default function HomeScreen({ navigation }) {
                             )}
                           </TouchableOpacity>
                         ) : (
-                          <TouchableOpacity
-                            key={task.id}
-                            style={{
-                              flexDirection: 'row',
+                        <TouchableOpacity
+                          key={task.id}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            backgroundColor: task.completed ? '#F2F0EF' : '#fff',
+                            borderRadius: 8,
+                            paddingVertical: 10,
+                            paddingHorizontal: 14,
+                            marginBottom: 6,
+                            borderWidth: 1,
+                            borderColor: task.completed ? '#f7bd50' : '#eee',
+                            shadowColor: '#E7A120',
+                            shadowOffset: { width: 0, height: 6 },
+                            shadowOpacity: 0.18,
+                            shadowRadius: 8,
+                            elevation: 8,
+                          }}
+                          onPress={() => {
+                            setDropdownOpen(false);
+                            navigation.navigate('Timer', {
+                              taskName: task.name,
+                              roomId: room.id,
+                            });
+                          }}
+                        >
+                          <Text style={task.completed ? global.buttonTextCompleted : global.buttonText}>
+                            {task.name}
+                          </Text>
+                          {task.completed ? (
+                            <View style={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: 14,
+                              backgroundColor: '#E7A120',
                               alignItems: 'center',
-                              justifyContent: 'space-between',
-                              backgroundColor: task.completed ? '#F2F0EF' : '#fff',
-                              borderRadius: 8,
-                              paddingVertical: 10,
-                              paddingHorizontal: 14,
-                              marginBottom: 6,
-                              borderWidth: 1,
-                              borderColor: task.completed ? '#f7bd50' : '#eee',
-                              shadowColor: '#E7A120',
-                              shadowOffset: { width: 0, height: 6 },
-                              shadowOpacity: 0.18,
-                              shadowRadius: 8,
-                              elevation: 8,
-                            }}
-                            onPress={() => {
-                              setDropdownOpen(false);
-                              navigation.navigate('Timer', {
-                                taskName: task.name,
-                                roomId: room.id,
-                              });
-                            }}
-                          >
-                            <Text style={task.completed ? global.buttonTextCompleted : global.buttonText}>
-                              {task.name}
-                            </Text>
-                            {task.completed ? (
-                              <View style={{
-                                width: 28,
-                                height: 28,
-                                borderRadius: 14,
-                                backgroundColor: '#E7A120',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}>
-                                <Feather name="check" size={18} color="#fff" />
-                              </View>
-                            ) : (
-                              <View style={{ width: 24, height: 24 }} />
-                            )}
-                          </TouchableOpacity>
+                              justifyContent: 'center',
+                            }}>
+                              <Feather name="check" size={18} color="#fff" />
+                            </View>
+                          ) : (
+                            <View style={{ width: 24, height: 24 }} />
+                          )}
+                        </TouchableOpacity>
                         )
                       ))
                     )}
@@ -620,16 +664,22 @@ export default function HomeScreen({ navigation }) {
       )}
 
       {roomData.user?.avatar && (
-        <AvatarStack
-          avatar={roomData.user.avatar}
-          size={height / 5}
-          style={{
-            right: width / 10, // Center horizontally for size 150
-            bottom: height / 10,           // Place above ground, adjust as needed
-            zIndex: 10,
-          }}
-        />
-      )}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Profile')}
+            activeOpacity={0.8}
+            style={{
+              position: 'absolute',
+              right: 20,
+              bottom: 20,
+              zIndex: 10,
+            }}
+          >
+            <AvatarStack
+              avatar={roomData.user.avatar}
+              size={height / 5}
+            />
+          </TouchableOpacity>
+        )}
     </SafeAreaView>
   );
 }

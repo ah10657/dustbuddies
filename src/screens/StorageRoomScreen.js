@@ -90,7 +90,8 @@ export default function StorageRoomScreen({ route }) {
 
   const Wall = decorMap[roomData.decor?.pref_wall];
   const Floor = decorMap[roomData.decor?.pref_floor];
-  const floorHeight = height * 0.2;
+  const floorSvgAspect = 122.67 / 142.42; // Use the same as BedroomScreen or update to match storage room floor SVG viewBox
+  const floorHeight = width * floorSvgAspect;
 
   const enterEditMode = () => {
     setLocalTasks(roomTasks.map(task => ({ ...task })));
@@ -182,9 +183,9 @@ export default function StorageRoomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: floorHeight,
-            zIndex: 1,
+            zIndex: 2,
           }}
+          preserveAspectRatio="xMidYMax slice"
         />
       )}
 

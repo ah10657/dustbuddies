@@ -14,7 +14,9 @@ import global from '../styles/global';
 
 const GRID_WIDTH = 4;
 const GRID_HEIGHT = 5;
-const GRID_UNIT = 60;
+const GRID_SIDE_MARGIN = 8;
+const { width: deviceWidth } = Dimensions.get('window');
+const CELL_SIZE = Math.floor((deviceWidth - GRID_SIDE_MARGIN * 2) / GRID_WIDTH);
 
 // Map room_type to the corresponding screen name
 const ROOM_TYPE_TO_SCREEN = {
@@ -33,9 +35,10 @@ export default function RoomSelectionScreen({ navigation }) {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentFloor, setCurrentFloor] = useState(0);
+  const [roomTasks, setRoomTasks] = useState({}); // { roomId: [task, ...] }
 
   useEffect(() => {
-    const fetchRooms = async () => {
+    const fetchRoomsAndTasks = async () => {
       try {
         const userId = getUserId();
         const snapshot = await getDocs(
@@ -45,16 +48,22 @@ export default function RoomSelectionScreen({ navigation }) {
           id: doc.id,
           ...doc.data(),
         }));
-
         setRooms(roomList);
+
+        // Fetch tasks for each room
+        const tasksByRoom = {};
+        for (const room of roomList) {
+          const tasksSnap = await getDocs(collection(db, 'user', userId, 'rooms', room.id, 'room_tasks'));
+          tasksByRoom[room.id] = tasksSnap.docs.map(doc => doc.data());
+        }
+        setRoomTasks(tasksByRoom);
       } catch (error) {
-        console.error('Error fetching rooms:', error);
+        console.error('Error fetching rooms or tasks:', error);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchRooms();
+    fetchRoomsAndTasks();
   }, []);
 
   if (loading) return <ActivityIndicator size="large" />;
@@ -62,20 +71,23 @@ export default function RoomSelectionScreen({ navigation }) {
   // Separate house room and grid rooms
   const houseRoom = rooms.find(r => r.room_type === 'house');
   const gridRooms = rooms.filter(r => r.room_type !== 'house' && ((r.floor ?? 0) === currentFloor));
+  const numFloors = rooms.reduce((max, r) => Math.max(max, (r.floor ?? 0) + 1), 1);
 
   return (
     <View style={[global.container, global.roomSelectionWrapper]}>
       <Text style={global.headerText}>Pick a room!</Text>
 
       <View style={[global.grid, {
-        width: GRID_WIDTH * GRID_UNIT,
-        height: GRID_HEIGHT * GRID_UNIT,
+        width: GRID_WIDTH * CELL_SIZE,
+        height: GRID_HEIGHT * CELL_SIZE,
+        marginLeft: GRID_SIDE_MARGIN,
+        marginRight: GRID_SIDE_MARGIN,
       }]}>
         {/* Render grid background cells for visual consistency */}
         {[...Array(GRID_HEIGHT)].map((_, row) => (
           <View key={row} style={global.gridRow}>
             {[...Array(GRID_WIDTH)].map((_, col) => (
-              <View key={col} style={[global.gridCell, { width: GRID_UNIT, height: GRID_UNIT }]} />
+              <View key={col} style={[global.gridCell, { width: CELL_SIZE, height: CELL_SIZE }]} />
             ))}
           </View>
         ))}
@@ -89,6 +101,11 @@ export default function RoomSelectionScreen({ navigation }) {
           // Get the correct screen name for this room type
           const screenName = ROOM_TYPE_TO_SCREEN[room.room_type];
 
+          // Determine if all tasks are completed for this room
+          const tasks = roomTasks[room.id] || [];
+          const hasTasks = tasks.length > 0;
+          const allTasksCompleted = hasTasks && tasks.every(t => t.task_complete);
+
           return (
             <TouchableOpacity
               key={room.id}
@@ -101,27 +118,34 @@ export default function RoomSelectionScreen({ navigation }) {
               }}
               style={[
                 global.roomBoxMap,
+                allTasksCompleted && { backgroundColor: '#F2F0EF', borderColor: '#ccc' },
                 {
-                  left: x * GRID_UNIT,
-                  top: y * GRID_UNIT,
-                  width: w * GRID_UNIT,
-                  height: h * GRID_UNIT,
+                  left: x * CELL_SIZE,
+                  top: y * CELL_SIZE,
+                  width: w * CELL_SIZE,
+                  height: h * CELL_SIZE,
                 },
               ]}
             >
-              <Text style={global.roomBoxMapText}>{room.display_name}</Text>
+              <Text style={[
+                global.roomBoxMapText,
+                allTasksCompleted && { color: '#949392' },
+              ]}>{room.display_name}</Text>
             </TouchableOpacity>
           );
         })}
       </View>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
-        {[...Array(rooms.reduce((max, r) => Math.max(max, (r.floor ?? 0) + 1), 1))].map((_, i) => (
-          <TouchableOpacity key={i} onPress={() => setCurrentFloor(i)} style={{ margin: 4, padding: 8, backgroundColor: currentFloor === i ? '#2196f3' : '#eee', borderRadius: 8 }}>
-            <Text style={{ color: currentFloor === i ? '#fff' : '#333' }}>Floor {i + 1}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {/* Only show floor selection if more than one floor */}
+      {numFloors > 1 && (
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
+          {[...Array(numFloors)].map((_, i) => (
+            <TouchableOpacity key={i} onPress={() => setCurrentFloor(i)} style={{ margin: 4, padding: 8, backgroundColor: currentFloor === i ? '#2196f3' : '#eee', borderRadius: 8 }}>
+              <Text style={{ color: currentFloor === i ? '#fff' : '#333' }}>Floor {i + 1}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
 
       {houseRoom && (
         <TouchableOpacity

@@ -92,7 +92,8 @@ export default function LaundryRoomScreen({ route }) {
   const Floor = decorMap['laundryFloor'];
   const WasherDryer = decorMap[roomData.decor?.pref_washer_dryer];
   const Shelf = decorMap[roomData.decor?.pref_shelf];
-  const floorHeight = height * 0.2;
+  const floorSvgAspect = 122.67 / 142.42; // Use the same as BedroomScreen or update to match laundry floor SVG viewBox
+  const floorHeight = width * floorSvgAspect;
 
   const enterEditMode = () => {
     setLocalTasks(roomTasks.map(task => ({ ...task })));
@@ -184,7 +185,7 @@ export default function LaundryRoomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: height,
+            zIndex: 2,
           }}
           preserveAspectRatio="xMidYMax slice"
         />
@@ -193,10 +194,9 @@ export default function LaundryRoomScreen({ route }) {
         <WasherDryer
           style={{
             position: 'absolute',
-            bottom: height * 0.2 + 120,
+            bottom: floorHeight,
             left: width * 0.1,
             width: width * 0.5,
-            height: 120,
           }}
         />
       )}
@@ -204,7 +204,7 @@ export default function LaundryRoomScreen({ route }) {
         <Shelf
           style={{
             position: 'absolute',
-            bottom: height * 0.2 + 120,
+            bottom: floorHeight + 120,
             right: width * 0.1,
             width: width * 0.3,
             height: 80,
@@ -214,8 +214,8 @@ export default function LaundryRoomScreen({ route }) {
       {roomData.user?.avatar && (
         <AvatarStack
           avatar={roomData.user.avatar}
-          size={150}
-          style={[global.avatar, { left: width / 2 - 75, bottom: height * 0.2 + 10 }]}
+          size={height * .3}
+          style={[global.avatar, { left: width / 2 - 75, bottom: floorHeight / 2 }]}
         />
       )}
 
