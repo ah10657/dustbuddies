@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { doc, updateDoc, getDoc } from 'firebase/firestore';
@@ -19,6 +19,7 @@ import AvatarBase from '../assets/images/avatar/skin.svg';
 import AvatarStack from '../components/AvatarStack';
 import global from '../styles/global';
 
+const { width, height } = Dimensions.get('window');
 const ITEM_CATEGORIES = Object.keys(avatarParts);
 const CATEGORY_LABELS = Object.fromEntries(
   Object.entries(avatarParts).map(([key, val]) => [key, val.label])
@@ -31,9 +32,15 @@ const DEFAULT_AVATAR = Object.fromEntries(
   ])
 );
 
+const MAIN_TABS = [
+  { key: 'appearance', label: 'Appearance', categories: ['skin', 'eyes', 'hair'] },
+  { key: 'clothes', label: 'Clothes', categories: ['top', 'bottom', 'shoes'] },
+];
+
 export default function CharacterCreatorScreen() {
   const navigation = useNavigation();
-  const [selectedCategory, setSelectedCategory] = useState(ITEM_CATEGORIES[0]);
+  const [mainTab, setMainTab] = useState(MAIN_TABS[0].key);
+  const [selectedCategory, setSelectedCategory] = useState(MAIN_TABS[0].categories[0]);
   const [selectedItems, setSelectedItems] = useState(DEFAULT_AVATAR);
   const [loading, setLoading] = useState(true);
 
@@ -60,6 +67,14 @@ export default function CharacterCreatorScreen() {
     };
     fetchAvatar();
   }, []);
+
+  // When mainTab changes, reset selectedCategory to the first in that tab
+  useEffect(() => {
+    const tabObj = MAIN_TABS.find(t => t.key === mainTab);
+    if (tabObj && !tabObj.categories.includes(selectedCategory)) {
+      setSelectedCategory(tabObj.categories[0]);
+    }
+  }, [mainTab]);
 
   if (loading) {
     return <View style={styles.avatarPreview}><Text>Loading...</Text></View>;
@@ -95,37 +110,70 @@ export default function CharacterCreatorScreen() {
     }
   };
 
+  // Get the categories for the current main tab
+  const currentTabObj = MAIN_TABS.find(t => t.key === mainTab);
+  const visibleCategories = currentTabObj ? currentTabObj.categories : [];
+
   return (
-    <View style={[styles.container, { backgroundColor: '#bfe3fa', flex: 1 }]}> {/* Use your app's blue as background */}
+    <View style={[styles.container, { backgroundColor: '#5EB1CC', flex: 1, alignItems: 'center' }]}> {/* Use your app's blue as background */}
       {/* Avatar Preview Area - flush to top */}
-      <View style={{ alignItems: 'center', marginTop: 24, marginBottom: 8 }}>
+      <View style={{ alignItems: 'center', width: '70%', marginBottom: 10, borderRadius: 30, backgroundColor: '#fff' }}>
         <AvatarStack
           avatar={selectedItems}
-          size={180}
+          size={height / 2}
           style={{ alignSelf: 'center' }}
         />
       </View>
 
-      {/* Spacer to push options to bottom 1/3 */}
-      <View style={{ flex: 1 }} />
+      {/* Main Tabs (Appearance/Clothes) */}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%'}}>
+        {MAIN_TABS.map(tab => (
+          <TouchableOpacity
+            key={tab.key}
+            onPress={() => setMainTab(tab.key)}
+            style={[
+              styles.tab,
+              mainTab === tab.key && styles.activeTab,
+              { paddingHorizontal: 18, paddingVertical: 8, width: '50%', borderTopLeftRadius: 10, borderTopRightRadius: 10 },
+            ]}
+          >
+            <Text
+              style={[
+                styles.tabText,
+                mainTab === tab.key && styles.activeTabText,
+                { fontWeight: 'bold', fontSize: 16, textAlign: 'center' },
+              ]}
+            >
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-      {/* Customization Tabs */}
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 4 }}>
-        {ITEM_CATEGORIES.map((category) => (
+      {/* Customization Tabs (filtered by main tab) */}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', width: '100%' }}>
+        {visibleCategories.map((category) => (
           <TouchableOpacity
             key={category}
             onPress={() => setSelectedCategory(category)}
             style={[
               styles.tab,
               selectedCategory === category && styles.activeTab,
-              { marginHorizontal: 2, borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6 },
+              {
+                width: `${100 / visibleCategories.length}%`,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginHorizontal: 0,
+                paddingHorizontal: 0,
+                paddingVertical: 10,
+              },
             ]}
           >
             <Text
               style={[
                 styles.tabText,
                 selectedCategory === category && styles.activeTabText,
-                { fontWeight: 'bold' },
+                { fontWeight: 'bold', textAlign: 'center' },
               ]}
             >
               {CATEGORY_LABELS[category]}
@@ -135,7 +183,7 @@ export default function CharacterCreatorScreen() {
       </View>
 
       {/* Customization Options - bottom 1/3, 2 rows, 3 columns */}
-      <View style={{ height: 140, justifyContent: 'flex-end', marginBottom: 8 }}>
+      <View style={{ justifyContent: 'flex-end', backgroundColor: '#95CCDD', paddingBottom: 100 }}>
         <FlatList
           data={Object.keys(avatarParts[selectedCategory].options)}
           keyExtractor={(item) => item}
@@ -150,21 +198,22 @@ export default function CharacterCreatorScreen() {
                 style={[
                   styles.squareTile,
                   isSelected && { borderColor: '#ff9c33', borderWidth: 2 },
-                  { backgroundColor: '#fff', margin: 8, borderRadius: 12, width: 70, height: 70, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
+                  { backgroundColor: '#fff', margin: 8, borderRadius: 12, width: width * .30, height: width * .30, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
                 ]}
               >
-                {Component && <Component width={44} height={44} />}
+                {Component && <Component />}
               </TouchableOpacity>
             );
           }}
         />
       </View>
 
-      {/* I'm done! Button at the very bottom */}
-      <View style={{ alignItems: 'center', marginBottom: 24 }}>
+      {/* I'm done! Button fixed at the bottom */}
+      <View style={styles.bottomButtonContainer} pointerEvents="box-none">
+        <View style={styles.bottomButtonBackground} />
         <TouchableOpacity
           style={global.shopButton}
-          onPress={() => navigation.goBack()}
+          onPress={handleSaveAndGoBack}
         >
           <Text style={global.shopButtonText}>I'm done!</Text>
         </TouchableOpacity>
@@ -176,7 +225,7 @@ export default function CharacterCreatorScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#d4e9ff',
+    backgroundColor: '#5EB1CC',
     paddingTop: 20,
   },
   avatarPreview: {
@@ -201,7 +250,6 @@ const styles = StyleSheet.create({
   },
   tab: {
     padding: 10,
-    borderRadius: 10,
     backgroundColor: '#ffd580',
   },
   activeTab: {
@@ -240,8 +288,25 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   backButtonText: {
-    color: '#fff',
+    color: '#ff9c33',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  bottomButtonContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 80,
+    zIndex: 10,
+  },
+  bottomButtonBackground: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#95CCDD', // or your preferred color
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    height: 80,
   },
 });

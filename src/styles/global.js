@@ -185,13 +185,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   shopButton: {
-    backgroundColor: '#2196f3',
+    backgroundColor: '#fff',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
   },
   shopButtonText: {
-    color: 'white',
+    color: '#ff9c33',
+    fontWeight: 'bold',
     fontSize: 16,
   },
   timerButtons: { 
