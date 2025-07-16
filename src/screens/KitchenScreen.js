@@ -48,6 +48,8 @@ export default function KitchenScreen({ route }) {
   const insets = useSafeAreaInsets();
   const progressCircleSize = width * 0.4;
   const progressCircleStroke = progressCircleSize * 0.12;
+  const floorSvgAspect = 122.67 / 142.42; // Use the same as BedroomScreen or update to match kitchen floor SVG viewBox
+  const floorHeight = width * floorSvgAspect;
 
   useFocusEffect(
     useCallback(() => {
@@ -91,7 +93,7 @@ export default function KitchenScreen({ route }) {
   const Wall = decorMap['kitchenWall'];
   const Floor = decorMap['kitchenFloor'];
   const Cupboards = decorMap[roomData.decor?.pref_cupboards];
-  const floorHeight = height * 0.2;
+
 
   const enterEditMode = () => {
     setLocalTasks(roomTasks.map(task => ({ ...task })));
@@ -183,7 +185,7 @@ export default function KitchenScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: height,
+            zIndex: 2,
           }}
           preserveAspectRatio="xMidYMax slice"
         />
@@ -192,18 +194,17 @@ export default function KitchenScreen({ route }) {
         <Cupboards
           style={{
             position: 'absolute',
-            bottom: height * 0.2 + 120,
-            left: width * 0.1,
-            width: width * 0.8,
-            height: 120,
+            bottom: floorHeight,
+            left: 0,
+            width: '100%',
           }}
         />
       )}
       {roomData.user?.avatar && (
         <AvatarStack
           avatar={roomData.user.avatar}
-          size={150}
-          style={[global.avatar, { left: width / 2 - 75, bottom: height * 0.2 + 10 }]}
+          size={height * .3}
+          style={[global.avatar, { left: width / 2 - 75, bottom: floorHeight / 2 }]}
         />
       )}
 

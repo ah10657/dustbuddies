@@ -94,6 +94,8 @@ export default function LivingRoomScreen({ route }) {
   const WallDecor = decorMap[roomData.decor?.pref_wall_decor];
   const Side = decorMap[roomData.decor?.pref_side];
   const Window = decorMap[roomData.decor?.pref_window];
+  const floorSvgAspect = 122.67 / 142.42; // Use the same as BedroomScreen or update to match living room floor SVG viewBox
+  const floorHeight = width * floorSvgAspect;
 
   const enterEditMode = () => {
     setLocalTasks(roomTasks.map(task => ({ ...task })));
@@ -185,7 +187,7 @@ export default function LivingRoomScreen({ route }) {
             bottom: 0,
             left: 0,
             width: width,
-            height: height,
+            zIndex: 2,
           }}
           preserveAspectRatio="xMidYMax slice"
         />
@@ -194,10 +196,11 @@ export default function LivingRoomScreen({ route }) {
         <Couch
           style={{
             position: 'absolute',
-            bottom: height * 0.2 + 120,
+            bottom: floorHeight / 2,
             left: width * 0.1,
             width: width * 0.8,
-            height: 120,
+            height: width * 0.8,
+            zIndex: 3,
           }}
         />
       )}
@@ -216,10 +219,11 @@ export default function LivingRoomScreen({ route }) {
         <Side
           style={{
             position: 'absolute',
-            bottom: height * 0.2 + 120,
-            right: width * 0.1,
-            width: 80,
-            height: 80,
+            bottom: floorHeight / 2,
+            left: 0,
+            width: width * 0.3,
+            height: width * 0.3,
+            zIndex: 4,
           }}
         />
       )}
@@ -237,8 +241,8 @@ export default function LivingRoomScreen({ route }) {
       {roomData.user?.avatar && (
         <AvatarStack
           avatar={roomData.user.avatar}
-          size={150}
-          style={[global.avatar, { left: width / 2 - 75, bottom: height * 0.2 + 10 }]}
+          size={height * .3}
+          style={[global.avatar, { left: width / 2 - 75, bottom: floorHeight / 2 }]}
         />
       )}
 

@@ -62,6 +62,7 @@ export default function RoomSelectionScreen({ navigation }) {
   // Separate house room and grid rooms
   const houseRoom = rooms.find(r => r.room_type === 'house');
   const gridRooms = rooms.filter(r => r.room_type !== 'house' && ((r.floor ?? 0) === currentFloor));
+  const numFloors = rooms.reduce((max, r) => Math.max(max, (r.floor ?? 0) + 1), 1);
 
   return (
     <View style={[global.container, global.roomSelectionWrapper]}>
@@ -115,13 +116,16 @@ export default function RoomSelectionScreen({ navigation }) {
         })}
       </View>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
-        {[...Array(rooms.reduce((max, r) => Math.max(max, (r.floor ?? 0) + 1), 1))].map((_, i) => (
-          <TouchableOpacity key={i} onPress={() => setCurrentFloor(i)} style={{ margin: 4, padding: 8, backgroundColor: currentFloor === i ? '#2196f3' : '#eee', borderRadius: 8 }}>
-            <Text style={{ color: currentFloor === i ? '#fff' : '#333' }}>Floor {i + 1}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {/* Only show floor selection if more than one floor */}
+      {numFloors > 1 && (
+        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
+          {[...Array(numFloors)].map((_, i) => (
+            <TouchableOpacity key={i} onPress={() => setCurrentFloor(i)} style={{ margin: 4, padding: 8, backgroundColor: currentFloor === i ? '#2196f3' : '#eee', borderRadius: 8 }}>
+              <Text style={{ color: currentFloor === i ? '#fff' : '#333' }}>Floor {i + 1}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
 
       {houseRoom && (
         <TouchableOpacity

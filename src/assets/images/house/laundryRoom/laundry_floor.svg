@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="laundry_floor" xmlns="http://www.w3.org/2000/svg" width="1.93in" height="1.68in" viewBox="0 0 138.79 121.06">
+<svg id="laundry_floor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138.79 121.06">
   <polygon points="94.52 8.86 93.38 .38 77.64 .38 78.03 8.86 94.52 8.86" fill="#b1c4b1" stroke="#eae3df" stroke-miterlimit="10" stroke-width=".75"/>
   <polygon points="111.12 8.86 109.22 .38 93.47 .38 94.62 8.86 111.12 8.86" fill="#bccebc" stroke="#eae3df" stroke-miterlimit="10" stroke-width=".75"/>
   <polygon points="94.62 8.86 93.47 .38 93.38 .38 94.52 8.86 94.62 8.86" fill="#c0c7c9" stroke="#eae3df" stroke-miterlimit="10" stroke-width=".75"/>
