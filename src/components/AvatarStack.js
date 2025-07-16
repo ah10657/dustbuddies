@@ -55,9 +55,7 @@ export default function AvatarStack({ avatar, size = 100, style }) {
 
 const styles = StyleSheet.create({
   avatarContainer: {
-    position: 'absolute',
-    bottom: 75,
-    right: 20,
+    // Removed position: 'absolute', bottom: 75, right: 20
   },
   layer: {
     position: 'absolute',

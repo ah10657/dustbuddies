@@ -9,8 +9,6 @@ import {
   TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { signOut } from 'firebase/auth';
-import { auth } from '../lib/firebase';
 import { useUser } from '../contexts/UserContext';
 import { decorMap } from '../lib/svgMap';
 import { getGlobalTaskCompletion } from '../models/tasksModel';
@@ -163,18 +161,6 @@ export default function HomeScreen({ navigation }) {
     }, [user, userData])
   );
 
-  const handleLogout = async () => {
-    console.log('Logout button pressed!');
-    try {
-      await signOut(auth);
-      console.log('Sign out successful');
-      // UserContext will handle redirect
-    } catch (error) {
-      console.error('Logout error:', error);
-      Alert.alert('Error', 'Failed to logout');
-    }
-  };
-
   // Enter/exit edit mode
   const enterEditMode = () => {
     setLocalRoomsWithTasks(roomsWithTasks.map(room => ({
@@ -273,29 +259,6 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[global.container, { position: 'relative', flex: 1 }]} edges={['top', 'bottom']}>
-      {/* Logout Button */}
-      <TouchableOpacity
-        onPress={handleLogout}
-        style={{
-          position: 'absolute',
-          top: 50,
-          right: 20,
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          padding: 12,
-          borderRadius: 20,
-          zIndex: 1000,
-          minWidth: 60,
-          alignItems: 'center',
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.25,
-          shadowRadius: 3.84,
-          elevation: 5,
-        }}
-        activeOpacity={0.7}
-      >
-        <Text style={{ color: '#333', fontSize: 14, fontWeight: 'bold' }}>Logout</Text>
-      </TouchableOpacity>
 
       {Sky && (
         <Sky
@@ -701,16 +664,22 @@ export default function HomeScreen({ navigation }) {
       )}
 
       {roomData.user?.avatar && (
-        <AvatarStack
-          avatar={roomData.user.avatar}
-          size={height / 5}
-          style={{
-            right: width / 10, // Center horizontally for size 150
-            bottom: height / 10,           // Place above ground, adjust as needed
-            zIndex: 10,
-          }}
-        />
-      )}
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Profile')}
+            activeOpacity={0.8}
+            style={{
+              position: 'absolute',
+              right: 20,
+              bottom: 20,
+              zIndex: 10,
+            }}
+          >
+            <AvatarStack
+              avatar={roomData.user.avatar}
+              size={height / 5}
+            />
+          </TouchableOpacity>
+        )}
     </SafeAreaView>
   );
 }

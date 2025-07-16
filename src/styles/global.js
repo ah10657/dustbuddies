@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     padding: 10,
     minWidth: 200,
     minHeight: 200,
-    maxWidth: 600,
-    maxHeight: 600,
+    maxWidth: 800,
+    maxHeight: 800,
     alignSelf: 'center',
   },
 
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     color: '#f9a825',
     fontWeight: 'bold',
     textAlign: 'center',
-    fontSize: 10
+    fontSize: 15
   },
   roomBox: {
     backgroundColor: '#4caf50',

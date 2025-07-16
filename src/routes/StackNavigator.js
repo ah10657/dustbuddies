@@ -18,6 +18,7 @@ import SignupScreen from '../screens/SignupScreen';
 import BlueprintSetupScreen from '../screens/BlueprintSetupScreen';
 import BlueprintGridScreen from '../screens/BlueprintGridScreen';
 import CharacterCreatorScreen from '../screens/CharacterCreatorScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import global from '../styles/global';
 import { TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -46,6 +47,7 @@ export default function StackNavigator() {
         // Authenticated user screens
         <>
           <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="BedroomScreen" component={BedroomScreen} />
           <Stack.Screen name="BathroomScreen" component={BathroomScreen} />
           <Stack.Screen name="KitchenScreen" component={KitchenScreen} />
