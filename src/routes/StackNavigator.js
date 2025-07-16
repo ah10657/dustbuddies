@@ -7,7 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import BedroomScreen from '../screens/BedroomScreen';
 import RoomSelectionScreen from '../screens/RoomSelectionScreen';
 import TimerScreen from '../screens/TimerScreen';
-import ShopScreen from '../screens/ShopScreen';
+import ShopSelectionScreen from '../screens/ShopSelectionScreen';
 import BathroomScreen from '../screens/BathroomScreen';
 import LivingRoomScreen from '../screens/LivingRoomScreen';
 import KitchenScreen from '../screens/KitchenScreen';
@@ -56,7 +56,7 @@ export default function StackNavigator() {
           <Stack.Screen name="StorageRoomScreen" component={StorageRoomScreen} />
           <Stack.Screen name="RoomSelection" component={RoomSelectionScreen} />
           <Stack.Screen name="Timer" component={TimerScreen} />
-          <Stack.Screen name="Shop" component={ShopScreen} />
+          <Stack.Screen name="Shop" component={ShopSelectionScreen} />
           <Stack.Screen name="CharacterCreator" component={CharacterCreatorScreen} />
         </>
       ) : (

@@ -56,6 +56,11 @@ import StoreCognacCarpet from '../assets/images/store/store_walls_floors/cognac_
 import StoreDarkGreenCarpet from '../assets/images/store/store_walls_floors/dark_green_carpet.svg';
 import StoreGreenStripeWall from '../assets/images/store/store_walls_floors/green_stripe_wall.svg';
 import StoreWhiteStripeWall from '../assets/images/store/store_walls_floors/white_stripe_wall.svg';
+import StoreMap from '../assets/images/store/store_map/store_map.svg';
+import StoreBoutique from '../assets/images/store/store_map/store_boutique.svg';
+import StoreFurniture from '../assets/images/store/store_map/store_furniture.svg';
+import StoreHardware from '../assets/images/store/store_map/store_hardware.svg';
+import StoreSalon from '../assets/images/store/store_map/store_salon.svg';
 
 // Mascot Logo
 import Logo from '../assets/images/mascot_logo/logo.svg';
@@ -198,6 +203,11 @@ export const decorMap = {
   storeDarkGreenCarpet: StoreDarkGreenCarpet,
   storeGreenStripeWall: StoreGreenStripeWall,
   storeWhiteStripeWall: StoreWhiteStripeWall,
+  storeMap: StoreMap,
+  storeBoutique: StoreBoutique,
+  storeFurniture: StoreFurniture,
+  storeHardware: StoreHardware,
+  storeSalon: StoreSalon,
   // Mascot Logo
   logo: Logo,
   mascot: Mascot,

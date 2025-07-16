@@ -213,7 +213,7 @@ export default function BedroomScreen({ route }) {
           style={{
             position: 'absolute',
             bottom: floorHeight - (bedSize / 2),
-            left: (width - bedSize) / 3,
+            left: (width - bedSize) / 2,
             width: bedSize,
             height: bedSize,
             zIndex: 3,
@@ -276,7 +276,7 @@ export default function BedroomScreen({ route }) {
         <AvatarStack
           avatar={roomData.user.avatar}
           size={height * .3}
-          style={[global.avatar, { left: width / 2 - 75, bottom: floorHeight / 2 }]}
+          style={[global.avatar, {  bottom: floorHeight / 2 }]}
         />
       )}
 
