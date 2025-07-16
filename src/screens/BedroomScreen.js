@@ -141,7 +141,8 @@ export default function BedroomScreen({ route }) {
         />
       )}
       {Side && (
-        <Side
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CharacterCreator')}
           style={{
             position: 'absolute',
             bottom: height * 0.2 + 40,
@@ -150,8 +151,11 @@ export default function BedroomScreen({ route }) {
             height: 60,
             zIndex: 4,
           }}
-        />
+        >
+          <Side width={60} height={60} />
+        </TouchableOpacity>
       )}
+      
       {WallDecor && (
         <WallDecor
           style={{

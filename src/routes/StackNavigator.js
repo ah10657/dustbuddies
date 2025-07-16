@@ -17,6 +17,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import BlueprintSetupScreen from '../screens/BlueprintSetupScreen';
 import BlueprintGridScreen from '../screens/BlueprintGridScreen';
+import CharacterCreatorScreen from '../screens/CharacterCreatorScreen';
 import global from '../styles/global';
 import { TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -54,6 +55,7 @@ export default function StackNavigator() {
           <Stack.Screen name="RoomSelection" component={RoomSelectionScreen} />
           <Stack.Screen name="Timer" component={TimerScreen} />
           <Stack.Screen name="Shop" component={ShopScreen} />
+          <Stack.Screen name="CharacterCreator" component={CharacterCreatorScreen} />
         </>
       ) : (
         // Non-authenticated user screens
