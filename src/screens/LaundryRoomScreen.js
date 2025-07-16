@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
+import { Alert, TextInput } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import {
   View,
   Text,
@@ -8,10 +10,12 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, deleteDoc, updateDoc, addDoc, collection } from 'firebase/firestore';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { Feather } from '@expo/vector-icons';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
@@ -31,6 +35,19 @@ export default function LaundryRoomScreen({ route }) {
   const [progressPercent, setProgressPercent] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { width, height } = Dimensions.get('window');
+  const insets = useSafeAreaInsets();
+  const progressCircleSize = width * 0.4;
+  const progressCircleStroke = progressCircleSize * 0.12;
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingTaskId, setEditingTaskId] = useState(null);
+  const [editingTaskName, setEditingTaskName] = useState('');
+  const [editingTaskRecurrence, setEditingTaskRecurrence] = useState('daily');
+  const [addingTask, setAddingTask] = useState(false);
+  const [newTaskName, setNewTaskName] = useState('');
+  const [localTasks, setLocalTasks] = useState([]);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const originalTasksRef = useRef([]);
 
   useFocusEffect(
     useCallback(() => {
@@ -77,8 +94,81 @@ export default function LaundryRoomScreen({ route }) {
   const Shelf = decorMap[roomData.decor?.pref_shelf];
   const floorHeight = height * 0.2;
 
+  const enterEditMode = () => {
+    setLocalTasks(roomTasks.map(task => ({ ...task })));
+    originalTasksRef.current = roomTasks.map(task => ({ ...task }));
+    setIsEditMode(true);
+    setHasUnsavedChanges(false);
+  };
+  const exitEditMode = () => {
+    setIsEditMode(false);
+    setLocalTasks([]);
+    setEditingTaskId(null);
+    setEditingTaskName('');
+    setEditingTaskRecurrence('daily');
+    setHasUnsavedChanges(false);
+  };
+  const handleDropdownClose = () => {
+    if (isEditMode && hasUnsavedChanges) {
+      Alert.alert(
+        'Unsaved Changes',
+        'You are closing without saving your changes. Are you sure?',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { text: 'Discard Changes', style: 'destructive', onPress: exitEditMode },
+        ]
+      );
+    } else if (isEditMode) {
+      Alert.alert(
+        'Exit Edit Mode',
+        'You are closing edit mode without making changes.',
+        [
+          { text: 'OK', onPress: exitEditMode },
+        ]
+      );
+    } else {
+      setDropdownOpen(false);
+    }
+  };
+  const saveAllEdits = async () => {
+    setIsSaving(true);
+    const userId = getUserId();
+    const orig = originalTasksRef.current;
+    const deleted = orig.filter(ot => !localTasks.some(lt => lt.id === ot.id));
+    const added = localTasks.filter(lt => !lt.id);
+    const updated = localTasks.filter(lt => {
+      const origTask = orig.find(ot => ot.id === lt.id);
+      return origTask && (lt.name !== origTask.name || lt.recurrence !== origTask.recurrence);
+    });
+    for (const task of deleted) {
+      await deleteDoc(doc(db, 'user', userId, 'rooms', roomId, 'room_tasks', task.id));
+    }
+    for (const task of added) {
+      await addDoc(collection(db, 'user', userId, 'rooms', roomId, 'room_tasks'), {
+        task_name: task.name,
+        recurrence: task.recurrence,
+        task_complete: false,
+        last_completed_at: '',
+      });
+    }
+    for (const task of updated) {
+      await updateDoc(doc(db, 'user', userId, 'rooms', roomId, 'room_tasks', task.id), {
+        task_name: task.name,
+        recurrence: task.recurrence,
+      });
+    }
+    const taskData = await getRoomTasks(userId, roomId);
+    setRoomTasks(taskData.tasks);
+    setRemainingTasks(taskData.remainingTasks);
+    setProgressPercent(taskData.progressPercent);
+    setIsSaving(false);
+    exitEditMode();
+  };
+
   return (
-    <View style={[global.container, { position: 'relative' }]}> 
+    <SafeAreaView style={[global.container, { position: 'relative', flex: 1 }]} edges={['top', 'bottom']}>
+      {/* Top Filler for Safe Area */}
+      <View style={[global.topFiller, { height: insets.top, backgroundColor: '#5EB1CC' }]} />
       {Wall && (
         <Wall
           width={width}
@@ -96,6 +186,7 @@ export default function LaundryRoomScreen({ route }) {
             width: width,
             height: height,
           }}
+          preserveAspectRatio="xMidYMax slice"
         />
       )}
       {WasherDryer && (
@@ -124,17 +215,22 @@ export default function LaundryRoomScreen({ route }) {
         <AvatarStack
           avatar={roomData.user.avatar}
           size={150}
-          style={{
-            left: width / 2 - 75,
-            bottom: height * 0.2 + 10,
-            zIndex: 10,
-          }}
+          style={[global.avatar, { left: width / 2 - 75, bottom: height * 0.2 + 10 }]}
         />
       )}
 
+      {/* Bottom Filler for Safe Area */}
+      <View style={[global.bottomFiller, { height: insets.bottom }]} />
+      <View style={[global.bottomRoomBar, { bottom: insets.bottom }]}>
+        <Text style={global.bottomRoomBarText}>
+          {roomData.display_name || 'Laundry Room'}
+        </Text>
+      </View>
+
+      {/* Back Button */}
       {BackButtonIcon && (
         <TouchableOpacity
-          style={{ position: 'absolute', bottom: -5, left: -5 }}
+          style={[global.backButton, { bottom: 10 + insets.bottom }]}
           onPress={() => navigation.navigate('RoomSelection')}
         >
           <BackButtonIcon width={80} height={80} />
@@ -146,20 +242,15 @@ export default function LaundryRoomScreen({ route }) {
         {!dropdownOpen && (
           <Text style={global.remainingLabel}>Remaining Tasks:</Text>
         )}
-
-        <View style={dropdownOpen ? global.expandedHeader : global.previewRow}>
-          {!dropdownOpen && (
+        <View style={{ flexDirection: 'row', alignItems: 'center', minHeight: progressCircleSize, width: '100%' }}>
+          {/* Vertical Task List */}
+          <View style={[global.verticalTaskList, { width: '50%', height: progressCircleSize }]}>
             <FlatList
               data={remainingTasks}
-              horizontal
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <TouchableOpacity
-                  style={[
-                    global.button,
-                    item.completed && global.buttonCompleted,
-                    { backgroundColor: '#fff', minWidth: 90, marginRight: 8 },
-                  ]}
+                  style={global.verticalTaskItem}
                   onPress={() =>
                     navigation.navigate('Timer', {
                       taskName: item.name,
@@ -179,30 +270,35 @@ export default function LaundryRoomScreen({ route }) {
                   )}
                 </TouchableOpacity>
               )}
-              contentContainerStyle={global.taskChipContainer}
+              showsVerticalScrollIndicator={false}
+              style={{ flexGrow: 1 }}
+              contentContainerStyle={{ paddingBottom: 24 }}
             />
-          )}
-
-          <View style={{ position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
-          <View style={{ position: 'absolute', width: 65, height: 65, borderRadius: 35, backgroundColor: '#fff', zIndex: 0 }} />
+            {/* Fade overlay at the bottom */}
+            <LinearGradient
+              colors={["rgba(94,177,204,0)", "#5EB1CC"]}
+              style={[global.verticalTaskFade, { height: 32 }]}
+              pointerEvents="none"
+            />
+          </View>
+          {/* Progress Circle with White Background */}
+          <View style={[global.progressCircleContainer, { width: progressCircleSize, height: progressCircleSize }]}>
+            <View style={[global.progressCircleBg, { width: progressCircleSize, height: progressCircleSize, borderRadius: progressCircleSize / 2 }]} />
             <AnimatedCircularProgress
-              size={70}
-              width={7}
+              size={progressCircleSize}
+              width={progressCircleStroke}
               fill={progressPercent}
               tintColor="#f7bd50"
               backgroundColor="#ffffff"
               style={{ zIndex: 1 }}
               rotation={0}
             >
-              {
-                () => (
-                  <Text style={global.progressText}>{progressPercent}%</Text>
-                )
-              }
+              {() => (
+                <Text style={[global.progressText, { fontSize: progressCircleSize * 0.28 }]}>{progressPercent}%</Text>
+              )}
             </AnimatedCircularProgress>
           </View>
         </View>
-
         <Text style={global.dropdownToggle}>{dropdownOpen ? '▲' : '▼'}</Text>
       </Pressable>
 
@@ -211,21 +307,7 @@ export default function LaundryRoomScreen({ route }) {
         <View
           style={[
             global.taskDropdownContainer,
-            {
-              width: width,
-              height: height * 0.66,
-              backgroundColor: '#5EB1CC',
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              borderTopLeftRadius: 32,
-              borderTopRightRadius: 32,
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-              zIndex: 100,
-              paddingBottom: 0,
-              justifyContent: 'flex-start',
-            },
+            { height: height * 0.66 },
           ]}
         >
           {/* Progress Bar and Room Header */}
@@ -246,13 +328,122 @@ export default function LaundryRoomScreen({ route }) {
             </AnimatedCircularProgress>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 4 }}>{roomData.name}</Text>
           </View>
-          {/* Task List */}
+          {/* Edit Tasks Button */}
+          {isEditMode ? (
+            <TouchableOpacity
+              style={global.orangeButton}
+              onPress={saveAllEdits}
+              disabled={isSaving || !hasUnsavedChanges}
+            >
+              <Text style={global.orangeButtonText}>{isSaving ? 'Saving...' : 'Done Editing'}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={global.orangeButton}
+              onPress={enterEditMode}
+            >
+              <Text style={global.orangeButtonText}>Edit Tasks</Text>
+            </TouchableOpacity>
+          )}
           <FlatList
-            data={roomTasks}
-            keyExtractor={(item) => item.id}
+            data={isEditMode ? localTasks : roomTasks}
+            keyExtractor={(item, idx) => item.id || `new-${idx}`}
             contentContainerStyle={{ paddingHorizontal: 18, paddingBottom: 40 }}
-            renderItem={({ item }) => (
-              <View style={[global.taskRoomBox, { backgroundColor: '#5EB1CC' }]}> {/* blue group box */}
+            renderItem={({ item, index }) => (
+              isEditMode ? (
+                <TouchableOpacity
+                  style={global.button}
+                  activeOpacity={1}
+                  onPress={() => {}}
+                >
+                  {editingTaskId === item.id ? (
+                    <>
+                      <TextInput
+                        value={editingTaskName}
+                        onChangeText={text => {
+                          setEditingTaskName(text);
+                          setHasUnsavedChanges(true);
+                        }}
+                        style={[global.buttonText, { backgroundColor: '#fff', flex: 1, borderRadius: 6, paddingHorizontal: 8 }]}
+                        returnKeyType="done"
+                        onSubmitEditing={() => {
+                          if (editingTaskName.trim()) {
+                            setLocalTasks(prev => prev.map((t, idx2) => idx2 === index ? { ...t, name: editingTaskName } : t));
+                            setEditingTaskId(null);
+                            setEditingTaskName('');
+                            setEditingTaskRecurrence('daily');
+                            setHasUnsavedChanges(true);
+                          }
+                        }}
+                        onBlur={() => {
+                          setEditingTaskId(null);
+                          setEditingTaskName('');
+                          setEditingTaskRecurrence('daily');
+                        }}
+                      />
+                      <Picker
+                        selectedValue={editingTaskRecurrence}
+                        style={{ flex: 1, marginVertical: 4 }}
+                        onValueChange={itemValue => {
+                          setEditingTaskRecurrence(itemValue);
+                          setLocalTasks(prev => prev.map((t, idx2) => idx2 === index ? { ...t, recurrence: itemValue } : t));
+                          setHasUnsavedChanges(true);
+                        }}
+                      >
+                        <Picker.Item label="Daily" value="daily" />
+                        <Picker.Item label="Every Other Day" value="every_2_days" />
+                        <Picker.Item label="Weekly" value="weekly" />
+                        <Picker.Item label="Monthly" value="monthly" />
+                      </Picker>
+                      <TouchableOpacity onPress={() => {
+                        if (editingTaskName.trim()) {
+                          setLocalTasks(prev => prev.map((t, idx2) => idx2 === index ? { ...t, name: editingTaskName, recurrence: editingTaskRecurrence } : t));
+                          setEditingTaskId(null);
+                          setEditingTaskName('');
+                          setEditingTaskRecurrence('daily');
+                          setHasUnsavedChanges(true);
+                        }
+                      }} style={{ marginLeft: 8 }}>
+                        <Feather name="check" size={20} color="#178591" />
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <>
+                      <Text style={global.buttonText}>{item.name}</Text>
+                      <Text style={[global.buttonText, { marginLeft: 8, fontSize: 12 }]}> {
+                        item.recurrence === 'daily' ? 'Daily' :
+                        item.recurrence === 'every_2_days' ? 'Every Other Day' :
+                        item.recurrence === 'weekly' ? 'Weekly' :
+                        item.recurrence === 'monthly' ? 'Monthly' : ''
+                      }</Text>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={() => {
+                          setEditingTaskId(item.id);
+                          setEditingTaskName(item.name);
+                          setEditingTaskRecurrence(item.recurrence || 'daily');
+                        }} style={{ marginHorizontal: 6 }}>
+                          <Feather name="edit-2" size={18} color="#178591" />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                          Alert.alert(
+                            'Delete Task',
+                            'Are you sure you want to delete this task?',
+                            [
+                              { text: 'Cancel', style: 'cancel' },
+                              { text: 'Delete', style: 'destructive', onPress: () => {
+                                setLocalTasks(prev => prev.filter((_, idx2) => idx2 !== index));
+                                setHasUnsavedChanges(true);
+                              }},
+                            ]
+                          );
+                        }} style={{ marginHorizontal: 6 }}>
+                          <Feather name="trash-2" size={18} color="#e53935" />
+                        </TouchableOpacity>
+                      </View>
+                    </>
+                  )}
+                </TouchableOpacity>
+              ) : (
                 <TouchableOpacity
                   style={[
                     global.button,
@@ -276,10 +467,48 @@ export default function LaundryRoomScreen({ route }) {
                     <View style={{ width: 24, height: 24 }} />
                   )}
                 </TouchableOpacity>
-              </View>
+              )
             )}
+            ListFooterComponent={isEditMode ? (
+              <View style={{ marginTop: 16, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                {addingTask ? (
+                  <>
+                    <TextInput
+                      value={newTaskName}
+                      onChangeText={setNewTaskName}
+                      style={[global.buttonText, { backgroundColor: '#fff', borderRadius: 6, paddingHorizontal: 8, flex: 1 }]}
+                      placeholder="New task name"
+                      returnKeyType="done"
+                      onSubmitEditing={() => {
+                        if (newTaskName.trim()) {
+                          setLocalTasks(prev => [...prev, { name: newTaskName, recurrence: 'daily' }]);
+                          setAddingTask(false);
+                          setNewTaskName('');
+                          setHasUnsavedChanges(true);
+                        }
+                      }}
+                      onBlur={() => { setAddingTask(false); setNewTaskName(''); }}
+                    />
+                    <TouchableOpacity onPress={() => {
+                      if (newTaskName.trim()) {
+                        setLocalTasks(prev => [...prev, { name: newTaskName, recurrence: 'daily' }]);
+                        setAddingTask(false);
+                        setNewTaskName('');
+                        setHasUnsavedChanges(true);
+                      }
+                    }} style={{ marginLeft: 8 }}>
+                      <Feather name="check" size={20} color="#178591" />
+                    </TouchableOpacity>
+                  </>
+                ) : (
+                  <TouchableOpacity onPress={() => setAddingTask(true)} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Feather name="plus-circle" size={22} color="#178591" />
+                    <Text style={[global.orangeButtonText, { marginLeft: 6 }]}>Add Task</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            ) : null}
           />
-          {/* Close area at the bottom for overlay effect */}
           <TouchableOpacity
             style={{
               position: 'absolute',
@@ -293,13 +522,13 @@ export default function LaundryRoomScreen({ route }) {
               justifyContent: 'center',
               flexDirection: 'row',
             }}
-            onPress={() => setDropdownOpen(false)}
+            onPress={handleDropdownClose}
             activeOpacity={0.7}
           >
             <Feather name="chevron-up" size={32} color="#fff" style={{ textAlign: 'center' }} />
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 } 
