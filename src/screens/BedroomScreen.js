@@ -370,10 +370,10 @@ export default function BedroomScreen({ route }) {
         >
           {/* Progress Bar and Room Header */}
           <View style={{ alignItems: 'center', marginTop: 24, marginBottom: 8 }}>
-            <View style={{ position: 'absolute', width: 90, height: 90, borderRadius: 45, backgroundColor: '#fff', zIndex: 0 }} />
+            <View style={{ position: 'absolute', width: progressCircleSize, height: progressCircleSize, borderRadius: progressCircleSize / 2, backgroundColor: '#fff', zIndex: 0 }} />
             <AnimatedCircularProgress
-              size={90}
-              width={10}
+              size={progressCircleSize}
+              width={progressCircleStroke}
               fill={progressPercent}
               tintColor="#f7bd50"
               backgroundColor="#ffffff"
@@ -381,7 +381,7 @@ export default function BedroomScreen({ route }) {
               rotation={0}
             >
               {() => (
-                <Text style={{ fontSize: 28, color: '#F7BD50', fontWeight: 'bold' }}>{progressPercent}%</Text>
+                <Text style={{ fontSize: progressCircleSize * 0.28, color: '#F7BD50', fontWeight: 'bold' }}>{progressPercent}%</Text>
               )}
             </AnimatedCircularProgress>
             <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 18, marginTop: 4 }}>{roomData.name}</Text>
