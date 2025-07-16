@@ -22,7 +22,7 @@ import { db } from '../lib/firebase';
 import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
 import AvatarStack from '../components/AvatarStack';
-import BackButtonIcon from '../assets/images/house/house_thumbnail.svg';
+import BackButtonIcon from '../assets/images/house/doorIcon.svg';
 import global from '../styles/global';
 import { getRoomTasks } from '../models/tasksModel';
 

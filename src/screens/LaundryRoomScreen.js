@@ -22,7 +22,7 @@ import { getUserId } from '../lib/getUserId';
 import { decorMap } from '../lib/svgMap';
 import { getRoomTasks } from '../models/tasksModel';
 import AvatarStack from '../components/AvatarStack';
-import BackButtonIcon from '../assets/images/house/house_thumbnail.svg';
+import BackButtonIcon from '../assets/images/house/doorIcon.svg';
 import global from '../styles/global';
 
 export default function LaundryRoomScreen({ route }) {

@@ -1,6 +1,6 @@
 // Houses
 import BasicHouse from '../assets/images/house/house.svg';
-import HouseThumbnail from '../assets/images/house/house_thumbnail.svg'
+import DoorIcon from '../assets/images/house/doorIcon.svg'
 
 // Backgrounds
 import YardSky from '../assets/images/homeScreen/yard_sky.svg';
@@ -149,7 +149,7 @@ import Complete5Btn from '../assets/images/tasks/complete+5_btn.svg';
 export const decorMap = {
   // Houses
   house: BasicHouse,
-  houseThumbnail: HouseThumbnail,
+  exitButton: DoorIcon,
 
   // Backgrounds
   homeScreenYard: YardSky,
