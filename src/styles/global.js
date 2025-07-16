@@ -14,6 +14,12 @@ const styles = StyleSheet.create({
     marginVertical: 50,
     color: '#ffffff',
   },
+  subHeaderText: {
+    color: '#fff', 
+    fontWeight: 'bold', 
+    fontSize: '24', 
+    margin: 4,
+  },
     roomSelectionWrapper: {
       backgroundColor: '#6ec1e4',
       paddingVertical: 40,
@@ -55,14 +61,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
   },
   roomBoxMapText: {
-    color: '#333',
+    color: '#f9a825',
     fontWeight: 'bold',
     textAlign: 'center',
+    fontSize: 10
   },
   roomBox: {
     backgroundColor: '#4caf50',
     padding: 30,
     borderRadius: 10,
+    borderColor: '#f9a825',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -101,11 +109,15 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     alignItems: 'center',
+    zIndex: 100,
   },
   remainingLabel: {
     fontSize: 14,
     color: 'white',
     marginBottom: 5,
+    textAlign: 'left',
+    width: '100%',
+    fontWeight: 'bold',
   },
   taskChip: {
     backgroundColor: '#147883',
@@ -345,16 +357,16 @@ const styles = StyleSheet.create({
   // Task Dropdown Overlay/Container
   taskDropdownContainer: {
     position: 'absolute',
-    top: 0,
-    left: 0,
     width: '100%',
-    height: '100%',
-    zIndex: 100,
-    borderBottomLeftRadius: 32,
-    borderBottomRightRadius: 32,
-    paddingBottom: 32,
-    paddingTop: 0,
+    left: 0,
+    top: 0,
+    backgroundColor: '#5EB1CC',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    zIndex: 2000, // Increased to ensure dropdown is above top bar
+    paddingBottom: 0,
     justifyContent: 'flex-start',
+    // height should be set inline per screen for responsiveness
   },
   // Room header (inside dropdown)
   taskRoomHeader: {
@@ -380,11 +392,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     marginBottom: 6,
     borderWidth: 1,
+    width: '100%',
     borderColor: '#eee',
   },
   buttonCompleted: {
     backgroundColor: '#F2F0EF',
-    borderColor: '#f7bd50',
   },
   buttonText: {
     color: '#E7A120',
@@ -448,6 +460,105 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 20,
+  },
+  verticalTaskList: {
+    height: 56, // enough for 1 task + a hint of the next
+    overflow: 'hidden',
+    width: '100%',
+    position: 'relative',
+    justifyContent: 'flex-start',
+  },
+  verticalTaskFade: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: 24,
+    zIndex: 10,
+  },
+  verticalTaskItem: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: '#eee',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  bottomFiller: {
+    backgroundColor: '#147883',
+    width: '100%',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    zIndex: 2,
+  },
+  bottomRoomBar: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    backgroundColor: '#147883',
+    paddingVertical: 12,
+    alignItems: 'center',
+    zIndex: 10,
+  },
+  bottomRoomBarText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  backButton: {
+    position: 'absolute',
+    left: 10,
+    zIndex: 20,
+  },
+  avatar: {
+    position: 'absolute',
+    zIndex: 10,
+  },
+  topFiller: {
+    width: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+  },
+  progressCircleContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    marginLeft: 12,
+    flexShrink: 0,
+  },
+  progressCircleBg: {
+    position: 'absolute',
+    backgroundColor: '#fff',
+    zIndex: 0,
+  },
+  orangeButton: {
+    alignSelf: 'center',
+    width: '60%', // portion of the dropdown width
+    marginVertical: 10,
+    // Inherit from button
+    backgroundColor: '#E7A120',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    marginBottom: 6,
+    borderWidth: 1,
+    borderColor: '#eee',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  orangeButtonText: {
+    // Inherit from buttonText
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
 });
 

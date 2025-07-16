@@ -67,14 +67,6 @@ export default function RoomSelectionScreen({ navigation }) {
     <View style={[global.container, global.roomSelectionWrapper]}>
       <Text style={global.headerText}>Pick a room!</Text>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
-        {[...Array(rooms.reduce((max, r) => Math.max(max, (r.floor ?? 0) + 1), 1))].map((_, i) => (
-          <TouchableOpacity key={i} onPress={() => setCurrentFloor(i)} style={{ margin: 4, padding: 8, backgroundColor: currentFloor === i ? '#2196f3' : '#eee', borderRadius: 8 }}>
-            <Text style={{ color: currentFloor === i ? '#fff' : '#333' }}>Floor {i + 1}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
       <View style={[global.grid, {
         width: GRID_WIDTH * GRID_UNIT,
         height: GRID_HEIGHT * GRID_UNIT,
@@ -123,12 +115,20 @@ export default function RoomSelectionScreen({ navigation }) {
         })}
       </View>
 
+      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 8 }}>
+        {[...Array(rooms.reduce((max, r) => Math.max(max, (r.floor ?? 0) + 1), 1))].map((_, i) => (
+          <TouchableOpacity key={i} onPress={() => setCurrentFloor(i)} style={{ margin: 4, padding: 8, backgroundColor: currentFloor === i ? '#2196f3' : '#eee', borderRadius: 8 }}>
+            <Text style={{ color: currentFloor === i ? '#fff' : '#333' }}>Floor {i + 1}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+
       {houseRoom && (
         <TouchableOpacity
           onPress={() => navigation.navigate('Home')}
-          style={{ marginTop: 30, padding: 16, backgroundColor: '#E0F7FA', borderRadius: 10, alignItems: 'center' }}
+          style={global.orangeButton}
         >
-          <Text style={{ fontSize: 18, color: '#00796B', fontWeight: 'bold' }}>Now go outside and play!</Text>
+          <Text style={global.orangeButtonText}>Now go outside and play!</Text>
         </TouchableOpacity>
       )}
     </View>
